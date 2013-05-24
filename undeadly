@@ -4,22 +4,131 @@ use Mojolicious::Lite;
 # Documentation browser under "/perldoc"
 plugin 'PODRenderer';
 
-get '/' => sub {
-  my $self = shift;
-  $self->render('index');
+helper usernavbar => sub {
+    my ($self) = @_;
+    return 'anon_navbar';
 };
 
+under sub {
+    my $self = shift;
+
+    $self->stash( $_ => "XXX FIXME [$_] XXX" ) for qw(
+        baseurl
+        body
+        captcha
+        category
+        checked_comments
+        checked_poll
+        checked_type_html
+        checked_type_plain
+        checked_verbose
+        cksum
+        comments
+        date
+        department
+        dept
+        editors
+        email
+        errata
+        excerpt
+        form
+        href
+        indent
+        items
+        link
+        mode
+        more
+        name
+        navigation
+        pid
+        poll
+        pubdate
+        query
+        rcsid
+        related
+        results
+        selected_method_and
+        selected_method_boolean
+        selected_method_or
+        selected_sort_revscore
+        selected_sort_revtime
+        selected_sort_revtitle
+        selected_sort_score
+        selected_sort_time
+        selected_sort_title
+        selected_topic_oreilly_weasel
+        selected_topic_topic27
+        selected_topic_topic30
+        selected_topic_topic31
+        selected_topic_topic34
+        selected_topic_topic35
+        selected_topic_topic36
+        selected_topic_topic37
+        selected_topic_topic38
+        selected_topic_topic39
+        selected_topic_topic40
+        selected_topic_topic42
+        selected_topic_topic43
+        selected_topic_topicaskobsdj
+        selected_topic_topicblog
+        selected_topic_topicbsd
+        selected_topic_topicbsdtalk
+        selected_topic_topicconf
+        selected_topic_topiccrypto
+        selected_topic_topiceditorial
+        selected_topic_topichardware
+        selected_topic_topicjava
+        selected_topic_topicmail
+        selected_topic_topicmobile
+        selected_topic_topicnda
+        selected_topic_topicnetworking
+        selected_topic_topicnews
+        selected_topic_topicopenbsd
+        selected_topic_topicopenssh
+        selected_topic_topicpf2
+        selected_topic_topicports
+        selected_topic_topicreadme
+        selected_topic_topicsecurity
+        selected_topic_topicsparc
+        selected_topic_topicsysadmin
+        sid
+        subject
+        submission
+        thres
+        time
+        title
+        topicimg
+        topicquery
+        unindent
+        usergroup
+        vuxml
+        weeklist
+        yesterday
+    );
+
+    return 1;
+};
+
+get '/' => 'front';
+get '/about';
+get '/errata';
+get '/search';
+get '/article/:sid';
+get '/rss';
+get '/submit';
+post '/submit';
+
+get '/deauth';
+get '/login';
+post '/login';
+
+get '/register';
+post '/register';
+
+get '/prefs';
+post '/prefs';
+
+get '/submissions';
+post '/edit';
+
 app->start;
-__DATA__
-
-@@ index.html.ep
-% layout 'default';
-% title 'Welcome';
-Welcome to the Mojolicious real-time web framework!
-
-@@ layouts/default.html.ep
-<!DOCTYPE html>
-<html>
-  <head><title><%= title %></title></head>
-  <body><%= content %></body>
-</html>
