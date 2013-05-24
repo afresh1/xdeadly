@@ -1,0 +1,143 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+# Copyright (c) 2013 Andrew Fresh <andrew@afresh1.com>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+my $extension = '.orig';
+my $backup    = '';
+my $oldargv   = '';
+LINE: while (<>) {
+    if ( $ARGV ne $oldargv ) {
+        if ( $extension !~ /\*/ ) {
+            $backup = $ARGV . $extension;
+        }
+        else {
+            ( $backup = $extension ) =~ s/\*/$ARGV/g;
+        }
+        rename( $ARGV, $backup );
+        open( ARGVOUT, ">$ARGV" );
+        select(ARGVOUT);
+        $oldargv = $ARGV;
+    }
+
+    s/"%%BASEURL%%\?([^"]*)"/fix_baseurl($1)/eg;
+    s/<img ([^>]+)>/'<%= ' . fix_image($1) . ' %>'/eg; 
+    s/%%([^%]+)%%/'<%= ' . fix_it($1) . ' %>'/eg;
+}
+continue {
+    print;    # this prints to original filename
+}
+select(STDOUT);
+
+sub fix_baseurl {
+    my ($query) = @_;
+
+    $query =~ s/%%URLOPTS%%//g;
+
+    my %query;
+    foreach my $opt ( split /\&amp;/, $query ) {
+        my ( $key, $value ) = split /=/, $opt, 2;
+
+        if ( $value =~ /%%(.+)%%/ ) {
+            $value = fix_it($1);
+        }
+        elsif ($key eq 'action') {
+            # do nothing
+        }
+        else {
+            $value = qq{'$value'};
+        }
+
+        $query{$key} = $value;
+    }
+
+    my $action = delete $query{action};
+    $action .= 'sid' if $query{sid};
+
+    my $new = $query = join ', ', map {"$_ => $query{$_}"} sort keys %query;
+    $new = "->query($new)" if $new;
+
+    return qq{"<%= url_for('$action')$new %>"};
+}
+
+sub fix_it {
+    my ($macro) = @_;
+    $macro = lc $macro;
+
+    if ( -e "templates/$macro.html.ep" ) {
+        return "include '$macro'";
+    }
+    elsif ( -e "templates/front_$macro.html.ep" ) {
+        return "include 'front_$macro'";
+    }
+    elsif ($macro eq 'usernavbar') {
+        return "include $macro";
+    }
+    elsif ($macro eq 'authurl') {
+        return "url_for('login')";
+    }
+    
+    return "\$$macro";
+}
+
+sub fix_image {
+    my ($attr) = @_; my %attrs;
+    my $key = ''; my $value = ''; my $in_value = 0;
+    my $value_quoted = 0;
+    foreach my $c (split //, $attr) {
+        if ($in_value) {
+            if ($c eq $value_quoted) {
+                $value_quoted = '';
+
+                $in_value = 0;
+                $attrs{$key} = $value;
+                $key   = '';
+                $value = '';
+            }
+            elsif (not length $value and ($c eq '"' or $c eq "'")) {
+                $value_quoted = $c;
+            }
+            elsif (not $value_quoted and $c eq ' ') {
+                $in_value = 0;
+                $attrs{$key} = $value;
+                $key   = '';
+                $value = '';
+            }
+            else {
+                $value .= $c;
+            }
+        }
+        elsif ($c eq '=') {
+            $in_value = 1;
+        }
+        elsif ($c eq ' ') {
+            # do nothing
+        }
+        else {
+            $key .= $c;
+        }
+    }
+
+    $attrs{src} =~ s{^/?}{/};
+    foreach my $value (values %attrs) {
+        $value = qq{'$value'} unless $value =~ /^\d+$/;
+    }
+
+    my $src = delete $attrs{src};
+    my $new = join ', ', map {"$_ => $attrs{$_}"} sort keys %attrs;
+    $new = ", $new" if $new;
+
+    return qq{image($src$new)};
+}
