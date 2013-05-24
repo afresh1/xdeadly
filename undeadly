@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
 
-use Mojo::Util qw(url_escape);
+use Mojo::Util qw(url_escape slurp);
 
 # Documentation browser under "/perldoc"
 plugin 'PODRenderer';
@@ -72,6 +72,14 @@ helper story_details => sub {
 
     close $fh;
     return %story;
+};
+
+helper story_more => sub {
+    my ( $self, $sid ) = @_;
+
+    my $file = app->home->rel_file("$data_dir/$sid/article.more");
+    return unless -e $file;
+    return slurp($file);
 };
 
 helper topicimg => sub {
@@ -221,7 +229,14 @@ get '/' => sub {
 get '/about';
 get '/errata';
 get '/search';
-get '/article/:sid';
+
+get '/article/:sid' => sub {
+    my ($self) = @_;
+    my $sid = $self->param('sid');
+
+    $self->stash( $self->story_details($sid),
+        more => $self->story_more($sid) );
+} => 'article';
 get '/rss';
 get '/submit';
 post '/submit';
