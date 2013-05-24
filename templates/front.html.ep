@@ -15,8 +15,7 @@
 			<tr>
 
 				<td valign="top" width="100%">
-					<%= include 'front_story' %>
-				</td>
+					<%= include 'front_story', %{ $_ } for @{ $front_stories } %>
 
 				<td width="20" valign="top">
 					<%= image('/images/blank.gif', alt => '', height => 1, width => 20) %>
