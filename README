@@ -1,0 +1,155 @@
+$Id: README,v 1.2 2005/03/04 08:15:39 dhartmei Exp $
+
+The undeadly.org web site consists of the following components
+
+  1) Web server
+
+     Any web server that can run CGIs will do, I'm using thttpd (from ports)
+     as it has lower overhead than Apache.
+
+     The configuration is very basic
+
+       port=80
+       dir=/var/www/htdocs
+       chroot
+       vhost
+       user=www
+       cgipat=**
+
+     Apache can be used as well, with a configuration like
+
+       <VirtualHost 129.128.5.155:80>
+		ServerName undeadly.org 
+		ServerAlias www.undeadly.org 
+		ServerAdmin daniel@benzedrine.cx
+		ErrorLog logs/undeadly_error_log
+		CustomLog logs/undeadly_access_log combined
+		DocumentRoot /var/www/htdocs/undeadly
+		DirectoryIndex index.html cgi index.cgi
+		ScriptAlias /cgi "/var/www/htdocs/undeadly/cgi"
+		<Directory />
+			Options Indexes FollowSymLinks ExecCGI
+			AllowOverride None
+		</Directory>
+		<Directory "/var/www/htdocs/undeadly/data">
+			AllowOverride None
+			Options None
+			Order allow,deny
+			Deny from all
+		</Directory>
+       </VirtualHost>
+
+     The directory layout is
+
+       /var/www/htdocs/undeadly/
+
+         cgi		the executable cgi
+         cgi.conf       configuration read by the cgi
+         index.html	simple page that redirects to the cgi
+         images/	images
+         html/		HTML templates
+	 htdig/		search engine data (see below)
+         data/		contains articles and comments
+           20040414120101/	one subdirectory per SID
+             article		the article (with headers and body)
+             article.more	optional 'read more' part
+             14/		one subdirectory per comment
+		comment		the comment (with headers and body)
+		comment.mod	optional moderation results
+		17/		nested comments (threads)
+		    ...
+           submission/		subdiretory for submitted article
+
+     cgi.conf example (note: all paths within chroot)
+
+       # example configuration for undeadly main cgi
+       domain		undeadly.org
+       datadir		/htdocs/undeadly/data
+       htmldir		/htdocs/undeadly/html
+       htdigdir		/htdocs/undeadly/htdig
+       passwd		/htdocs/auth/undeadly.org.passwd
+       secret		/htdocs/auth/undeadly.org.secret
+       logfile		/htdocs/auth/undeadly.org.log
+       baseurl		cgi
+       authurl		https://undeadly.org/
+       ct_html		Content-Type: text/html; charset=iso-8859-1
+       vuxmlfile	/htdocs/undeadly/vuxml/vuln.asc
+       mailaddr		daniel@benzedrine.cx
+
+  2) Search engine
+
+     ht://Dig craws the data directory (through the local filesystem)
+     and builds berkeley databases. A slightly hacked htsearch binary
+     is forked/execd by the cgi to retrieve search results for queries.
+
+     htdig needs some small patches so it treats the article files
+     (without file name extention) as HTML, and to extract the title
+     and date of last modification from their proprietary formats,
+     see README.htdig for details.
+
+     Two configurations and databases are used, a small one with just
+     articles and a larger one for articles and comments.
+
+       htdig/
+           bin/htsearch			patched searcher
+           bin/htdig			patched crawler
+           conf/htdig_articles.conf
+           conf/htdig_comments.conf
+           db_articles/
+           db_comments/
+
+  3) Authentication server
+
+     Editors must authentiate before being able to edit/publish/delete
+     submitted articles. stunnel is set up to listen on https (443) and
+     run a little server (HTTP and cgi-like). After a successful (SSL-
+     encrypted) HTTP basic authentication, it gives the client a HTTP
+     cookie and redirects back to the normal web site. The main cgi uses
+     the cookie to grant elevated privileges.
+
+       /var/www/htdocs/auth/
+           cgi			the authentication server
+           undeadly.org.secret	a secret used to sign sha1 hashes
+           undeadly.org.passwd	the user table with plain text passwords
+           undeadly.org.log	authentication related error log
+
+     Note that secret and passwd are used by the main cgi as well (to
+     check sha1 signatures of auth cookies), but must be inaccessable
+     through the web server to users.
+
+     The secret file should contain a single line with a random
+     (unguessable) string, like
+
+       $ openssl rand -base64 40 >undeadly.org.secret
+
+     The passwd file contains users, one per line, like
+
+       # user:group:password:realname:email:comment
+       dhartmei:admin:foobar:Daniel Hartmeier:daniel@benzedrine.cx:hi there
+
+     Valid groups are 'admin' and 'editor'. Admins have some additional
+     privileges (can edit/delete others' articles, can delete comments).
+
+       /etc/stunnel/stunnel.conf
+
+           cert		= /etc/ssl/private/stunnel.crt
+           key		= /etc/ssl/private/stunnel.key
+           chroot	= /var/www/htdocs/auth
+           pid		= /var/www/htdocs/auth/stunnel.pid
+           setuid	= _stunnel
+           setgid	= _stunnel
+
+           [https]
+           accept	= 443
+           exec		= /cgi
+           execargs	= cgi
+           TIMEOUTclose	= 0
+           TIMEOUTidle	= 10
+
+  4) General system tuning
+
+     /etc/sysctl.conf
+
+       kern.somaxconn=1024		# max. listen(2) backlog
+       net.inet.tcp.sendspace=65536	# TCP send buffer size
+

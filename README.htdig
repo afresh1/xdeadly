@@ -1,0 +1,48 @@
+To set up ht://Dig as search engine for undeadly, use the following
+instructions.
+
+  Create the directory structure
+
+       $ cd /var/www/htdocs/undeadly.org
+       $ mkdir -p htdig/common htdig/conf htdig/db_articles htdig/db_comments
+
+  Fetch the original source tarball and extract it
+
+       $ ftp -o htdig-3.1.6.tar.gz http://www.htdig.org/files/htdig-3.1.6.tar.gz
+       $ md5 htdig-3.1.6.tar.gz
+       MD5 (htdig-3.1.6.tar.gz) = 7a2f20d8d6149efd8d119bb2ebf55f23
+
+       $ tar zxf htdig-3.1.6.tar.gz
+
+  Apply the patch
+
+       $ cd htdig-3.1.6
+       $ patch </path/to/deadly/htdig/patch
+
+  Build the binaries
+
+       $ ./configure
+       $ make
+
+  Install the binaries manually
+
+      $ strip htsearch/htsearch
+      $ cp htdig/htdig htfuzzy/htfuzzy htmerge/htmerge htnotify/htnotify \
+          htsearch/htsearch /var/www/htdocs/undeadly.org/htdig/bin
+
+  Install the common files
+
+      $ cd installdir
+      $ cp bad_words english.0 english.aff synonyms *.db \
+          /var/www/htdocs/undeadly.org/htdig/common
+
+  Install the configuration files
+
+      $ cp /path/to/deadly/htdig/*.conf /var/www/htdocs/undeadly.org/htdig/conf
+
+To (re-)build the search databases, run the provided script (as a nightly
+cronjob, for instance)
+
+  $ undeadly_htdig articles
+  $ undeadly_htdig comments
+

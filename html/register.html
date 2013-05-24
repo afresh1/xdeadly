@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+	<head>
+		<title>Register</title>
+	</head>
+
+	<body bgcolor="#ffffff" text="#000000" link="#336666" vlink="#666666" alink="#996666">
+
+		%%HEADER%%
+
+		<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
+			<tr>
+				<td valign="top" width="100%">
+					<font color="#000000">
+
+<font color="#336666" size="3">
+	<form method="post" action="%%BASEURL%%?action=registerpost">
+		<input type="hidden" name="cksum" value="%%CKSUM%%">
+
+		<bold>Note: User accounts are still a work in progress.
+		Currently, the only benefits of registering are
+		that you don't have to enter the captchas when posting
+		and that your login name is shown instead of your
+		IP address in posts. Working on additional benefits ;)</bold><p>
+
+		<bold><large><blink>You can't use your login before you receive the confirmation
+		email and visit the activation link in there!</blink></large></bold><p>
+
+		<bold>There is currently no way to reset a lost/forgotten password.
+		If this happens, <a href="mailto:daniel@benzedrine.cx">email me</a>.
+		You can change your password through the <i>Preferences</i> page
+		once you're logged in. So use a simple password to register, and
+		change it to the 128-bits-of-true-randomness-secure-one <i>afterwards</i>,
+		otherwise you risk locking yourself out when you mis-type it here ;)</bold><p>
+
+		Login<br>
+		<small>The login name you choose will be visible to other users
+		in comments you post instead of your IP address.</small><br>
+		<input type="text" name="login" value="" size="14"><p>
+
+		Password<br>
+		<small>Only hashes of passwords are stored on disk, but don't use
+		the same password as for other systems.</small><br>
+		<input type="password" name="pw" value="" size="14"><p>
+
+		Password confirmation<br>
+		<input type="password" name="pwconfirm" value="" size="14"><p>
+
+		Full name<br>
+		<small>The full name you specify here will be inserted as
+		default in your future posts. You can still edit the value
+		with each individual post, this merely saves you some
+		typing.</small><br>
+		<input type="text" name="name" value="" size="60"><p>
+
+		Email address<br>
+		<small>Please provide a valid email address. An email will be
+		sent to this address containing an activation link. Your account
+		will not be enabled before that link is visited. Your email address
+		will not be visible to other users.</small><br>
+		<input type="text" name="email" value="" size="60"><p>
+
+		Web page<br>
+		<small>Similar to the full name, this becomes the editable
+		default value for future posts.</small><br>
+		<input type="text" name="href" value="" size="60"><p>
+
+%%CAPTCHA%%
+
+		<input type="submit" name="submit" value="Register">
+	</form>
+</font>
+						<p><br>
+					</font>
+				</td>
+			</tr>
+		</table>
+
+		%%FOOTER%%
+
+	</body>
+
+</html>

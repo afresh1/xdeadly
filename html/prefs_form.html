@@ -1,0 +1,26 @@
+<font color="#336666" size="3">
+	<form method="post" action="%%BASEURL%%?action=prefspost">
+		<input type="hidden" name="mode" value="%%MODE%%">
+		<input type="hidden" name="thres" value="%%THRES%%">
+
+		<p>
+		Name<br>
+		<input type="text" name="name" value="%%NAME%%" size="60"><p>
+
+		Email address<br>
+		<input type="text" name="email" value="%%EMAIL%%" size="60"><p>
+
+		Web site<br>
+		<textarea name="comment" cols="72" rows="8">%%COMMENT%%</textarea><p>
+
+		<input type="submit" name="submit" value="Submit">
+	</form>
+	<p>
+	<form method="post" action="%%AUTHURL%%">
+		Change password:
+		new <input type="password" name="pw_new" value="" size="10">
+		confirm <input type="password" name="pw_confirm" value="" size="10">
+		<input type="hidden" name="action" value="changepw">
+		<input type="submit" value="Submit (SSL)">
+	</form>
+</font>

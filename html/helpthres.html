@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+	<head>
+		<title>OpenBSD Journal:  Threshold help</title>
+	</head>
+
+	<body bgcolor="#ffffff" text="#000000" link="#336666" vlink="#666666" alink="#996666">
+
+		%%HEADER%%
+
+		<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
+
+			<tr>
+				<td valign="top" width="100%">
+					<font color="#000000">
+
+<br><p>
+<h2>Thresholds</h2>
+
+Thresholds can be used to filter out comments based on moderation
+results. Results consist of count (total number of votes cast),
+up (number of positive votes), down (number of negative votes) and
+sum (up - down, possibly negative when down > up).
+Two kinds of filters can be used.<p>
+
+<h3>Simple thresholds</h3>
+
+A single numerical value filters out all comments with sum below
+the specified value.
+
+<h3>Advanced thresholds</h3>
+
+Arbitrary expressions can specify what comments to show, using
+the variables c (count), u (up), d (down) and s (sum), like<p>
+
+<ul>
+  <li>s &gt;= 0 <i>show only comments with sum greater or equal 0</i><br>
+  <li>(u * 100) / c &gt;= 75 <i>show only comments with at least 75% up votes</i><br>
+  <li>c &lt; 5 | (u * 100) / c &gt;= 75 <i>same as above, but show comments with less
+    than 5 votes, too</i><br>
+  <li>c = 0 <i>show only unmoderated comments</i><br>
+  <li>c > 10 & s < 3 & s > -3 <i>show comments with many votes, but sum
+    near zero (highly polarizing comments)</i><br>
+</ul><p>
+Arithmetic operators are +, -, * and / (division by zero results in
+value zero), calculation is floating point.<br>
+Comparison operators are = (equal), != (unequal), &lt; (less),
+&lt;= (less or equal), &gt; (greater) and &gt;= (greater or equal).<br>
+Boolean operators are | (or), &amp; (and).<br>
+Parentheses work around arithmetic and comparitive parts, not boolean parts
+(yet).<p>
+					</font>
+				</td>
+			</tr>
+
+		</table>
+
+		%%FOOTER%%
+
+	</body>
+
+</html>

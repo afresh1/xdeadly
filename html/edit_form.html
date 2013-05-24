@@ -1,0 +1,94 @@
+<p><br>
+<font color="#336666" size="3">
+<form method="post" action="%%BASEURL%%?action=editpost">
+  <input type="hidden" name="sid" value="%%SID%%">
+  <input type="hidden" name="mode" value="%%MODE%%">
+  <input type="hidden" name="thres" value="%%THRES%%">
+  <input type="hidden" name="edit" value="1">
+  <input type="hidden" name="submission" value="%%SUBMISSION%%">
+  Subject<br>
+  <input type="text" name="subject" value="%%SUBJECT%%" size="60">
+  <p>
+  Contributed by (will be replaced with your user name when saved)<br>
+  <input type="text" name="name" value="%%NAME%%" size="60">
+  <p>
+  Email address (optional, not currently shown)<br>
+  <input type="text" name="email" value="%%EMAIL%%" size="60">
+  <p>
+  Web page (optional, editor's own page)<br>
+  <input type="text" name="href" value="%%HREF%%" size="60">
+  <p>
+  Department (make up something witty)<br>
+  <input type="text" name="dept" value="%%DEPT%%" size="60">
+  <p>
+  Topic <select name="topic">
+    <option value="topic27" %%SELECTED_TOPIC_topic27%%>2.7
+    <option value="topic30" %%SELECTED_TOPIC_topic30%%>3.0
+    <option value="topic31" %%SELECTED_TOPIC_topic31%%>3.1
+    <option value="topic34" %%SELECTED_TOPIC_topic34%%>3.4
+    <option value="topic35" %%SELECTED_TOPIC_topic35%%>3.5
+    <option value="topic36" %%SELECTED_TOPIC_topic36%%>3.6
+    <option value="topic37" %%SELECTED_TOPIC_topic37%%>3.7
+    <option value="topic38" %%SELECTED_TOPIC_topic38%%>3.8
+    <option value="topic39" %%SELECTED_TOPIC_topic39%%>3.9
+    <option value="topic40" %%SELECTED_TOPIC_topic40%%>4.0
+    <option value="topic42" %%SELECTED_TOPIC_topic42%%>4.2
+    <option value="topic43" %%SELECTED_TOPIC_topic43%%>4.3
+    <option value="topicaskobsdj" %%SELECTED_TOPIC_topicaskobsdj%%>Ask
+    <option value="topicblog" %%SELECTED_TOPIC_topicblog%%>Blog
+    <option value="topicbsd" %%SELECTED_TOPIC_topicbsd%%>BSD
+    <option value="topicbsdtalk" %%SELECTED_TOPIC_topicbsdtalk%%>BSDTalk
+    <option value="topicconf" %%SELECTED_TOPIC_topicconf%%>Conference
+    <option value="topiccrypto" %%SELECTED_TOPIC_topiccrypto%%>Crypto
+    <option value="topiceditorial" %%SELECTED_TOPIC_topiceditorial%%>Editorial
+    <option value="topichardware" %%SELECTED_TOPIC_topichardware%%>Hardware
+    <option value="topicnetworking" %%SELECTED_TOPIC_topicnetworking%%>Internet
+    <option value="topicmail" %%SELECTED_TOPIC_topicmail%%>Mail
+    <option value="topicmobile" %%SELECTED_TOPIC_topicmobile%%>MobileOBSD
+    <option value="topicnda" %%SELECTED_TOPIC_topicnda%%>NDA
+    <option value="topicnews" %%SELECTED_TOPIC_topicnews%%>News
+    <option value="oreilly_weasel" %%SELECTED_TOPIC_oreilly_weasel%%>O'Reilly
+    <option value="topicopenbsd" %%SELECTED_TOPIC_topicopenbsd%%>OpenBSD
+    <option value="topicopenssh" %%SELECTED_TOPIC_topicopenssh%%>OpenSSH
+    <option value="topicpf2" %%SELECTED_TOPIC_topicpf2%%>PF
+    <option value="topicports" %%SELECTED_TOPIC_topicports%%>Ports
+    <option value="topicreadme" %%SELECTED_TOPIC_topicreadme%%>Readme
+    <option value="topicsecurity" %%SELECTED_TOPIC_topicsecurity%%>Security
+    <option value="topicsparc" %%SELECTED_TOPIC_topicsparc%%>Sparc
+    <option value="topicsysadmin" %%SELECTED_TOPIC_topicsysadmin%%>SysAdmin
+    <option value="topicjava" %%SELECTED_TOPIC_topicjava%%>Java
+  </select>
+  <p>
+  Poll&nbsp;<input type="checkbox" name="poll" value="yes" %%CHECKED_POLL%%>
+  <small>(for polls, use one line of front text for each choice, check for
+  trailing newlines, preview is slightly broken still, save)</small>
+  <p>
+  Front text<br>
+  <textarea name="data" cols="90" rows="20">%%DATA%%</textarea>
+  <br><p>
+  More text<br>
+  <textarea name="more" cols="90" rows="20">%%MORE%%</textarea>
+  <br><p>
+<!--
+  Use normal
+  <a href="http://www.htmlhelp.com/reference/wilbur/overview.html">HTML</a>
+  formatting, <b>&lt;br&gt;</b>, <b>&lt;p&gt;</b>, <b>&lt;em&gt;</b>,
+  <b>&lt;b&gt;</b>, <b>&lt;i&gt;</b>, <b>&lt;pre&gt;</b> and <b>&lt;a&gt;</b>
+  tags are allowed.<br>
+  For example,
+  <b>&lt;a href="http://www.benzedrine.cx/"&gt;web site&lt;/a&gt;</b>
+  becomes <a href="http://www.benzedrine.cx/">web site</a>.
+  <p>
+  Note that <b>&amp;</b> must be escaped to <b>&amp;amp;</b>,
+  <b>&lt;</b> to <b>&amp;lt;</b> and <b>&gt;</b> to <b>&amp;gt;</b>,
+  unless used in a <b>&lt;pre&gt;&lt;/pre&gt;</b> block.
+  <p>
+-->
+  Delayed publication time (either <b>YYYYMMDDhhmmss</b> (in GMT), or <b>+m</b> for "m minutes from now", leave empty for no delay)<br>
+  <input type="text" name="pubdate" value="%%PUBDATE%%" size="14">
+  <p>
+  <input type="submit" name="preview" value="Preview">
+  <input type="submit" name="submit" value="Save">
+  <p>
+</form>
+</font>

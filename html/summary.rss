@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.92">
+  <channel>
+
+    <title>OpenBSD Journal</title>
+    <link>http://undeadly.org/</link>
+    <description>The OpenBSD Community.</description>
+    <language>en-us</language>
+    <managingEditor>dhartmei@undeadly.org</managingEditor>
+
+    <image>
+      <title>OpenBSD Journal</title>
+      <url>http://undeadly.org/images/logo.jpg</url>
+      <link>http://undeadly.org/</link>
+      <width>300</width>
+      <height>100</height>
+      <description>The OpenBSD Community.</description>
+    </image>
+
+%%ITEMS%%
+
+  </channel>
+</rss>

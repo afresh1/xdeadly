@@ -1,0 +1,230 @@
+--- htsearch/Makefile.in.orig	Sat Apr 17 02:48:36 2004
++++ htsearch/Makefile.in	Sat Apr 17 02:48:53 2004
+@@ -14,6 +14,7 @@
+ FOBJS=		$(top_builddir)/htfuzzy/libfuzzy.a
+ TARGET=		htsearch
+ LOCAL_DEFINES=	-DCONFIG_DIR=\"$(CONFIG_DIR)\"
++LDFLAGS+=	-static
+ 
+ all:	$(TARGET)
+ 
+--- htdig/Document.cc.orig	Fri Feb  1 00:47:17 2002
++++ htdig/Document.cc		Sat Apr 17 00:31:10 2004
+@@ -754,11 +754,12 @@
+     // Process only HTML files (this could be changed if we read
+     // the server's mime.types file).
+     // (...and handle a select few other types for now...)
+-    char *ext = strrchr(*filename, '.');
++    char *fil = strrchr(*filename, '/');
++    char *ext = strrchr(fil == NULL ? (char *)*filename : fil, '.');
+     if (ext == NULL)
+-      	return Document_not_local;
+-    if ((mystrcasecmp(ext, ".html") == 0) || (mystrcasecmp(ext, ".htm") == 0))
+         contentType = "text/html";
++    else if ((mystrcasecmp(ext, ".html") == 0) || (mystrcasecmp(ext, ".htm") == 0))
++        contentType = "text/html";
+     else if ((mystrcasecmp(ext, ".txt") == 0) || (mystrcasecmp(ext, ".asc") == 0))
+         contentType = "text/plain";
+     else if ((mystrcasecmp(ext, ".pdf") == 0))
+@@ -765,7 +766,7 @@
+         contentType = "application/pdf";
+     else if ((mystrcasecmp(ext, ".ps") == 0) || (mystrcasecmp(ext, ".eps") == 0))
+         contentType = "application/postscript";
+-    else 
++    else
+   	return Document_not_local;
+ 
+     // Open it
+--- htdig/HTML.cc.orig		Fri Feb  1 00:47:17 2002
++++ htdig/HTML.cc		Sat Apr 17 02:39:05 2004
+@@ -134,7 +134,50 @@
+ {
+ }
+ 
++void
++HTML::undeadly(Retriever &retriever)
++{
++	const char *months[13] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
++	    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", NULL };
++	char t[8192];
++	int i = 0;
+ 
++	for (char *p = contents->get(); *p; ++p) {
++		if (*p == '\n') {
++			t[i] = 0;
++
++			if (!strncmp(t, "subject: ", 9))
++				retriever.got_title(t + 9);
++			else if (!strncmp(t, "date: ", 6)) {
++				char wd[4], mo[4], n[20];
++				int d, h, mi, s, y;
++
++				// Sun Oct  5 20:22:00 2003
++				if (sscanf(t + 6, "%3s %3s %d %d:%d:%d %d",
++				    wd, mo, &d, &h, &mi, &s, &y) != 7)
++					cout << "error: invalid date '" <<
++					    t + 6 << "'" << endl;
++				else {
++					int i;
++
++					for (i = 0; months[i]; ++i)
++						if (!strcmp(months[i], mo))
++							break;
++					if (!months[i])
++						cout << "invalid month" << endl;
++					// 2003-10-05 22:22:00
++					sprintf(n, "%4.4d-%2.2d-%2.2d "
++					    "%2.2d:%2.2d:%2.2d",
++					    y, i, d, h, mi, s);
++					retriever.got_time(n);
++				}
++			}
++			i = 0;
++		} else
++			t[i++] = *p;
++	}
++}
++
+ //*****************************************************************************
+ // void HTML::parse(Retriever &retriever, URL &baseURL)
+ //   Parse the HTML document using the Retriever object for all the callbacks.
+@@ -176,6 +219,8 @@
+     in_space = 0;
+     in_punct = 0;
+ 	
++    undeadly(retriever);
++
+     while (*position)
+     {
+ 
+--- htdig/HTML.h.orig		Fri Feb  1 00:47:17 2002
++++ htdig/HTML.h		Sat Apr 17 00:31:10 2004
+@@ -82,6 +82,7 @@
+     //
+     void		do_tag(Retriever &, String &);
+     char		*transSGML(char *);
++    void		undeadly(Retriever &);
+ };
+ 
+ #endif
+--- htsearch/Display.cc.orig	Fri Feb  1 00:47:18 2002
++++ htsearch/Display.cc		Sat Apr 17 00:31:10 2004
+@@ -109,7 +109,7 @@
+         logSearch(pageNumber, matches);
+     }
+ 
+-    displayHTTPheaders();
++//  displayHTTPheaders();
+     setVariables(pageNumber, matches);
+ 	
+     //
+@@ -124,11 +124,13 @@
+ 	// No matches.
+ 	//
+         delete matches;
+-	displayNomatch();
++//	displayNomatch();
++        cout << "0" << endl;
+ 	return;
+     }
+     // maxScore = match->getScore();	// now done in buildMatchList()
+     	
++/*
+     String	wrap_file = config["search_results_wrapper"];
+     String	*wrapper = 0;
+     char	*header = 0, *footer = 0;
+@@ -164,15 +166,19 @@
+ 	expandVariables(header);
+     else
+ 	displayHeader();
++*/
+ 
+     //
+     // Display the window of matches requested.
+     //
++/*
+     if (currentTemplate->getStartTemplate())
+     {
+ 	expandVariables(currentTemplate->getStartTemplate());
+     }
++*/
+     
++    cout << matches->Count() << endl;
+     matches->Start_Get();
+     while ((match = (ResultMatch *)matches->Get_Next()) &&
+ 	   numberDisplayed < number)
+@@ -185,7 +191,37 @@
+ 		continue;	// The document isn't present for some reason
+ 	    ref->DocAnchor(match->getAnchor());
+ 	    ref->DocScore(match->getScore());
+-	    displayMatch(match,currentMatch+1);
++
++            int percent = 100;
++            if (maxScore != 0) {
++		percent = (int)(ref->DocScore() * 100 / (double)maxScore);
++		if (percent <= 0)
++		    percent = 1;
++            }
++
++	    char    *coded_url = match->getURL();
++	    String url = HtURLCodec::instance()->decode(coded_url);
++	    HtURLRewriter::instance()->Replace(url);
++
++	    int iA = ref->DocAnchor();
++            String *anchor = 0;
++            int fanchor = 0;
++            if (iA > 0) {
++		List *anchors = ref->DocAnchors();
++		if (anchors->Count() >= iA) {
++		    anchor = new String();
++		    fanchor = 1;
++		    *anchor << "#" << ((String*) (*anchors)[iA-1])->get();
++		}
++	    }
++	    int first = -1;
++	    String urlanchor(url);
++	    if (anchor)
++		urlanchor << anchor;
++
++            cout << currentMatch+1 << " " << HtURLCodec::instance()->decode(match->getURL()) << " " << percent << " " << *excerpt(ref, urlanchor, fanchor, first) << endl;
++
++//	    displayMatch(match,currentMatch+1);
+ 	    numberDisplayed++;
+ 	    match->setRef(NULL);
+ 	    delete ref;
+@@ -193,6 +229,7 @@
+ 	currentMatch++;
+     }
+ 
++/*
+     if (currentTemplate->getEndTemplate())
+     {
+ 	expandVariables(currentTemplate->getEndTemplate());
+@@ -204,6 +241,7 @@
+ 
+     if (wrapper)
+ 	delete wrapper;
++*/
+     delete matches;
+ }
+ 
+--- htsearch/htsearch.cc.orig	Fri Feb  1 00:47:18 2002
++++ htsearch/htsearch.cc	Sat Apr 17 00:31:10 2004
+@@ -82,13 +82,17 @@
+ 	      // The default is obviously to do this securely
+ 	      // but if people want to shoot themselves in the foot...
+ #ifndef ALLOW_INSECURE_CGI_CONFIG
++/*
+ 	      if (!getenv("REQUEST_METHOD"))
+ 		{
++*/
+ #endif
+ 		  configFile = optarg;
+ 		  override_config=1;
+ #ifndef ALLOW_INSECURE_CGI_CONFIG
++/*
+ 		}
++*/
+ #endif
+ 	      break;
+  	    case 'v':

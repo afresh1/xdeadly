@@ -1,0 +1,39 @@
+<table bgcolor="#ffffff" cellpadding="5" cellspacing="0" border="0" width="100%">
+
+	<tr>
+		<td valign="top">
+			<a href="%%BASEURL%%?action=front%%URLOPTS%%"><img src="images/logo.jpg" width="300" height="100" alt="OpenBSD Journal" border="0"></a>
+			<!-- do NOT follow this link, you'll get blacklisted as bot -->
+			<a href="/crawlertrap/" name=""></a>
+		</td>
+		<td align="right" valign="bottom">
+			<form method="get" action="%%BASEURL%%">
+				<input type="hidden" name="action" value="search">
+				<input type="hidden" name="mode" value="%%MODE%%">
+				<input type="hidden" name="thres" value="%%THRES%%">
+				<input type="text" name="query" value="" size="15">
+				<input type="submit" value="Search">
+			</form>
+		</td>
+	</tr>
+
+</table>
+
+<table border="0" width="100%" bgcolor="#cccccc" cellpadding="3" cellspacing="0">
+	<tr>
+		<td bgcolor="#cccccc" nowrap="nowrap">
+			<a href="%%BASEURL%%?action=front%%URLOPTS%%"><font color="#336666" size="3"><b> Home :</b></font></a>
+		</td>
+		<td bgcolor="#cccccc" nowrap="nowrap">
+			<a href="%%BASEURL%%?action=submit%%URLOPTS%%"><font color="#336666" size="3"><b>: Add Story :</b></font></a>
+		</td>
+		<td bgcolor="#cccccc" nowrap="nowrap">
+			<a href="%%BASEURL%%?action=search&amp;sort=time%%URLOPTS%%"><font color="#336666" size="3"><b>: Archives :</b></font></a>
+		</td>
+		<td bgcolor="#cccccc" nowrap="nowrap">
+			<a href="%%BASEURL%%?action=about%%URLOPTS%%"><font color="#336666" size="3"><b>: About :</b></font></a>
+		</td>
+		%%USERNAVBAR%%
+		<td width="100%" bgcolor="#cccccc"></td>
+	</tr>
+</table>
