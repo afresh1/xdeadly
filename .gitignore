@@ -10,3 +10,6 @@ Makefile*
 MANIFEST*
 !MANIFEST.SKIP
 *META.*
+
+data
+auth
