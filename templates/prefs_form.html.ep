@@ -1,22 +1,22 @@
 <font color="#336666" size="3">
-	<form method="post" action="%%BASEURL%%?action=prefspost">
-		<input type="hidden" name="mode" value="%%MODE%%">
-		<input type="hidden" name="thres" value="%%THRES%%">
+	<form method="post" action="<%= url_for('prefspost') %>">
+		<input type="hidden" name="mode" value="<%= $mode %>">
+		<input type="hidden" name="thres" value="<%= $thres %>">
 
 		<p>
 		Name<br>
-		<input type="text" name="name" value="%%NAME%%" size="60"><p>
+		<input type="text" name="name" value="<%= $name %>" size="60"><p>
 
 		Email address<br>
-		<input type="text" name="email" value="%%EMAIL%%" size="60"><p>
+		<input type="text" name="email" value="<%= $email %>" size="60"><p>
 
 		Web site<br>
-		<textarea name="comment" cols="72" rows="8">%%COMMENT%%</textarea><p>
+		<textarea name="comment" cols="72" rows="8"><%= include 'comment' %></textarea><p>
 
 		<input type="submit" name="submit" value="Submit">
 	</form>
 	<p>
-	<form method="post" action="%%AUTHURL%%">
+	<form method="post" action="<%= url_for('login') %>">
 		Change password:
 		new <input type="password" name="pw_new" value="" size="10">
 		confirm <input type="password" name="pw_confirm" value="" size="10">

@@ -1,6 +1,6 @@
 <tr>
   <td>
-    <a href="%%LINK%%"><b>%%SUBJECT%%</b></a>&nbsp; %%MOD%% (%%SCORE%%%) by <b>%%NAME%%</b> on %%DATE%% <b>%%COUNT%%</b> comments.<br>
-    %%EXCERPT%%
+    <a href="<%= $link %>"><b><%= $subject %></b></a>&nbsp; <%= $mod %> (<%= $score %>%) by <b><%= $name %></b> on <%= $date %> <b><%= $count %></b> comments.<br>
+    <%= $excerpt %>
   </td>
 </tr>

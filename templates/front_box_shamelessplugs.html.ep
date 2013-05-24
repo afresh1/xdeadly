@@ -14,7 +14,7 @@
 					<td>
 						<font size="-1"><p></font>
 						<ul>
-							<li><a href="http://www.junisphere.net/"><img src="images/junisphere.png" align="middle" border="0" alt="[junisphere]"></a></li>
+							<li><a href="http://www.junisphere.net/"><%= image('/images/junisphere.png', align => 'middle', alt => '[junisphere]', border => 0) %></a></li>
 						</ul><p>
 					</td>
 				</tr>

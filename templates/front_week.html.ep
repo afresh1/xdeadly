@@ -1,10 +1,10 @@
 <tr>
 	<td valign="top">
-		<font size="1">%%TIME%%</font>
+		<font size="1"><%= $time %></font>
 	</td>
 	<td valign="top">
 		<font size="1">
-			<a href="%%HREF%%">%%SUBJECT%%</a> (%%COUNT%%)
+			<a href="<%= $href %>"><%= $subject %></a> (<%= $count %>)
 		</font>
 	</td>
 </tr>

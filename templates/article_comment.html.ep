@@ -3,25 +3,25 @@
 		<font size="2"><br /></font>
 		<table width="100%" cellspacing="0" border="0">
 			<tr>
-				<td width="1">%%INDENT%%&nbsp;%%UNINDENT%%</td>
+				<td width="1"><%= $indent %>&nbsp;<%= $unindent %></td>
 				<td bgcolor="#cccccc">
 					<font color="#336666">
-						<b>%%SUBJECT%%</b> (mod %%MODSUM%%/%%MODCOUNT%%) %%NEW%%<br />
-						by %%NAME%% %%HOST%% %%EMAIL%% on %%DATE%% %%HREF%%
+						<b><%= $subject %></b> (mod <%= $modsum %>/<%= $modcount %>) <%= $new %><br />
+						by <%= $name %> <%= $host %> <%= $email %> on <%= $date %> <%= $href %>
 					</font>
 				</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td>
-					%%BODY%%
+					<%= $body %>
 				</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td align="center">
 					<font size="2">
-						%%NAVIGATION%%
+						<%= $navigation %>
 					</font>
 				</td>
 			</tr>

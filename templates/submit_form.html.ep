@@ -1,32 +1,32 @@
 <font color="#336666" size="3">
-	<form method="post" action="%%BASEURL%%?action=submitpost">
-		<input type="hidden" name="sid" value="%%SID%%">
-		<input type="hidden" name="pid" value="%%PID%%">
-		<input type="hidden" name="mode" value="%%MODE%%">
-		<input type="hidden" name="thres" value="%%THRES%%">
-		<input type="hidden" name="cksum" value="%%CKSUM%%">
+	<form method="post" action="<%= url_for('submitpost') %>">
+		<input type="hidden" name="sid" value="<%= $sid %>">
+		<input type="hidden" name="pid" value="<%= $pid %>">
+		<input type="hidden" name="mode" value="<%= $mode %>">
+		<input type="hidden" name="thres" value="<%= $thres %>">
+		<input type="hidden" name="cksum" value="<%= $cksum %>">
 
 		Name<br>
 		<small>If you risk freedom or life by speaking up, leave empty
 		(gets posted as <i>Anonymous Coward</i>), otherwise take
 		credit and responsiblity for your words (you <i>do</i>
 		think it's worth submitting, after all)</small><br>
-		<input type="text" name="name" value="%%NAME%%" size="60"><p>
+		<input type="text" name="name" value="<%= $name %>" size="60"><p>
 
 		Email address (optional)<br>
 		<small>This shows up verbatim in comments, but not submitted
 		stories. For stories, it may be used by editors to contact
 		you in case there are questions regarding
 		your submission or to give feedback</small><br>
-		<input type="text" name="email" value="%%EMAIL%%" size="60"><p>
+		<input type="text" name="email" value="<%= $email %>" size="60"><p>
 
 		Web page (optional)<br>
 		<small>If specified, this becomes the URL pointed to by your
 		name, like your personal web page</small><br>
-		<input type="text" name="href" value="%%HREF%%" size="60"><p>
+		<input type="text" name="href" value="<%= $href %>" size="60"><p>
 
 		Subject<br>
-		<input type="text" name="subject" value="%%SUBJECT%%" size="60"><p>
+		<input type="text" name="subject" value="<%= $subject %>" size="60"><p>
 
 		Comment<br>
 		<small><i>Please</i> truncate quotes as short as possible.
@@ -34,10 +34,10 @@
 		writing. Readers of your comment will see the original reference just above
 		your post, so you can truncate your quote to a minimum.
 		To make Puffy really happy, put replies <i>below</i> quotes.</small><br>
-		<textarea name="data" cols="72" rows="25">%%DATA%%</textarea><p>
+		<textarea name="data" cols="72" rows="25"><%= $data %></textarea><p>
 
-		<input type="radio" name="type" value="plain" %%CHECKED_TYPE_PLAIN%%> Plain text (automatically converted to HTML)<br>
-		<input type="radio" name="type" value="html" %%CHECKED_TYPE_HTML%%> HTML (<i>Warning:</i> if you switch to HTML mode, you have to manually HTML-ize your post, including quotes)<br>
+		<input type="radio" name="type" value="plain" <%= $checked_type_plain %>> Plain text (automatically converted to HTML)<br>
+		<input type="radio" name="type" value="html" <%= $checked_type_html %>> HTML (<i>Warning:</i> if you switch to HTML mode, you have to manually HTML-ize your post, including quotes)<br>
 		<p>
 
 		<i>In HTML mode:</i><p>
@@ -59,7 +59,7 @@
 		and their use will cause your post to be refused with an error.
 		When this happens, navigate back to re-edit your post.<p>
 
-%%CAPTCHA%%
+<%= $captcha %>
 
 		<input type="submit" name="preview" value="Preview">
 		<input type="submit" name="submit" value="Submit">

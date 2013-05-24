@@ -1,14 +1,14 @@
 <td bgcolor="#cccccc" nowrap="nowrap">
-	<a href="%%BASEURL%%?action=submissions%%URLOPTS%%"><font color="#ff0000" size="3"><b>: Submissions :</b></font></a>
+	<a href="<%= url_for('submissions') %>"><font color="#ff0000" size="3"><b>: Submissions :</b></font></a>
 <td>
 <td bgcolor="#cccccc" nowrap="nowrap">
-	<a href="%%BASEURL%%?action=prefs%%URLOPTS%%"><font color="#ff0000" size="3"><b>: Preferences :</b></font></a>
+	<a href="<%= url_for('prefs') %>"><font color="#ff0000" size="3"><b>: Preferences :</b></font></a>
 <td>
 <td bgcolor="#cccccc" nowrap="nowrap">
-	<a href="%%BASEURL%%?action=deauth%%URLOPTS%%"><font color="#ff0000" size="3"><b>: Logout :</b></font></a>
+	<a href="<%= url_for('deauth') %>"><font color="#ff0000" size="3"><b>: Logout :</b></font></a>
 <td>
 <td bgcolor="#cccccc" nowrap="nowrap">
 	<font color ="#ff0000" size="2">
-		<b>%%USERGROUP%%</b>
+		<b><%= $usergroup %></b>
 	</font>
 <td>

@@ -13,13 +13,13 @@
 				<tr>
 					<td>
 						<table width="203">
-							%%WEEKLIST%%
+							<%= $weeklist %>
 							<tr>
 								<td colspan="2" align="right">
 									<p><p>
 									<font size="2">
-										<a href="%%BASEURL%%?action=search&amp;query=*&amp;sort=time%%URLOPTS%%"><b>Older Stuff...</b></a><br>
-										<a href="%%BASEURL%%?action=front&amp;date=%%YESTERDAY%%%%URLOPTS%%"><b>Yesterday's Edition...</b></a>
+										<a href="<%= url_for('search')->query(query => '*', sort => 'time') %>"><b>Older Stuff...</b></a><br>
+										<a href="<%= url_for('front')->query(date => $yesterday) %>"><b>Yesterday's Edition...</b></a>
 									</font>
 								</td>
 							</tr>

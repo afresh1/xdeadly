@@ -14,12 +14,12 @@
 					<td>
 						<font size="-1"><p></font>
 						<ul>
-							<li><font size="-1"><a href="%%BASEURL%%?action=article&amp;sid=20040513185058%%URLOPTS%%">Secure Architectures with OpenBSD</a></font></li>
-							<li><font size="-1"><a href="%%BASEURL%%?action=article&amp;sid=20040301165203%%URLOPTS%%">Building Firewalls with OpenBSD and PF</a></font></li>
-							<li><font size="-1"><a href="%%BASEURL%%?action=article&amp;sid=20000507004136%%URLOPTS%%">Building Linux &amp; OpenBSD Firewalls</a></font></li>
-							<li><font size="-1"><a href="%%BASEURL%%?action=article&amp;sid=20001012023516%%URLOPTS%%">Managing IMAP</a></font></li>
-							<li><font size="-1"><a href="%%BASEURL%%?action=article&amp;sid=20010114000632%%URLOPTS%%">Building Internet Firewalls</a></font></li>
-							<li><font size="-1"><a href="%%BASEURL%%?action=article&amp;sid=20011006204448%%URLOPTS%%">Network Troubleshooting Tools</a></font></li>
+							<li><font size="-1"><a href="<%= url_for('articlesid')->query(sid => '20040513185058') %>">Secure Architectures with OpenBSD</a></font></li>
+							<li><font size="-1"><a href="<%= url_for('articlesid')->query(sid => '20040301165203') %>">Building Firewalls with OpenBSD and PF</a></font></li>
+							<li><font size="-1"><a href="<%= url_for('articlesid')->query(sid => '20000507004136') %>">Building Linux &amp; OpenBSD Firewalls</a></font></li>
+							<li><font size="-1"><a href="<%= url_for('articlesid')->query(sid => '20001012023516') %>">Managing IMAP</a></font></li>
+							<li><font size="-1"><a href="<%= url_for('articlesid')->query(sid => '20010114000632') %>">Building Internet Firewalls</a></font></li>
+							<li><font size="-1"><a href="<%= url_for('articlesid')->query(sid => '20011006204448') %>">Network Troubleshooting Tools</a></font></li>
 						</ul><p>
 					</td>
 				</tr>

@@ -7,7 +7,7 @@
 
 	<body bgcolor="#ffffff" text="#000000" link="#336666" vlink="#666666" alink="#996666">
 
-		%%HEADER%%
+		<%= include 'header' %>
 
 		<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
 
@@ -47,7 +47,7 @@ allowing their work to be preserved here. Thank you!<p>
 
 Well, it turned out that adding support for submitting new articles
 and comments wasn't much of a deal after that, so here's my
-<a href="%%BASEURL%%?action=article&amp;sid=20040409000001%%URLOPTS%%">proposal</a>
+<a href="<%= url_for('articlesid')->query(sid => '20040409000001') %>">proposal</a>
 for a new OpenBSD Journal. There's much to be done, both in code
 features and, most importantly, in editing new articles. Volunteers
 are most welcome, drop us a
@@ -62,9 +62,9 @@ are most welcome, drop us a
 		<td bgcolor="#cccccc"><font color="#336666">Email</font></td>
 		<td bgcolor="#cccccc"><font color="#336666">Comment</font></td>
 	</tr>
-	%%EDITORS%%
+	<%= $editors %>
 </table>
-<small><br>If you're an editor and not listed above, <a href="%%AUTHURL%%">login</a>, edit preferences and set some <i>web site</i> (only accounts with non-empty web sites are shown here).</small><p>
+<small><br>If you're an editor and not listed above, <a href="<%= url_for('login') %>">login</a>, edit preferences and set some <i>web site</i> (only accounts with non-empty web sites are shown here).</small><p>
 
 <b>Contributors</b><br>
 <table border="0">
@@ -102,22 +102,22 @@ are most welcome, drop us a
 
 <p>
 <b>Articles posted per month</b><br>
-<img src="/articles.png" alt="articles"><p>
+<%= image('/articles.png', alt => 'articles') %><p>
 <b>Comments posted per month</b><br>
-<img src="/comments.png" alt="comments"><p>
+<%= image('/comments.png', alt => 'comments') %><p>
 <a href="/top/">top 10</a> most read articles of the last day/week/month<br>
 <a href="/awstats/">awstats</a> web server log statistics<br>
 <a href="/pfstat/">pfstat</a> packet filter statistics
 <p>
 
-<i>%%RCSID%%</i><p>
+<i><%= $rcsid %></i><p>
 					</font>
 				</td>
 			</tr>
 
 		</table>
 
-		%%FOOTER%%
+		<%= include 'footer' %>
 
 	</body>
 

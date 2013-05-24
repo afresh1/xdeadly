@@ -1,10 +1,10 @@
     <item>
-      <title>%%TITLE%%</title>
-      <link>%%LINK%%</link>
-      <category>%%CATEGORY%%</category>
-      <pubDate>%%DATE%%</pubDate>
+      <title><%= $title %></title>
+      <link><%= $link %></link>
+      <category><%= $category %></category>
+      <pubDate><%= $date %></pubDate>
       <description><![CDATA[
-%%BODY%%
+<%= $body %>
 ]]></description>
     </item>
 

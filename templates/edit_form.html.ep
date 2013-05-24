@@ -1,73 +1,73 @@
 <p><br>
 <font color="#336666" size="3">
-<form method="post" action="%%BASEURL%%?action=editpost">
-  <input type="hidden" name="sid" value="%%SID%%">
-  <input type="hidden" name="mode" value="%%MODE%%">
-  <input type="hidden" name="thres" value="%%THRES%%">
+<form method="post" action="<%= url_for('editpost') %>">
+  <input type="hidden" name="sid" value="<%= $sid %>">
+  <input type="hidden" name="mode" value="<%= $mode %>">
+  <input type="hidden" name="thres" value="<%= $thres %>">
   <input type="hidden" name="edit" value="1">
-  <input type="hidden" name="submission" value="%%SUBMISSION%%">
+  <input type="hidden" name="submission" value="<%= $submission %>">
   Subject<br>
-  <input type="text" name="subject" value="%%SUBJECT%%" size="60">
+  <input type="text" name="subject" value="<%= $subject %>" size="60">
   <p>
   Contributed by (will be replaced with your user name when saved)<br>
-  <input type="text" name="name" value="%%NAME%%" size="60">
+  <input type="text" name="name" value="<%= $name %>" size="60">
   <p>
   Email address (optional, not currently shown)<br>
-  <input type="text" name="email" value="%%EMAIL%%" size="60">
+  <input type="text" name="email" value="<%= $email %>" size="60">
   <p>
   Web page (optional, editor's own page)<br>
-  <input type="text" name="href" value="%%HREF%%" size="60">
+  <input type="text" name="href" value="<%= $href %>" size="60">
   <p>
   Department (make up something witty)<br>
-  <input type="text" name="dept" value="%%DEPT%%" size="60">
+  <input type="text" name="dept" value="<%= $dept %>" size="60">
   <p>
   Topic <select name="topic">
-    <option value="topic27" %%SELECTED_TOPIC_topic27%%>2.7
-    <option value="topic30" %%SELECTED_TOPIC_topic30%%>3.0
-    <option value="topic31" %%SELECTED_TOPIC_topic31%%>3.1
-    <option value="topic34" %%SELECTED_TOPIC_topic34%%>3.4
-    <option value="topic35" %%SELECTED_TOPIC_topic35%%>3.5
-    <option value="topic36" %%SELECTED_TOPIC_topic36%%>3.6
-    <option value="topic37" %%SELECTED_TOPIC_topic37%%>3.7
-    <option value="topic38" %%SELECTED_TOPIC_topic38%%>3.8
-    <option value="topic39" %%SELECTED_TOPIC_topic39%%>3.9
-    <option value="topic40" %%SELECTED_TOPIC_topic40%%>4.0
-    <option value="topic42" %%SELECTED_TOPIC_topic42%%>4.2
-    <option value="topic43" %%SELECTED_TOPIC_topic43%%>4.3
-    <option value="topicaskobsdj" %%SELECTED_TOPIC_topicaskobsdj%%>Ask
-    <option value="topicblog" %%SELECTED_TOPIC_topicblog%%>Blog
-    <option value="topicbsd" %%SELECTED_TOPIC_topicbsd%%>BSD
-    <option value="topicbsdtalk" %%SELECTED_TOPIC_topicbsdtalk%%>BSDTalk
-    <option value="topicconf" %%SELECTED_TOPIC_topicconf%%>Conference
-    <option value="topiccrypto" %%SELECTED_TOPIC_topiccrypto%%>Crypto
-    <option value="topiceditorial" %%SELECTED_TOPIC_topiceditorial%%>Editorial
-    <option value="topichardware" %%SELECTED_TOPIC_topichardware%%>Hardware
-    <option value="topicnetworking" %%SELECTED_TOPIC_topicnetworking%%>Internet
-    <option value="topicmail" %%SELECTED_TOPIC_topicmail%%>Mail
-    <option value="topicmobile" %%SELECTED_TOPIC_topicmobile%%>MobileOBSD
-    <option value="topicnda" %%SELECTED_TOPIC_topicnda%%>NDA
-    <option value="topicnews" %%SELECTED_TOPIC_topicnews%%>News
-    <option value="oreilly_weasel" %%SELECTED_TOPIC_oreilly_weasel%%>O'Reilly
-    <option value="topicopenbsd" %%SELECTED_TOPIC_topicopenbsd%%>OpenBSD
-    <option value="topicopenssh" %%SELECTED_TOPIC_topicopenssh%%>OpenSSH
-    <option value="topicpf2" %%SELECTED_TOPIC_topicpf2%%>PF
-    <option value="topicports" %%SELECTED_TOPIC_topicports%%>Ports
-    <option value="topicreadme" %%SELECTED_TOPIC_topicreadme%%>Readme
-    <option value="topicsecurity" %%SELECTED_TOPIC_topicsecurity%%>Security
-    <option value="topicsparc" %%SELECTED_TOPIC_topicsparc%%>Sparc
-    <option value="topicsysadmin" %%SELECTED_TOPIC_topicsysadmin%%>SysAdmin
-    <option value="topicjava" %%SELECTED_TOPIC_topicjava%%>Java
+    <option value="topic27" <%= $selected_topic_topic27 %>>2.7
+    <option value="topic30" <%= $selected_topic_topic30 %>>3.0
+    <option value="topic31" <%= $selected_topic_topic31 %>>3.1
+    <option value="topic34" <%= $selected_topic_topic34 %>>3.4
+    <option value="topic35" <%= $selected_topic_topic35 %>>3.5
+    <option value="topic36" <%= $selected_topic_topic36 %>>3.6
+    <option value="topic37" <%= $selected_topic_topic37 %>>3.7
+    <option value="topic38" <%= $selected_topic_topic38 %>>3.8
+    <option value="topic39" <%= $selected_topic_topic39 %>>3.9
+    <option value="topic40" <%= $selected_topic_topic40 %>>4.0
+    <option value="topic42" <%= $selected_topic_topic42 %>>4.2
+    <option value="topic43" <%= $selected_topic_topic43 %>>4.3
+    <option value="topicaskobsdj" <%= $selected_topic_topicaskobsdj %>>Ask
+    <option value="topicblog" <%= $selected_topic_topicblog %>>Blog
+    <option value="topicbsd" <%= $selected_topic_topicbsd %>>BSD
+    <option value="topicbsdtalk" <%= $selected_topic_topicbsdtalk %>>BSDTalk
+    <option value="topicconf" <%= $selected_topic_topicconf %>>Conference
+    <option value="topiccrypto" <%= $selected_topic_topiccrypto %>>Crypto
+    <option value="topiceditorial" <%= $selected_topic_topiceditorial %>>Editorial
+    <option value="topichardware" <%= $selected_topic_topichardware %>>Hardware
+    <option value="topicnetworking" <%= $selected_topic_topicnetworking %>>Internet
+    <option value="topicmail" <%= $selected_topic_topicmail %>>Mail
+    <option value="topicmobile" <%= $selected_topic_topicmobile %>>MobileOBSD
+    <option value="topicnda" <%= $selected_topic_topicnda %>>NDA
+    <option value="topicnews" <%= $selected_topic_topicnews %>>News
+    <option value="oreilly_weasel" <%= $selected_topic_oreilly_weasel %>>O'Reilly
+    <option value="topicopenbsd" <%= $selected_topic_topicopenbsd %>>OpenBSD
+    <option value="topicopenssh" <%= $selected_topic_topicopenssh %>>OpenSSH
+    <option value="topicpf2" <%= $selected_topic_topicpf2 %>>PF
+    <option value="topicports" <%= $selected_topic_topicports %>>Ports
+    <option value="topicreadme" <%= $selected_topic_topicreadme %>>Readme
+    <option value="topicsecurity" <%= $selected_topic_topicsecurity %>>Security
+    <option value="topicsparc" <%= $selected_topic_topicsparc %>>Sparc
+    <option value="topicsysadmin" <%= $selected_topic_topicsysadmin %>>SysAdmin
+    <option value="topicjava" <%= $selected_topic_topicjava %>>Java
   </select>
   <p>
-  Poll&nbsp;<input type="checkbox" name="poll" value="yes" %%CHECKED_POLL%%>
+  Poll&nbsp;<input type="checkbox" name="poll" value="yes" <%= $checked_poll %>>
   <small>(for polls, use one line of front text for each choice, check for
   trailing newlines, preview is slightly broken still, save)</small>
   <p>
   Front text<br>
-  <textarea name="data" cols="90" rows="20">%%DATA%%</textarea>
+  <textarea name="data" cols="90" rows="20"><%= $data %></textarea>
   <br><p>
   More text<br>
-  <textarea name="more" cols="90" rows="20">%%MORE%%</textarea>
+  <textarea name="more" cols="90" rows="20"><%= $more %></textarea>
   <br><p>
 <!--
   Use normal
@@ -85,7 +85,7 @@
   <p>
 -->
   Delayed publication time (either <b>YYYYMMDDhhmmss</b> (in GMT), or <b>+m</b> for "m minutes from now", leave empty for no delay)<br>
-  <input type="text" name="pubdate" value="%%PUBDATE%%" size="14">
+  <input type="text" name="pubdate" value="<%= $pubdate %>" size="14">
   <p>
   <input type="submit" name="preview" value="Preview">
   <input type="submit" name="submit" value="Save">

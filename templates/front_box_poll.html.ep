@@ -14,7 +14,7 @@
 					<td>
 						<p>
 						<font size="-1">
-							%%POLL%%
+							<%= $poll %>
 						</font>
 						<p>
 					</td>

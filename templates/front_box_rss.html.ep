@@ -14,7 +14,7 @@
 					<td>
 						<font size="-1">
 							Users wishing RSS/RDF summary files of OpenBSD Journal,
-							can retrieve: <a href="%%BASEURL%%?action=rss"><img src="images/xml.gif" width="36" height="14" border="0" alt="[xml]"></a>
+							can retrieve: <a href="<%= url_for('rss') %>"><%= image('/images/xml.gif', alt => '[xml]', border => 0, height => 14, width => 36) %></a>
 							<p>
 						</font>
 					</td>

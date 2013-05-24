@@ -13,9 +13,9 @@
 				<tr>
 					<td>
 						<table width="203">
-							%%ERRATA%%
+							<%= $errata %>
 							<tr><td colspan="2" align="right">
-								<a href="%%BASEURL%%?action=errata"><img src="images/xml.gif" width="36" height="14" border="0" alt="[xml]"></a>
+								<a href="<%= url_for('errata') %>"><%= image('/images/xml.gif', alt => '[xml]', border => 0, height => 14, width => 36) %></a>
 							</td></tr>
 						</table>
 					</td>

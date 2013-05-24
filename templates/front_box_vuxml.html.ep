@@ -13,9 +13,9 @@
 				<tr>
 					<td>
 						<table width="203">
-							%%VUXML%%
+							<%= $vuxml %>
 							<tr><td colspan="2" align="right">
-								<a href="http://www.vuxml.org/openbsd/rss.xml"><img src="images/xml.gif" width="36" height="14" border="0" alt="[xml]"></a>
+								<a href="http://www.vuxml.org/openbsd/rss.xml"><%= image('/images/xml.gif', alt => '[xml]', border => 0, height => 14, width => 36) %></a>
 							</td></tr>
 						</table>
 					</td>

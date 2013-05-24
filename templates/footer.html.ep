@@ -1,11 +1,11 @@
 <hr width="100%">
 <p align="center">
 	[
-	<a href="%%BASEURL%%?action=front%%URLOPTS%%">Home</a> |
-	<a href="%%BASEURL%%?action=submit%%URLOPTS%%">Add Story</a> |
-	<a href="%%BASEURL%%?action=search&amp;sort=time%%URLOPTS%%">Archives</a> |
-	<a href="%%BASEURL%%?action=search&amp;query=poll&amp;sort=time%%URLOPTS%%">Polls</a> |
-	<a href="%%BASEURL%%?action=about%%URLOPTS%%">About</a>
+	<a href="<%= url_for('front') %>">Home</a> |
+	<a href="<%= url_for('submit') %>">Add Story</a> |
+	<a href="<%= url_for('search')->query(sort => 'time') %>">Archives</a> |
+	<a href="<%= url_for('search')->query(query => 'poll', sort => 'time') %>">Polls</a> |
+	<a href="<%= url_for('about') %>">About</a>
 	]
 </p>
 <p align="center">

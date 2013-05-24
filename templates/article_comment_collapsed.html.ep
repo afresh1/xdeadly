@@ -1,13 +1,13 @@
 <tr>
 	<td>
-		%%INDENT%%
+		<%= $indent %>
 		<table width="100%" cellspacing="0" border="0">
 			<tr>
 				<td>
-					<a href="%%LINK%%">%%SUBJECT%%</a> (%%MODSUM%%/%%MODCOUNT%%) by %%NAME%% on %%DATE%% %%NEW%%
+					<a href="<%= $link %>"><%= $subject %></a> (<%= $modsum %>/<%= $modcount %>) by <%= $name %> on <%= $date %> <%= $new %>
 				</td>
 			</tr>
 		</table>
-		%%UNINDENT%%
+		<%= $unindent %>
 	</td>
 </tr>
