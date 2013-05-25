@@ -1,6 +1,6 @@
 <font color="#336666" size="3">
 	<form method="post" action="<%= url_for('prefspost') %>">
-		<input type="hidden" name="mode" value="<%= $mode %>">
+		<input type="hidden" name="mode" value="<%= mode %>">
 		<input type="hidden" name="thres" value="<%= $thres %>">
 
 		<p>

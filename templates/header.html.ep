@@ -9,7 +9,7 @@
 		<td align="right" valign="bottom">
 			<form method="get" action="<%= $baseurl %>">
 				<input type="hidden" name="action" value="search">
-				<input type="hidden" name="mode" value="<%= $mode %>">
+				<input type="hidden" name="mode" value="<%= mode %>">
 				<input type="hidden" name="thres" value="<%= $thres %>">
 				<input type="text" name="query" value="" size="15">
 				<input type="submit" value="Search">

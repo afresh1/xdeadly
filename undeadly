@@ -120,6 +120,13 @@ helper topicimg => sub {
     return "$topic.$ext";
 };
 
+helper mode => sub {
+    my ($self) = @_;
+    my %modes = map { $_ => 1 } qw( expanded flat );
+
+    return $modes{ $self->param('mode') };
+};
+
 
 under sub {
     my $self = shift;
@@ -146,7 +153,6 @@ under sub {
         indent
         items
         link
-        mode
         name
         navigation
         pid

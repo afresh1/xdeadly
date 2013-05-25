@@ -2,7 +2,7 @@
 <font color="#336666" size="3">
 <form method="post" action="<%= url_for('editpost') %>">
   <input type="hidden" name="sid" value="<%= $sid %>">
-  <input type="hidden" name="mode" value="<%= $mode %>">
+  <input type="hidden" name="mode" value="<%= mode %>">
   <input type="hidden" name="thres" value="<%= $thres %>">
   <input type="hidden" name="edit" value="1">
   <input type="hidden" name="submission" value="<%= $submission %>">
