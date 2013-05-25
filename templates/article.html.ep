@@ -59,7 +59,7 @@
 		</tbody></table>
 
 		<table width="100%" cellspacing="0" border="0"><tbody>
-			<%= $comments %>
+			<%= include comment_template, %{ $_ } for @{ $comments } %>
 		</tbody></table>
 
 		<%= include 'footer' %>

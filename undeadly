@@ -14,25 +14,26 @@ helper usernavbar => sub {
     return 'anon_navbar';
 };
 
-helper stories => sub {
-    my ($self) = @_;
+helper stories  => sub { return shift->_posts };
+helper _posts  => sub {
+    my ($self, $dir) = @_;
+    $dir = app->home->rel_dir( join '/', $data_dir, $dir || '' );
 
-    my $dir = app->home->rel_dir( $data_dir );
     opendir my $dh, $dir or die "Couldn't opendir $dir: $!";
-    my @stories
+    my @posts
         = sort { $b <=> $a } grep { /^\d+$/ && -d "$dir/$_" } readdir $dh;
     close $dh;
 
-    return @stories;
+    return @posts;
 };
 
 helper story_details => sub {
     my ( $self, $sid ) = @_;
 
-    my $file = "$data_dir/$sid/article";
+    my $file = "$sid/article";
     my %story = $self->load_post($file);
 
-    $story{has_more} = -e app->home->rel_file("$file.more");
+    $story{has_more} = -e app->home->rel_file("$data_dir/$file.more");
     $story{more} = '';
 
     if ($story{name} and $story{href}) {
@@ -50,14 +51,15 @@ helper story_details => sub {
 
 helper load_post => sub {
     my ($self, $file) = @_;
-    $file = app->home->rel_file($file);
+    $file = app->home->rel_file("$data_dir/$file");
     return unless -e $file;
 
     open my $fh, '<', $file or die "Couldn't open $file: $!";
 
     my %post = (
-        file       => $file,
-        body       => '',
+        file     => $file,
+        comments => [],
+        body     => '',
     );
 
     my $in_body = 0;
@@ -87,6 +89,29 @@ helper story_more => sub {
     my $file = app->home->rel_file("$data_dir/$sid/article.more");
     return unless -e $file;
     return slurp($file);
+};
+
+helper comments => sub {
+    my ( $self, $sid ) = @_;
+    return $self->load_comments( $sid );
+};
+
+helper load_comments => sub {
+    my ($self, $dir) = @_;
+
+    return
+        map { $_, @{ $_->{comments} } }
+        map +{ $self->load_comment("$dir/$_") }, $self->_posts($dir);
+};
+
+helper load_comment => sub {
+    my ($self, $dir) = @_;
+
+    my %comment = $self->load_post("$dir/comment");
+    $comment{cid}      = $dir;
+    $comment{comments} = [ $self->load_comments( $dir ) ];
+
+    return %comment;
 };
 
 helper topicimg => sub {
@@ -127,6 +152,9 @@ helper mode => sub {
     return $modes{ $self->param('mode') };
 };
 
+helper comment_template => sub {
+    return shift->mode ? 'article_comment' : 'article_comment_collapsed';
+};
 
 under sub {
     my $self = shift;
@@ -141,7 +169,6 @@ under sub {
         checked_type_plain
         checked_verbose
         cksum
-        comments
         date
         dept
         editors
@@ -153,8 +180,11 @@ under sub {
         indent
         items
         link
+        modsum
+        modcount
         name
         navigation
+        new
         pid
         poll
         pubdate
@@ -247,9 +277,14 @@ get '/article/:sid' => sub {
     my ($self) = @_;
     my $sid = $self->param('sid');
 
-    $self->stash( $self->story_details($sid),
-        more => $self->story_more($sid) );
+    $self->stash(
+        $self->story_details($sid),
+        more     => $self->story_more($sid),
+        comments => [ $self->comments($sid) ],
+    );
 } => 'article';
+
+
 get '/rss';
 get '/submit';
 post '/submit';

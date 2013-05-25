@@ -14,7 +14,7 @@
 			<tr>
 				<td>&nbsp;</td>
 				<td>
-					<%= $body %>
+					<%== $body %>
 				</td>
 			</tr>
 			<tr>
