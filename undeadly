@@ -93,13 +93,37 @@ helper story_more => sub {
 
 helper comments => sub {
     my ( $self, $sid ) = @_;
-    return $self->load_comments( $sid );
+
+    my @comments = $self->load_comments($sid);
+
+    my $base_level = $comments[0]->{level};
+
+    foreach my $comment (@comments) {
+        $comment->{template}
+            = $base_level == $comment->{level}
+            ? 'article_comment'
+            : $self->comment_template;
+
+        $comment->{indent} = $comment->{unindent} = '';
+
+        if ($self->mode ne 'flat') {
+            my $current = $comment->{level} - $base_level;
+            while ($current) {
+                $current--;
+                $comment->{indent}   .= '<ul>';
+                $comment->{unindent} .= '</ul>';
+            }
+        }
+    }
+
+    return @comments;
 };
 
 helper load_comments => sub {
     my ($self, $dir) = @_;
 
     return
+        map { $_->{level}++; $_ }
         map { $_, @{ $_->{comments} } }
         map +{ $self->load_comment("$dir/$_") }, $self->_posts($dir);
 };
@@ -147,7 +171,7 @@ helper topicimg => sub {
 
 helper mode => sub {
     my ($self) = @_;
-    my %modes = map { $_ => 1 } qw( expanded flat );
+    my %modes = map { $_ => $_ } qw( expanded flat );
 
     return $modes{ $self->param('mode') };
 };
@@ -177,7 +201,6 @@ under sub {
         excerpt
         form
         href
-        indent
         items
         link
         modsum
@@ -241,7 +264,6 @@ under sub {
         thres
         time
         title
-        unindent
         usergroup
         vuxml
         weeklist

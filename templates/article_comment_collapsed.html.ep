@@ -1,6 +1,6 @@
 <tr>
 	<td>
-		<%= $indent %>
+		<%== $indent %>
 		<table width="100%" cellspacing="0" border="0">
 			<tr>
 				<td>
@@ -8,6 +8,6 @@
 				</td>
 			</tr>
 		</table>
-		<%= $unindent %>
+		<%== $unindent %>
 	</td>
 </tr>
