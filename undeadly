@@ -210,6 +210,30 @@ helper parse_ctime => sub {
     return timegm( $s, $m, $h, $day, $months{$mname}, $year );
 };
 
+helper human_time => sub {
+    my ( $self, $epoch ) = @_;
+
+    my $name = 'seconds';
+    my %time = ( $name => scalar time - $epoch );
+
+    foreach (
+        { name => 'minutes', qty => 60 },
+        { name => 'hours',   qty => 60 },
+        { name => 'days',    qty => 24 },
+    ) {
+        $time{ $_->{name} } = int $time{$name} / $_->{qty};
+        $time{$name}        = int $time{$name} % $_->{qty};
+        $name               = $_->{name};
+    }
+
+    my $time = '';
+    $time = "$time{days}d" if $time{days};
+    $time .= sprintf "%d:%02d", $time{hours}, $time{minutes}
+        if $time{days} < 5;
+
+    return $time;
+};
+
 under sub {
     my $self = shift;
 
