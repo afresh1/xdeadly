@@ -31,7 +31,7 @@ helper story_details => sub {
     my ( $self, $sid ) = @_;
 
     my $file = "$sid/article";
-    my %story = $self->load_post($file);
+    my %story = $self->load_post($sid);
 
     $story{has_more} = -e app->home->rel_file("$data_dir/$file.more");
     $story{more} = '';
@@ -50,8 +50,13 @@ helper story_details => sub {
 };
 
 helper load_post => sub {
-    my ($self, $file) = @_;
-    $file = app->home->rel_file("$data_dir/$file");
+    my ($self, $base) = @_;
+    my $file;
+
+    foreach my $type (qw( article comment )) {
+        $file = app->home->rel_file("$data_dir/$base/$type");
+        last if -e $file;
+    }
     return unless -e $file;
 
     open my $fh, '<', $file or die "Couldn't open $file: $!";
@@ -131,9 +136,9 @@ helper load_comments => sub {
 helper load_comment => sub {
     my ($self, $dir) = @_;
 
-    my %comment = $self->load_post("$dir/comment");
+    my %comment = $self->load_post($dir);
     $comment{cid}      = $dir;
-    $comment{comments} = [ $self->load_comments( $dir ) ];
+    $comment{comments} = [ $self->load_comments($dir) ];
 
     return %comment;
 };
