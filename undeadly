@@ -212,6 +212,80 @@ helper comment_template => sub {
     return shift->mode ? 'article_comment' : 'article_comment_collapsed';
 };
 
+helper navigation => sub {
+    my ( $self, $sid ) = @_;
+
+    my @links;
+
+    my $mode = $self->mode;
+    my $href = $self->url_with("/article/$sid");
+    $href->query->remove('mode');
+
+    push @links, {
+        href  => $href->clone->query( mode => 'flat' ),
+        title => 'Flattened',
+    } unless $mode eq 'flat';
+
+    push @links, {
+        href  => $href->clone->query( mode => 'expanded' ),
+        title => 'Expanded',
+    } unless $mode eq 'expanded';
+
+    push @links, {
+        href  => $href,
+        title => 'Collapsed',
+    } if $mode;
+
+    if ( $self->current_route('front') ) {
+        my $count         = $self->count_comments($sid);
+        my $s             = $count eq 1 ? '' : 's';
+        my $latest_change = $self->human_time(
+            $self->latest_change( { $self->story_details($sid) } ) );
+
+        unshift @links, {
+            href => $href->clone->query( mode => $mode || 'expanded' ),
+            title => "$count comment$s $latest_change ago",
+        };
+    }
+    elsif ( $self->current_route('article') ) {
+        my $seen_myself = 0;
+        my $prev;
+        my $next;
+
+        foreach my $current ($self->stories) {
+            if ($current eq $sid) {
+                $seen_myself = 1;
+                next;
+            }
+            elsif ($seen_myself) {
+                $prev = $current;
+                last;
+            }
+            $next = $current;
+        }
+
+        if ($prev) {
+            my %story = $self->story_details($prev);
+            unshift @links, {
+                href =>  $self->url_with("/article/$prev"),
+                title => "<< $story{subject}",
+            };
+        }
+
+        if ($next) {
+            my %story = $self->story_details($next);
+            push @links, {
+                href =>  $self->url_with("/article/$next"),
+                title => "$story{subject} >>",
+            };
+        }
+        use Data::Dumper 'Dumper';
+        warn Dumper [ $prev, $next ];
+    }
+
+    return @links;
+};
+
 helper parse_ctime => sub {
     my ($self, $string) = @_;
 

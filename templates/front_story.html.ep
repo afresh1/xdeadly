@@ -29,5 +29,6 @@
 		</td>
 	</tr>
 </table>
-<%= $navigation %>
+%== join ' | ', map { link_to( $_->{title}, $_->{href} ) } navigation $sid;
+
 <p>
