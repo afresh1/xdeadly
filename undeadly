@@ -29,49 +29,56 @@ helper stories => sub {
 helper story_details => sub {
     my ( $self, $sid ) = @_;
 
-    my $file = app->home->rel_file("$data_dir/$sid/article");
-    return unless -e $file;
+    my $file = "$data_dir/$sid/article";
+    my %story = $self->load_post($file);
 
-    open my $fh, '<', $file or die "Couldn't open $file: $!";
-
-    my %story = (
-        sid        => $sid,
-        file       => $file,
-        department => '',
-        more       => '',
-        navigation => '',
-        body       => ''
-    );
-    my $in_body = 0;
-    while (<$fh>) {
-        chomp;
-        if ($in_body) {
-            $story{body} .= $_;
-        }
-        elsif (/^$/) {
-            $in_body = 1;
-        }
-        else {
-            my ($key, $value) = split /:\s*/, $_, 2;
-            $story{$key} = $value;
-        }
-    }
-
-    $story{date} .= ' (GMT)' if $story{date};
-    $story{department} = $story{dept};
-
-    $story{has_more} = -e "$file.more";
+    $story{has_more} = -e app->home->rel_file("$file.more");
+    $story{more} = '';
 
     if ($story{name} and $story{href}) {
         my $href = url_escape($story{href});
         $story{name} = "<a href='$href'>$story{name}</a>";
     }
 
-    $story{topicimg} = $self->topicimg($story{topic});
+    $story{department} = $story{dept};
+    $story{sid}        = $sid;
+    $story{topicimg}   = $self->topicimg($story{topic});
     $story{topicquery} = $story{topic};
 
-    close $fh;
     return %story;
+};
+
+helper load_post => sub {
+    my ($self, $file) = @_;
+    $file = app->home->rel_file($file);
+    return unless -e $file;
+
+    open my $fh, '<', $file or die "Couldn't open $file: $!";
+
+    my %post = (
+        file       => $file,
+        body       => '',
+    );
+
+    my $in_body = 0;
+    while (<$fh>) {
+        chomp;
+        if ($in_body) {
+            $post{body} .= $_;
+        }
+        elsif (/^$/) {
+            $in_body = 1;
+        }
+        else {
+            my ($key, $value) = split /:\s*/, $_, 2;
+            $post{$key} = $value;
+        }
+    }
+
+    $post{date} .= ' (GMT)' if $post{date};
+
+    close $fh;
+    return %post;
 };
 
 helper story_more => sub {
