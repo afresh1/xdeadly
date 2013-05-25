@@ -2,6 +2,7 @@
 use Mojolicious::Lite;
 
 use Mojo::Util qw(url_escape slurp);
+use Time::Local qw(timegm);
 
 # Documentation browser under "/perldoc"
 plugin 'PODRenderer';
@@ -183,6 +184,30 @@ helper mode => sub {
 
 helper comment_template => sub {
     return shift->mode ? 'article_comment' : 'article_comment_collapsed';
+};
+
+helper parse_ctime => sub {
+    my ($self, $string) = @_;
+
+    my %months = (
+        Jan => 0,
+        Feb => 1,
+        Mar => 2,
+        Apr => 3,
+        May => 4,
+        Jun => 5,
+        Jul => 6,
+        Aug => 7,
+        Sep => 8,
+        Oct => 9,
+        Nov => 10,
+        Dec => 11,
+    );
+
+    my ($wday, $mname, $day, $time, $year) = split /\s+/, $string;
+    my ($h, $m, $s) = split /:/, $time;
+
+    return timegm( $s, $m, $h, $day, $months{$mname}, $year );
 };
 
 under sub {
