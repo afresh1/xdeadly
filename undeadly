@@ -103,17 +103,17 @@ helper comments => sub {
 
     my @comments = $self->load_comments($sid);
 
-    my $base_level = $comments[0]->{level};
+    my $base_level = $comments[0]->{level} || 0;
 
     foreach my $comment (@comments) {
         $comment->{template}
-            = $base_level == $comment->{level}
+            = $base_level == ($comment->{level} || 0)
             ? 'article_comment'
             : $self->comment_template;
 
         $comment->{indent} = $comment->{unindent} = '';
 
-        if ($self->mode ne 'flat') {
+        if ($self->mode ne 'flat' and defined $comment->{level}) {
             my $current = $comment->{level} - $base_level;
             while ($current) {
                 $current--;
