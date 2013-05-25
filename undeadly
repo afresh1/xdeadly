@@ -84,6 +84,7 @@ helper load_post => sub {
     }
 
     $post{date} .= ' (GMT)' if $post{date};
+    $post{comments} = [ $self->comments($base) ];
 
     close $fh;
     return %post;
