@@ -125,6 +125,18 @@ helper comments => sub {
     return @comments;
 };
 
+helper count_comments => sub {
+    my ($self, $dir) = @_;
+    my $count = 0;
+
+    foreach my $cid ($self->_posts($dir)) {
+        $count++;
+        $count+= $self->count_comments( "$dir/$cid" );
+    }
+
+    return $count;
+};
+
 helper latest_change => sub {
     my ($self, @comments) = @_;
     my $epoch = 0;
