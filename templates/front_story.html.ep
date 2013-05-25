@@ -22,7 +22,7 @@
 		</td>
 		<td align="right" valign="top">
 			<a href="<%= url_for('search')->query(query => $topicquery, sort => 'time') %>">
-				<%= image('/images/<%= $topicimg %>', alt => '[<%= $topicquery %>]', border => 0, height => 70, hspace => 20, vspace => 10, width => 70) %>
+				<%= image("/images/$topicimg", alt => $topicquery, border => 0, height => 70, hspace => 20, vspace => 10, width => 70) %>
 			</a>
 		</td>
 	</tr>
