@@ -125,6 +125,20 @@ helper comments => sub {
     return @comments;
 };
 
+helper latest_change => sub {
+    my ($self, @comments) = @_;
+    my $epoch = 0;
+
+    foreach my $comment (@comments) {
+        my $try = $self->latest_change( @{ $comment->{comments} } );
+        $epoch = $try if $epoch < $try;
+        $comment->{epoch} ||= $self->parse_ctime( $comment->{date} );
+        $epoch = $comment->{epoch} if $epoch < $comment->{epoch};
+    }
+
+    return $epoch;
+};
+
 helper load_comments => sub {
     my ($self, $dir) = @_;
 
