@@ -1,0 +1,16 @@
+name: andrew
+email: nothanks@example.com
+href: https://github.com/afresh1/xdeadly
+date: Fri May 24 22:17:11 2013
+pubdate: 20130524193705
+host: andrew
+subject: Help Needed
+topic: topiceditorial
+dept: Future Plans
+
+<p>Well, you have made it this far.  Someday I hope you will be able to see a 
+TODO list on <a href="https://github.com/afresh1/xdeadly">Github</a> but for 
+now, I just created this story so you would have something to see.</p>
+
+<p>Please, look through the code and submit some pull requests.  I promise to 
+have time for code reviews!</p>
