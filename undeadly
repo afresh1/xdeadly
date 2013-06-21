@@ -50,6 +50,21 @@ helper story_details => sub {
     return %story;
 };
 
+helper comment_details => sub {
+    my ( $self, $sid, $cid ) = @_;
+    my %post = $self->load_post( "$sid/$cid" );
+
+    return (
+        sid        => $sid,
+        cid        => $cid,
+        department => '',
+        more       => '',
+        topicquery => '',
+        topicimg   => '',
+        %post,
+    );
+};
+
 helper load_post => sub {
     my ($self, $base) = @_;
     my $file;
@@ -214,13 +229,40 @@ helper comment_template => sub {
 };
 
 helper navigation => sub {
-    my ( $self, $sid ) = @_;
+    my ( $self, $sid, $cid) = @_;
 
     my @links;
 
     my $mode = $self->mode;
-    my $href = $self->url_with("/article/$sid");
+    my $href = $self->url_with;
     $href->query->remove('mode');
+
+    if ( defined $cid ) {
+        return (
+            {   href  => $href->clone->path("/article/$cid"),
+                title => 'Show Thread',
+            },
+            {   href  => $href->clone->path("/reply/$cid"),
+                title => 'Reply to this comment',
+            }
+        );
+    }
+
+    # XXX This is rather fragile, need to find a better way.
+    if ( @{ $href->path } > 2 ) {
+        my $up = $href->clone;
+        pop @{ $up->path };
+
+        my @dir = @{ $up->path };
+        shift @dir;
+        my %parent = $self->load_post(join '/', @dir);
+        my $title = $parent{subject} || '';
+
+        push @links, {
+            href  => $up,
+            title => "Up: $title",
+        };
+    }
 
     push @links, {
         href  => $href->clone->query( mode => 'flat' ),
@@ -280,8 +322,6 @@ helper navigation => sub {
                 title => "$story{subject} >>",
             };
         }
-        use Data::Dumper 'Dumper';
-        warn Dumper [ $prev, $next ];
     }
 
     return @links;
@@ -458,6 +498,17 @@ get '/article/:sid' => sub {
         $self->story_details($sid),
         more     => $self->story_more($sid),
         comments => [ $self->comments($sid) ],
+    );
+} => 'article';
+
+get '/article/:sid/*cid' => sub {
+    my ($self) = @_;
+    my $sid = $self->param('sid');
+    my $cid = $self->param('cid');
+
+    $self->stash(
+        $self->comment_details($sid, $cid),
+        comments => [ $self->comments("$sid/$cid") ],
     );
 } => 'article';
 

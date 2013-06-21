@@ -21,7 +21,7 @@
 				<td>&nbsp;</td>
 				<td align="center">
 					<font size="2">
-						<%= $navigation %>
+%== join ' ', map { '[ ' . link_to( $_->{title}, $_->{href} ) . ' ]' } navigation $sid, $cid;
 					</font>
 				</td>
 			</tr>
