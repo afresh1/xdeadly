@@ -68,8 +68,10 @@ helper comment_details => sub {
 helper load_post => sub {
     my ($self, $base) = @_;
     my $file;
+    my $type;
 
-    foreach my $type (qw( article comment )) {
+    foreach (qw( article comment )) {
+        $type = $_;
         $file = app->home->rel_file("$data_dir/$base/$type");
         last if -e $file;
     }
@@ -100,6 +102,7 @@ helper load_post => sub {
 
     $post{date} .= ' (GMT)' if $post{date};
     $post{comments} = [ $self->comments($base) ];
+    $post{mod}      = { $self->mod_points("$base/$type") };
 
     close $fh;
     return %post;
@@ -151,6 +154,33 @@ helper count_comments => sub {
     }
 
     return $count;
+};
+
+helper mod_points => sub {
+    my ($self, $post_file) = @_;
+    my $file = app->home->rel_file("$data_dir/$post_file.mod");
+
+    my %mod = (
+        file  => $file,
+        sum   => 0,
+        count => 0,
+        votes => {},
+    );
+    return %mod unless -e $file;
+
+    open my $fh, '<', $file or die "Couldn't open $file: $!";
+    while (<$fh>) {
+        my ($who, $what) = split /\s+/;
+
+        $mod{votes}{$who} = $what;
+        next unless $what;
+
+        $mod{count}++;
+        $mod{sum} += $what;
+    }
+    close $fh;
+
+    return %mod;
 };
 
 helper latest_change => sub {
@@ -273,8 +303,11 @@ helper navigation => sub {
         title => 'Expanded',
     } unless $mode eq 'expanded';
 
+    # $href->clone->query->remove('mode') returns a Mojo::Parameters object
+    my $collapsed_href = $href->clone;
+    $collapsed_href->query->remove('mode');
     push @links, {
-        href  => $href,
+        href  => $collapsed_href,
         title => 'Collapsed',
     } if $mode;
 
@@ -397,8 +430,6 @@ under sub {
         href
         items
         link
-        modsum
-        modcount
         name
         navigation
         new
