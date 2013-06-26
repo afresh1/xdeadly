@@ -234,8 +234,7 @@ helper navigation => sub {
     my @links;
 
     my $mode = $self->mode;
-    my $href = $self->url_with;
-    $href->query->remove('mode');
+    my $href = $self->url_with("/article/$sid");
 
     if ( defined $cid ) {
         return (
@@ -249,8 +248,8 @@ helper navigation => sub {
     }
 
     # XXX This is rather fragile, need to find a better way.
-    if ( @{ $href->path } > 2 ) {
-        my $up = $href->clone;
+    if ( @{ $self->url_with->path } > 2 ) {
+        my $up = $self->url_with->clone;
         pop @{ $up->path };
 
         my @dir = @{ $up->path };
@@ -286,7 +285,7 @@ helper navigation => sub {
             $self->latest_change( { $self->story_details($sid) } ) );
 
         unshift @links, {
-            href => $href->clone->query( mode => $mode || 'expanded' ),
+            href => $href->clone,
             title => "$count comment$s $latest_change ago",
         };
     }
