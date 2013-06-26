@@ -9,6 +9,7 @@ plugin 'PODRenderer';
 
 my $data_dir = 'data';
 my $num_front_page_stories = 5;
+my $num_rss_stories = 10;
 
 helper usernavbar => sub {
     my ($self) = @_;
@@ -543,7 +544,63 @@ get '/article/:sid/*cid' => sub {
 } => 'article';
 
 
-get '/rss';
+get '/summary' => [ format => [qw( rss json )] ] => sub {
+    my ($self) = @_;
+
+    my @required = qw(
+        subject
+        link
+        department
+        pubdate
+        body
+    );
+    my @allowed = @required, qw(
+        sid
+        cid
+        date
+        name
+        host
+        has_more
+    );
+
+    my $clean_it;
+    $clean_it = sub {
+        my %post = @_;
+        my %clean;
+
+        my $id = $post{cid} || $post{sid};
+        $clean{link} = $self->url_for("/article/$id")->to_abs;
+
+        foreach my $key (@allowed) {
+            next unless exists $post{$key} and defined $post{$key};
+            $clean{$key} = $post{$key};
+        }
+
+        if ( $post{mod} ) {
+            $clean{mod}{count} = $post{mod}{count};
+            $clean{mod}{sum}   = $post{mod}{sum};
+        }
+
+        @{ $clean{comments} }
+            = map +{ $clean_it->( %{$_} ) }, @{ $post{comments} || [] };
+
+        return %clean;
+    };
+
+    my @stories;
+    foreach my $sid ( $self->stories ) {
+        my %story = $clean_it->( $self->story_details($sid) );
+        $story{$_} //= undef for @required;
+        push @stories, \%story;
+        last if @stories == $num_rss_stories;
+    }
+
+    return $self->render( json => \@stories )
+        if $self->stash('format') eq 'json';
+
+    $self->stash( stories => \@stories );
+};
+
 get '/submit';
 post '/submit';
 

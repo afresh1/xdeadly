@@ -1,8 +1,8 @@
     <item>
-      <title><%= $title %></title>
-      <link>http://undeadly.org<%= $link %></link>
-      <category><%= $category %></category>
-      <pubDate><%= $date %></pubDate>
+      <title><%= $subject %></title>
+      <link><%= $link %></link>
+      <category><%= $department %></category>
+      <pubDate><%= $pubdate %></pubDate>
       <description><![CDATA[
 <%= $body %>
 ]]></description>

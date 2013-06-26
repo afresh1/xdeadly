@@ -18,7 +18,7 @@
       <description>The OpenBSD Community.</description>
     </image>
 
-<%= $items %>
+    <%= include 'summary_item',  %{ $_ } for @{ $stories } %>
 
   </channel>
 </rss>
