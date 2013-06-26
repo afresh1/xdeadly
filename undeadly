@@ -221,7 +221,7 @@ helper mode => sub {
     my ($self) = @_;
     my %modes = map { $_ => $_ } qw( expanded flat );
 
-    return $modes{ $self->param('mode') };
+    return $modes{ $self->param('mode') || 'collapsed' } || '';
 };
 
 helper comment_template => sub {
