@@ -554,14 +554,14 @@ get '/summary' => [ format => [qw( rss json )] ] => sub {
         pubdate
         body
     );
-    my @allowed = @required, qw(
+    my @allowed = ( @required, qw(
         sid
         cid
         date
         name
         host
         has_more
-    );
+    ) );
 
     my $clean_it;
     $clean_it = sub {
