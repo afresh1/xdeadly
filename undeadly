@@ -236,7 +236,7 @@ helper weeklist => sub {
 
         my @date = split /\s+/, $story{date};
         $story{shortdate} = sprintf "%s, %s %d", @date[ 0 .. 2 ];
-        $story{time} = @date[3];
+        $story{time} = $date[3];
 
         if ( $story{shortdate} ne $last_shortdate ) {
             $last_shortdate = $story{shortdate};
