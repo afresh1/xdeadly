@@ -2,6 +2,7 @@
 use Mojolicious::Lite;
 
 use Mojo::Util qw(url_escape slurp);
+use List::Util qw(sum);
 use Time::Local qw(timegm);
 
 # Documentation browser under "/perldoc"
@@ -104,6 +105,9 @@ helper load_post => sub {
     $post{date} .= ' (GMT)' if $post{date};
     $post{comments} = [ $self->comments($base) ];
     $post{mod}      = { $self->mod_points("$base/$type") };
+    $post{total_comments} = $#{ $post{comments} };
+    $post{total_comments}
+        += sum map { $_->{total_comments} } @{ $post{comments} };
 
     close $fh;
     return %post;
