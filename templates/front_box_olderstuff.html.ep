@@ -13,7 +13,28 @@
 				<tr>
 					<td>
 						<table width="203">
-							<%= $weeklist %>
+                            <tr>
+% my $last_date = '';
+% foreach my $story (weeklist) {
+%   if ($story->{shortdate} ne $last_date) {
+%       $last_date = $story->{shortdate};
+							<tr><td colspan="2"><font size="3" color="black">
+                                <b><%= $story->{shortdate} %></b></font><br>
+                            </td></tr>
+%   }
+                            <tr>
+                                <td valign="top">
+                                    <font size="1"><%= $story->{time} %></font>
+                                </td>
+                                <td valign="top">
+                                    <font size="1">
+                                    <%= link_to $story->{subject} => 'article/' . $story->{sid} %>
+                                    (<%= $story->{total_comments} %>)
+                                    </font>
+                                </td>
+                            </tr>
+% }
+                            </tr>
 							<tr>
 								<td colspan="2" align="right">
 									<p><p>

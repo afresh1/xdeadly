@@ -8,9 +8,10 @@ use Time::Local qw(timegm);
 # Documentation browser under "/perldoc"
 plugin 'PODRenderer';
 
-my $data_dir = 'data';
+my $data_dir               = 'data';
 my $num_front_page_stories = 5;
-my $num_rss_stories = 10;
+my $num_older_stories      = 5;
+my $num_rss_stories        = 10;
 
 helper usernavbar => sub {
     my ($self) = @_;
@@ -219,6 +220,33 @@ helper load_comment => sub {
     $comment{comments} = [ $self->load_comments($dir) ];
 
     return %comment;
+};
+
+helper weeklist => sub {
+    my ($self) = @_;
+
+    my $made_front_page = $num_front_page_stories;
+    my $made_weeklist   = $num_older_stories;
+
+    my $last_shortdate;
+    my @stories;
+    foreach my $sid ( $self->stories ) {
+        next if $made_front_page-- > 0;
+        my %story = $self->story_details($sid);
+
+        my @date = split /\s+/, $story{date};
+        $story{shortdate} = sprintf "%s, %s %d", @date[ 0 .. 2 ];
+        $story{time} = @date[3];
+
+        if ( $story{shortdate} ne $last_shortdate ) {
+            $last_shortdate = $story{shortdate};
+            last unless $made_weeklist--;
+        }
+
+        push @stories, \%story;
+    }
+
+    return @stories;
 };
 
 helper topicimg => sub {
@@ -496,7 +524,6 @@ under sub {
         title
         usergroup
         vuxml
-        weeklist
         yesterday
     );
 
@@ -508,6 +535,7 @@ get '/' => sub {
 
     my @stories;
     foreach my $sid ( $self->stories ) {
+        last if @stories == $num_front_page_stories;
         my %story = $self->story_details($sid);
         if ( $story{has_more} ) {
             $story{more}
@@ -516,7 +544,6 @@ get '/' => sub {
                 . ' . . .';
         }
         push @stories, \%story;
-        last if @stories == $num_front_page_stories;
     }
     $self->stash( front_stories => \@stories );
 } => 'front';
