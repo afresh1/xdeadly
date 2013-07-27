@@ -9,6 +9,7 @@ use Time::Local qw(timegm);
 plugin 'PODRenderer';
 
 my $data_dir               = 'data';
+my $auth_dir               = 'auth';
 my $num_front_page_stories = 5;
 my $num_older_stories      = 5;
 my $num_rss_stories        = 10;
@@ -438,6 +439,27 @@ helper human_time => sub {
         if $time{days} < 5;
 
     return $time;
+};
+
+helper users => sub {
+    my ( $self ) = @_;
+    my $user_file = app->home->rel_file("$auth_dir/xdeadly.org.passwd");
+
+    my @keys = qw( user group password realname email comment );
+
+    my %users;
+
+    open my $fh, '<', $user_file or die "Couldn't open $user_file: $!";
+    while (<$fh>) {
+        chomp;
+        next if /^\s*\#/;
+        my %user;
+        @user{@keys} = split /;/;
+        $users{ $user{user} } = \%user;
+    }
+    close $fh;
+
+    return \%users;
 };
 
 under sub {
