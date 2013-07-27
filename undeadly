@@ -5,11 +5,14 @@ use Mojo::Util qw(url_escape slurp);
 use List::Util qw(sum);
 use Time::Local qw(timegm);
 
+use Digest::SHA1;
+
 # Documentation browser under "/perldoc"
 plugin 'PODRenderer';
 
 my $data_dir               = 'data';
 my $auth_dir               = 'auth';
+my $secret                 = 'lw1N0mN0t8a24UR4NY12AT55p/23FxJ9H6+NReXed8nTZJraO0g';
 my $num_front_page_stories = 5;
 my $num_older_stories      = 5;
 my $num_rss_stories        = 10;
@@ -460,6 +463,16 @@ helper users => sub {
     close $fh;
 
     return \%users;
+};
+
+helper user_hash => sub {
+    my ($self, $password) = @_;
+
+    my $sha1 = Digest::SHA1->new;
+    $sha1->add( $secret );
+    $sha1->add( $password );
+
+    return $sha1->hexdigest;
 };
 
 under sub {
