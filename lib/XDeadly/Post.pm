@@ -57,8 +57,8 @@ sub _parse_ctime {
         Dec => 11,
     );
 
-    my ($wday, $mname, $day, $time, $year) = split /\s+/, $string;
-    my ($h, $m, $s) = split /:/, $time;
+    my ($wday, $mname, $day, $time, $year) = split /\s+/xms, $string;
+    my ($h, $m, $s) = split /:/xms, $time;
 
     return timegm( $s, $m, $h, $day, $months{$mname}, $year );
 };
@@ -91,11 +91,11 @@ sub extract_start_line {1}
 sub get_start_line_chunk {
     my ( $self, $offset ) = @_;
 
-    # need start_buffer to be defined, should only ever be 
-    $self->{start_buffer} //= '';
+    # need start_buffer to be defined, should only ever be the empty string
+    $self->{start_buffer} //= q{};
 
     $self->emit( progress => 'start_line', $offset );
-    return substr $self->{start_buffer}, $offset, 131072;
+    return substr $self->{start_buffer}, $offset, 131_072;
 }
 
 
