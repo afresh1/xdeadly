@@ -1,6 +1,8 @@
 package XDeadly::Post;
 use Mojo::Base 'Mojo::Message';
 
+our $VERSION = '0.01';
+
 use Mojo::Asset::File;
 use Mojo::Asset::Memory;
 use Mojo::Content::Single;
