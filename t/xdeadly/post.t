@@ -29,6 +29,28 @@ my %headers = (
 my $body = "If this had been an actual post you would have been asked to evacuate.\x0a";
 
 ok my $post = XDeadly::Post->new;
+is $post->data_dir, undef, 'new post has no data_dir';
+is $post->id, undef, 'new post has no id';
+is $post->path, undef, 'new post has no path';
+
+$post->path( 'tmp/test.post' );
+is $post->id, 'test.post', 'Got an id';
+is $post->data_dir, 'tmp', 'Got a data_dir';
+is $post->path, 'tmp/test.post';
+
+ok $post = XDeadly::Post->new( path => 'tmp/test.post' );
+is $post->id, 'test.post', 'Got an id';
+is $post->data_dir, 'tmp', 'Got a data_dir';
+is $post->path, 'tmp/test.post';
+
+ok $post = XDeadly::Post->new( data_dir => 'tmp', id => 'test.post' );
+is $post->id, 'test.post', 'Got an id';
+is $post->data_dir, 'tmp', 'Got a data_dir';
+is $post->path, 'tmp/test.post';
+
+
+
+ok $post = XDeadly::Post->new;
 ok $post->parse($message_text), 'Created a test post';
 is $post->path, undef, 'parsed post has no path';
 
