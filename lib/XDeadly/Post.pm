@@ -26,8 +26,21 @@ has content => sub {
     return $self->content;
 };
 
-has 'path';
+has 'id';
+has 'data_dir';
 has '_epoch';
+
+sub new {
+    my ($class, %args) = @_;
+
+    my $path = delete $args{path};
+
+    my $self = $class->SUPER::new( %args );
+
+    $self->path( $path ) if $path;
+
+    return $self;
+}
 
 sub parse {
     my $self = shift->SUPER::parse(@_);
@@ -62,6 +75,23 @@ sub _parse_ctime {
 
     return timegm( $s, $m, $h, $day, $months{$mname}, $year );
 };
+
+sub path {
+    my ($self, $path) = @_;
+
+    if ($path) {
+        my ($vol, $dirs, $file) = File::Spec->splitpath( $path );
+        my $dir = File::Spec->canonpath( File::Spec->catpath( $vol, $dirs ) );
+
+        $self->data_dir( $dir );
+        $self->id( $file );
+    }
+    elsif ($self->data_dir and $self->id) {
+        $path = File::Spec->catfile( $self->data_dir, $self->id );
+    }
+
+    return $path;
+}
 
 sub dir {
     my ($self) = @_;
