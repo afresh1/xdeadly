@@ -11,14 +11,15 @@ use Time::Local qw(timegm);
 use XDeadly::Comment;
 
 use Carp;
-use File::Spec::Functions qw/ catdir splitpath /;
+use File::Spec::Functions qw/ canonpath catdir catfile /;
+use File::Path qw/ make_path /;
 
 has content => sub {
     my ($self) = @_;
 
     $self->content( Mojo::Content::Single->new );
 
-    if ($self->path) {
+    if ($self->has_path and -e $self->path) {
         my $file = Mojo::Asset::File->new( path => $self->path );
         $self->parse( $file->slurp );
     }
@@ -26,21 +27,13 @@ has content => sub {
     return $self->content;
 };
 
-has 'id';
-has 'data_dir';
 has '_epoch';
+has level => 0;
+has is_article => 0;
 
-sub new {
-    my ($class, %args) = @_;
-
-    my $path = delete $args{path};
-
-    my $self = $class->SUPER::new( %args );
-
-    $self->path( $path ) if $path;
-
-    return $self;
-}
+has 'id';
+has 'filename' => 'post';
+has 'data_dir';
 
 sub parse {
     my $self = shift->SUPER::parse(@_);
@@ -76,41 +69,63 @@ sub _parse_ctime {
     return timegm( $s, $m, $h, $day, $months{$mname}, $year );
 };
 
-sub path {
-    my ($self, $path) = @_;
+=head3 dir
 
-    if ($path) {
-        my ($vol, $dirs, $file) = File::Spec->splitpath( $path );
-        my $dir = File::Spec->canonpath( File::Spec->catpath( $vol, $dirs ) );
+The working directory where we store our files.
 
-        $self->data_dir( $dir );
-        $self->id( $file );
-    }
-    elsif ($self->data_dir and $self->id) {
-        $path = File::Spec->catfile( $self->data_dir, $self->id );
-    }
+Should be data_dir/id
 
-    return $path;
-}
+=cut
 
 sub dir {
     my ($self) = @_;
-    croak('path not defined') unless $self->path;
-
-    my ($vol, $dirs, $file) = File::Spec->splitpath( $self->path );
-    return File::Spec->canonpath( File::Spec->catpath( $vol, $dirs ) );
+    croak('data_dir and id required') unless $self->data_dir and $self->id;
+    return canonpath( catdir $self->data_dir, split '/', $self->id );
 }
 
-sub save {
-    my ($self, $path) = @_;
-    $path ||= $self->path;
+=head3 has_path
 
-    croak("Cannot save without a path") unless $path;
-    $self->path($path);
+A check whether we can calculate the path
+
+=cut
+
+sub has_path {
+    my ($self) = @_;
+    return $self->id and $self->data_dir
+}
+
+=head3 path
+
+The full path to the content of the post.
+
+Built from data_dir/id/filename
+
+=cut
+
+sub path {
+    my ($self) = @_;
+    return catfile $self->dir, $self->filename;
+}
+
+=head3 save( data_dir => $data_dir, id => $id )
+
+saves the file, optionally takes data_dir and id parameters
+
+=cut
+
+sub save {
+    my ($self, %args) = @_;
+
+    $self->id( $args{id} )             if $args{id};
+    $self->data_dir( $args{data_dir} ) if $args{data_dir};
+
+    croak("Cannot save without a path") unless $self->has_path;
 
     my $file = Mojo::Asset::Memory->new();
     $file->add_chunk( $self->to_string );
-    $file->move_to($path);
+
+    make_path $self->dir;
+    $file->move_to($self->path);
 
     return $self;
 }
