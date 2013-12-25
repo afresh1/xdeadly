@@ -31,28 +31,16 @@ my $body = "If this had been an actual post you would have been asked to evacuat
 ok my $post = XDeadly::Post->new;
 is $post->data_dir, undef, 'new post has no data_dir';
 is $post->id, undef, 'new post has no id';
-is $post->path, undef, 'new post has no path';
 
-$post->path( 'tmp/test.post' );
-is $post->id, 'test.post', 'Got an id';
-is $post->data_dir, 'tmp', 'Got a data_dir';
-is $post->path, 'tmp/test.post';
-
-ok $post = XDeadly::Post->new( path => 'tmp/test.post' );
-is $post->id, 'test.post', 'Got an id';
-is $post->data_dir, 'tmp', 'Got a data_dir';
-is $post->path, 'tmp/test.post';
-
-ok $post = XDeadly::Post->new( data_dir => 'tmp', id => 'test.post' );
-is $post->id, 'test.post', 'Got an id';
-is $post->data_dir, 'tmp', 'Got a data_dir';
-is $post->path, 'tmp/test.post';
-
-
+ok $post = XDeadly::Post->new( data_dir => $dir, id => 'test' );
+is $post->data_dir, $dir, 'Got a data_dir';
+is $post->id, 'test', 'Got an id';
+is $post->dir, "$dir/test";
+is $post->path, "$dir/test/post";
 
 ok $post = XDeadly::Post->new;
 ok $post->parse($message_text), 'Created a test post';
-is $post->path, undef, 'parsed post has no path';
+is $post->id, undef, 'parsed post has no id';
 
 is $post->_epoch, 1377010297, 'correctly parsed the epoch';
 
@@ -60,19 +48,19 @@ is $post->build_body, $body, 'Body matches';
 is $post->headers->header($_), $headers{$_}, "Header($_) matches"
     for keys %headers;
 
-ok $post->save("$dir/test.post"), 'saved post';
-is $post->path, "$dir/test.post", 'post knows where it is';
+ok $post->save( data_dir => $dir, id => 'test' ), 'saved post';
+is $post->path, "$dir/test/post", 'post knows where it is';
 
-my $reloaded = XDeadly::Post->new( path => "$dir/test.post" );
-is $reloaded->path, "$dir/test.post", 'Reloaded has correct path';
-is $post->dir, $dir, 'Reloaded has correct dir';
+my $reloaded = XDeadly::Post->new( data_dir => $dir, id => 'test' );
+is $reloaded->path, "$dir/test/post", 'Reloaded has correct path';
+is $post->dir, "$dir/test", 'Reloaded has correct dir';
 
 is $post->build_body, $reloaded->build_body, 'Reloaded body matches';
 is $reloaded->headers->header($_), $headers{$_}, "Reloaded header($_) matches"
     for keys %headers;
 
 $post = XDeadly::Post->new;
-ok open( my $fh, '<', "$dir/test.post" ), 'Opened post';
+ok open( my $fh, '<', "$dir/test/post" ), 'Opened post';
 ok $post->parse( do { local $/ = undef; <$fh> } ), 'manual load parsed';
 close $fh;
 
@@ -80,11 +68,13 @@ is $post->build_body, $body, 'manual load body matches';
 is $post->headers->header($_), $headers{$_}, "manual load Header($_) matches"
     for keys %headers;
 
-ok $post->path("$dir/test.post2"), 'set post path';
+ok $post->data_dir($dir), 'set post data_dir';
+ok $post->id('test2'), 'set post id';
 ok $post->save, 'save post to ->path';
 
 $reloaded = XDeadly::Post->new();
-ok $reloaded->path( "$dir/test.post2" ), 'set path after ->new';
+ok $reloaded->data_dir( $dir ), 'set data_dir after ->new';
+ok $reloaded->id( 'test2' ), 'set id after ->new';
 
 is $post->build_body, $reloaded->build_body, 'Reloaded body matches';
 is $reloaded->headers->header($_), $headers{$_}, "Reloaded header($_) matches"
