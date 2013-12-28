@@ -36,13 +36,19 @@ has 'filename' => 'post';
 has 'data_dir';
 
 sub parse {
-    my $self = shift->SUPER::parse(@_);
+    my ( $self, $chunk ) = @_;
 
-    if (my $date = $self->headers->date) {
-        $self->_epoch( _parse_ctime($date) );
-    }
+    $self->content->on( body => sub {
+        my $content = shift;
+        my $headers = $content->headers;
 
-    return $self;
+        $headers->content_length( length $content->{pre_buffer} )
+            unless $headers->content_length;
+
+        $self->_epoch( _parse_ctime( $headers->date ) ) if $headers->date;
+    } );
+
+    return $self->SUPER::parse($chunk);
 }
 
 sub _parse_ctime {
