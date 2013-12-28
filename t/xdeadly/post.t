@@ -38,6 +38,19 @@ is $post->id, 'test', 'Got an id';
 is $post->dir, "$dir/test";
 is $post->path, "$dir/test/post";
 
+{
+    mkdir "$dir/loaded" or die;
+    open my $fh, '>', "$dir/loaded/post" or die $!;
+    print $fh $message_text;
+    close $fh;
+}
+
+ok my $loaded = XDeadly::Post->new( data_dir => $dir, id => 'loaded' );
+is $loaded->path, "$dir/loaded/post";
+is $loaded->build_body, $body, 'Loaded body matches';
+is $loaded->headers->header($_), $headers{$_}, "Loaded header($_) matches"
+    for keys %headers;
+
 ok $post = XDeadly::Post->new;
 ok $post->parse($message_text), 'Created a test post';
 is $post->id, undef, 'parsed post has no id';
