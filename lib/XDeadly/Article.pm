@@ -21,7 +21,11 @@ has 'id' => sub {
     return sprintf '%04d%02d%02d%02d%02d%02d', reverse @now;
 };
 
-sub has_more { my $self = shift; !!$self->{more} || -s $self->more_path }
+sub has_more {
+    my $self = shift;
+    return !!$self->{more} if exists $self->{more};
+    return -s $self->more_path;
+}
 
 has more_path => sub {
     my $self = shift;
