@@ -18,7 +18,7 @@ ok $article->id =~ /^\d{14}$/, 'New article generated id is 14 digits';
 
 
 my $dir = tempdir( CLEANUP => 1 );
-XDeadlyFixtures::copy_fixtures($dir);
+XDeadlyFixtures::copy_good_data_fixtures($dir);
 
 my $id = '19700101030000';
 ok $article = XDeadly::Article->new( data_dir => $dir, id => $id ), 'Load an article';

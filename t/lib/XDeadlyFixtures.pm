@@ -8,13 +8,13 @@ use File::Spec;
 use File::Find;
 use File::Copy;
 
-sub copy_fixtures {
-    my ($dest_dir) = @_;
+sub _copy_fixtures {
+    my ($rel_src, $dest_dir) = @_;
 
     croak 'Destination dir is required' unless $dest_dir;
 
     my $source_dir = File::Spec->catdir( dirname(__FILE__), File::Spec->updir,
-        'fixtures', 'standard' );
+        'fixtures', @{ $rel_src || [] } );
 
     find( sub {
         my $path = File::Spec->catdir( $dest_dir,
@@ -30,5 +30,7 @@ sub copy_fixtures {
 
     }, $source_dir );
 }
+
+sub copy_good_data_fixtures { _copy_fixtures(['good','data'],@_) }
 
 1;

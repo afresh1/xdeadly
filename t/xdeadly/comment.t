@@ -8,7 +8,7 @@ use XDeadlyFixtures;
 
 use XDeadly::Comment;
 my $dir = tempdir( CLEANUP => 1 );
-XDeadlyFixtures::copy_fixtures($dir);
+XDeadlyFixtures::copy_good_data_fixtures($dir);
 
 my $comment = XDeadly::Comment->new;
 
