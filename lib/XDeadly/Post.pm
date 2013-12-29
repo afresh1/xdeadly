@@ -28,7 +28,12 @@ has content => sub {
     return $self->content;
 };
 
-has '_epoch';
+has '_epoch' => sub {
+    my ($self) = @_;
+    return unless $self->headers->date;
+    return _parse_ctime( $self->headers->date );
+};
+
 has level => 0;
 has is_article => 0;
 
@@ -45,8 +50,6 @@ sub parse {
 
         $headers->content_length( length $content->{pre_buffer} )
             unless $headers->content_length;
-
-        $self->_epoch( _parse_ctime( $headers->date ) ) if $headers->date;
     } );
 
     return $self->SUPER::parse($chunk);
