@@ -22,7 +22,7 @@ has 'cid' => sub {
     my $parent_dir = $self->parent->dir;
 
     my $cid = 1;
-    $cid++ while -e catdir $parent_dir, $cid, $self->filename;
+    $cid++ while -e catdir $parent_dir, $cid;
     mkdir catdir $parent_dir, $cid;
 
     return $cid;
