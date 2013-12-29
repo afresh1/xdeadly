@@ -78,6 +78,8 @@ is $post->build_body, $body, 'Body matches';
 is $post->headers->header($_), $headers{$_}, "Header($_) matches"
     for keys %headers;
 
+is $post->subject, $headers{Subject}, 'Subject shortcut works';
+
 ok $post->save( data_dir => $dir, id => 'test' ), 'saved post';
 is $post->path, "$dir/test/post", 'post knows where it is';
 
