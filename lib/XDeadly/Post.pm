@@ -8,6 +8,7 @@ use Mojo::Asset::Memory;
 use Mojo::Content::Single;
 
 use Time::Local qw(timegm);
+use XDeadly::Article;
 use XDeadly::Comment;
 
 use Carp;
@@ -135,6 +136,31 @@ sub save {
 
     return $self;
 }
+
+sub articles {
+    my ( $self, $data_dir ) = @_;
+    return [ $self->_load_articles($data_dir) ];
+};
+
+sub _load_articles {
+    my ( $self, $dir ) = @_;
+
+    opendir my $dh, $dir or croak "Couldn't opendir $dir: $!";
+    my @articles = map { $self->_load_article( $dir, $_ ) }
+        grep { -d catdir( $dir, $_ ) }    # only files that exist
+        sort { $b <=> $a }                # newest to oldest
+        grep {/^\d+$/xms}                 # Could probably be more accurate
+        readdir $dh;
+    closedir $dh or croak "Couldn't closedir $dir: $!";
+
+    return @articles;
+}
+
+sub _load_article {
+    my ( $self, $data_dir, $id ) = @_;
+    XDeadly::Article->new( data_dir => $data_dir, id => $id );
+}
+
 
 # We don't actually have a start_line
 sub extract_start_line {1}
