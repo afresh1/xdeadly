@@ -150,15 +150,22 @@ sub articles {
 sub _load_articles {
     my ( $self, $dir ) = @_;
 
+    return map { $self->_load_article( $dir, $_ ) }
+        sort { $b <=> $a }    # newest to oldest
+        $self->_posts($dir);
+}
+
+sub _posts {
+    my ( $self, $dir ) = @_;
+
     opendir my $dh, $dir or croak "Couldn't opendir $dir: $!";
-    my @articles = map { $self->_load_article( $dir, $_ ) }
-        grep { -d catdir( $dir, $_ ) }    # only files that exist
-        sort { $b <=> $a }                # newest to oldest
-        grep {/^\d+$/xms}                 # Could probably be more accurate
+    my @posts
+        = grep { -d catdir( $dir, $_ ) }    # only dirs that exist
+        grep {/^\d+$/xms}                   # Could probably be more accurate
         readdir $dh;
     closedir $dh or croak "Couldn't closedir $dir: $!";
 
-    return @articles;
+    return @posts;
 }
 
 sub _load_article {
