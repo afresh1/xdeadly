@@ -1,0 +1,4 @@
+# user:group:password:realname:email:comment
+adminuser;admin;a147dd05552ba254df96ec51ce36e75fceafd093;Admin User;admin@example.com;example.com
+test1;user;4d4b06ffce9d901d80fb4730160546ce1f2f400d;Testy McTesterson;test1@example.com;
+test2;user;ac544d01351dd2fea3bd3f57e09a45b0f2e14863;Test Testarini;test2@example.com;example.net

@@ -32,5 +32,6 @@ sub _copy_fixtures {
 }
 
 sub copy_good_data_fixtures { _copy_fixtures(['good','data'],@_) }
+sub copy_good_auth_fixtures { _copy_fixtures(['good','auth'],@_) }
 
 1;
