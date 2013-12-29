@@ -122,4 +122,28 @@ is_deeply [ map { $_->_epoch } @{$articles} ],
 ok($_->{content}, 'Getting article epoch did load content')
     for @{ $articles };
 
+
+my $article = $articles->[-1]; # the fixture with comments
+ok my $comments = $article->comments;
+is @{ $comments }, 8, 'loaded 8 comments';
+
+is_deeply [ map { $_->id } @{$comments} ], [
+    '19700101010000/1',     '19700101010000/1/1',
+    '19700101010000/1/2',   '19700101010000/2',
+    '19700101010000/3',     '19700101010000/3/1',
+    '19700101010000/3/1/1', '19700101010000/3/1/2',
+], 'Comments have the ids in the correct order';
+
+for (@{ $comments }) {
+    is $_->article->id, $article->id, "The comment knows it's article";
+    ok !$_->{content}, 'Loading and getting comment id did not load content';
+}
+
+is_deeply [ map { $_->_epoch } @{$comments} ],
+    [ 70, 71, 72, 80, 90, 91, 86491, 172891, ],
+    'Comments have the expected epoch';
+
+ok($_->{content}, 'Getting comment epoch did load content')
+    for @{ $comments };
+
 done_testing();
