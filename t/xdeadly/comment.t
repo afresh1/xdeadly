@@ -60,7 +60,6 @@ my @tests  = (
 foreach my $t (@tests) {
     my $id = $t->{id};
     ok $comment = XDeadly::Comment->new( parent => $parent ), "[$id] New";
-    ok $comment->save, "[$id] save";    # have to save or it doesn't exist
 
     is $comment->data_dir, $dir,     "[$id] correct data_dir";
     is $comment->article,  $article, "[$id] correct article";
