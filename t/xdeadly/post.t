@@ -6,6 +6,9 @@ use File::Temp qw/ tempdir /;
 
 use XDeadly::Post;
 
+use lib 't/lib';
+use XDeadlyFixtures;
+
 my $dir = tempdir( CLEANUP => 1 );
 
 my $message_text = q{name: Testy McTesterson
@@ -92,5 +95,21 @@ ok $reloaded->id( 'test2' ), 'set id after ->new';
 is $post->build_body, $reloaded->build_body, 'Reloaded body matches';
 is $reloaded->headers->header($_), $headers{$_}, "Reloaded header($_) matches"
     for keys %headers;
+
+
+XDeadlyFixtures::copy_fixtures($dir);
+
+ok my $articles = XDeadly::Article->articles($dir);
+is @{ $articles }, 3, 'loaded 3 articles';
+is_deeply [ map { $_->id } @{$articles} ],
+    [ '19700101030000', '19700101020000', '19700101010000', ],
+    'got ids in the correct order';
+
+ok( $_->isa('XDeadly::Post'),    "$_ isa XDeadly::Post" )    for @{$articles};
+ok( $_->isa('XDeadly::Article'), "$_ isa XDeadly::Article" ) for @{$articles};
+
+is_deeply [ map { $_->_epoch } @{$articles} ],
+    [ '180', '120', '60', ],
+    'got epoch in the correct order';
 
 done_testing();
