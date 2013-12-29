@@ -173,6 +173,30 @@ sub _load_article {
     XDeadly::Article->new( data_dir => $data_dir, id => $id );
 }
 
+sub comments {
+    my ($self) = @_;
+    return [ map { ( $_, @{ $_->comments } ) }
+            $self->_load_comments( $self->dir ) ];
+}
+
+sub _load_comments {
+    my ( $self, $dir ) = @_;
+
+    return map { $self->_load_comment( $dir, $_ ) }
+        sort { $a <=> $b }    # oldest to newest
+        $self->_posts($dir);
+}
+
+sub _load_comment {
+    my ( $self, $dir, $cid ) = @_;
+
+    return XDeadly::Comment->new(
+        article => $self,
+        parent  => $self,
+        cid     => $cid,
+    );
+}
+
 
 # We don't actually have a start_line
 sub extract_start_line {1}
