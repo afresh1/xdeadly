@@ -3,6 +3,8 @@ use Mojo::Base -strict;
 use Test::More;
 
 use File::Temp qw/ tempdir /;
+use File::Path qw/ make_path /;
+use File::Spec;
 
 use XDeadly::Post;
 
@@ -112,6 +114,11 @@ eval { XDeadly::Post::_parse_ctime('Thu Jan 01 00:00:00 UTC 1970') };
 ok $@ =~ /Invalid date/, 'Date with a timezone is invalid';
 
 XDeadlyFixtures::copy_fixtures($dir);
+
+make_path(
+    File::Spec->catdir( $dir, '19700202020202' ),
+    File::Spec->catdir( $dir, '19700101000100', '5' )
+);
 
 ok my $articles = XDeadly::Article->articles($dir);
 is @{ $articles }, 3, 'loaded 3 articles';
