@@ -163,4 +163,6 @@ is_deeply [ map { $_->_epoch } @{$comments} ],
 ok($_->{content}, 'Getting comment epoch did load content')
     for @{ $comments };
 
+is $article->latest_change, '172891', 'found the last change for the article';
+
 done_testing();
