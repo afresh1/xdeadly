@@ -109,11 +109,17 @@ is_deeply [ map { $_->id } @{$articles} ],
     [ '19700101030000', '19700101020000', '19700101010000', ],
     'got ids in the correct order';
 
+ok(!$_->{content}, 'Loading and getting article id did not load content')
+    for @{ $articles };
+
 ok( $_->isa('XDeadly::Post'),    "$_ isa XDeadly::Post" )    for @{$articles};
 ok( $_->isa('XDeadly::Article'), "$_ isa XDeadly::Article" ) for @{$articles};
 
 is_deeply [ map { $_->_epoch } @{$articles} ],
     [ '180', '120', '60', ],
     'got epoch in the correct order';
+
+ok($_->{content}, 'Getting article epoch did load content')
+    for @{ $articles };
 
 done_testing();
