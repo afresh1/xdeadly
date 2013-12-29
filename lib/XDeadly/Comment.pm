@@ -30,7 +30,11 @@ has 'cid' => sub {
 
 # id's are joined with /, not the file path separator.
 # This is because it is representative of a URI path
-has id => sub { my $self = shift; join '/', $self->parent->id, $self->cid };
+has id => sub {
+    my $self = shift;
+    return unless $self->parent;
+    return join '/', $self->parent->id, $self->cid;
+};
 has 'parent' => sub {
     my ($self) = @_;
     return unless $self->{id};    # avoid the recursion
