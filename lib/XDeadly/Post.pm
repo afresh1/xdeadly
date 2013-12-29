@@ -41,6 +41,8 @@ has 'id';
 has 'filename' => 'post';
 has 'data_dir';
 
+sub subject { shift->content->headers->header( subject => @_ ) }
+
 sub parse {
     my ( $self, $chunk ) = @_;
 
