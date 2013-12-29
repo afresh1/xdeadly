@@ -53,4 +53,40 @@ sub save {
     return $self;
 }
 
+sub department { shift->headers->header('Dept') }
+sub topic      { shift->headers->header('Topic') }
+
+sub topicimg {
+    my ($self) = @_;
+
+    my $topic = $self->topic || return;
+
+    my %topicext;
+
+    $topicext{$_} = 'gif' for qw(
+        oreilly_weasel
+        topicbl
+        topicbsd
+        topiccrypto
+        topiceditorial
+        topicmail
+        topicopenbsd
+        topicopenssh
+        topicports
+    );
+
+    $topicext{$_} = 'png' for qw(
+        topic30
+        topic30
+        topicpf2
+        topicreadme
+        topicnda
+        topicsparc
+    );
+
+    my $ext = $topicext{$topic} || 'jpg';
+
+    return "$topic.$ext";
+}
+
 1;
