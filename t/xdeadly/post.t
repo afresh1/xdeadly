@@ -51,7 +51,17 @@ is $post->path, "$dir/test/post";
 }
 
 ok my $loaded = XDeadly::Post->new( data_dir => $dir, id => 'loaded' );
-is $loaded->path, "$dir/loaded/post";
+ok $loaded->has_path, 'loaded post has a path';
+is $loaded->data_dir, $dir, 'loaded post has correct data_dir';
+is $loaded->dir, "$dir/loaded", 'loaded post has correct dir';
+is $loaded->path, "$dir/loaded/post", 'loaded post has correct path';
+is $loaded->id, 'loaded', 'loaded post has corret id';
+is $loaded->level, 0, 'loaded post has correct level';
+ok !$loaded->is_article, 'loaded post is not an article';
+is $loaded->filename, 'post', 'loaded post filename is post';
+
+ok !$loaded->{content}, 'Still have not loaded the content for the post';
+
 is $loaded->build_body, $body, 'Loaded body matches';
 is $loaded->headers->header($_), $headers{$_}, "Loaded header($_) matches"
     for keys %headers;
