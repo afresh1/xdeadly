@@ -150,8 +150,11 @@ sub articles {
 sub _load_articles {
     my ( $self, $dir ) = @_;
 
+    my $filename = XDeadly::Article->new->filename;
+
     return map { $self->_load_article( $dir, $_ ) }
         sort { $b <=> $a }    # newest to oldest
+        grep { -f catfile $dir, $_, $filename } # only dirs with an article in them
         $self->_posts($dir);
 }
 
@@ -159,9 +162,8 @@ sub _posts {
     my ( $self, $dir ) = @_;
 
     opendir my $dh, $dir or croak "Couldn't opendir $dir: $!";
-    my @posts
-        = grep { -d catdir( $dir, $_ ) }    # only dirs that exist
-        grep {/^\d+$/xms}                   # Could probably be more accurate
+    my @posts = grep { -d catdir( $dir, $_ ) }    # only dirs that exist
+        grep {/^[^\.]/}                           # No dotfiles
         readdir $dh;
     closedir $dh or croak "Couldn't closedir $dir: $!";
 
@@ -182,8 +184,11 @@ sub comments {
 sub _load_comments {
     my ( $self, $dir ) = @_;
 
+    my $filename = XDeadly::Comment->new->filename;
+
     return map { $self->_load_comment( $dir, $_ ) }
         sort { $a <=> $b }    # oldest to newest
+        grep { -f catfile $dir, $_, $filename } # only dirs with a comment in them
         $self->_posts($dir);
 }
 
