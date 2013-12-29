@@ -3,6 +3,7 @@ use Mojo::Base 'XDeadly::Post';
 
 our $VERSION = 0.01;
 
+use Carp;
 use File::Spec::Functions qw(catfile);
 use Mojo::Asset::File;
 
@@ -52,6 +53,9 @@ sub save {
         $file->add_chunk( $self->more );
 
         $file->move_to($self->more_path);
+    }
+    elsif ( -e $self->more_path ) {
+        unlink $self->more_path || croak "Couldn't remove more file: $!";
     }
 
     return $self;
