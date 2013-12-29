@@ -35,6 +35,8 @@ ok my $post = XDeadly::Post->new;
 is $post->data_dir, undef, 'new post has no data_dir';
 is $post->id, undef, 'new post has no id';
 
+is $post->level, 0, 'Posts have a level of 0';
+
 ok $post = XDeadly::Post->new( data_dir => $dir, id => 'test' );
 is $post->data_dir, $dir, 'Got a data_dir';
 is $post->id, 'test', 'Got an id';
