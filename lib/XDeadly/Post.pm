@@ -142,6 +142,13 @@ sub save {
     return $self;
 }
 
+sub latest_change {
+    my ($self) = @_;
+
+    return [ sort { $a <=> $b }
+            ( $self->_epoch, map { $_->_epoch } @{ $self->comments } ) ]->[-1];
+}
+
 sub articles {
     my ( $self, $data_dir ) = @_;
     return [ $self->_load_articles($data_dir) ];
