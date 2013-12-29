@@ -50,12 +50,25 @@ is $article->more, $new_more, 'And it took';
 
 ok $article->save, 'Saved the article';
 
-ok $article = XDeadly::Article->new( data_dir => $dir, id => $id ), 'reload the article';
+ok $article = XDeadly::Article->new( data_dir => $dir, id => $id ),
+    'reload the article';
 
 ok $article->has_more, 'It knows it has more';
 is $article->more, $new_more, 'And it is what we set it to';
 
 ok !$article->{content}, 'Loading more does not load content';
+
+$article->more(undef);
+ok !$article->has_more, 'Can remove article more';
+ok !$article->more, 'After removing, more does not exist';
+
+$article->save;
+
+ok $article = XDeadly::Article->new( data_dir => $dir, id => $id ),
+    'reload the article';
+
+ok !$article->has_more, 'After reloading, still have no more';
+ok !$article->more, 'After reloading, still have more is empty';
 
 my %attributes = (
     department => 'test department',
