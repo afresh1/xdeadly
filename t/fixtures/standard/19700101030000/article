@@ -5,6 +5,7 @@ date: Thu Jan  1 00:03:00 1970
 host: testhost3
 subject: Test Post #3
 topic: topictest
+dept: test department
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
