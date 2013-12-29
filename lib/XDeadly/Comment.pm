@@ -58,4 +58,6 @@ sub article {
     return $parent->is_article ? $parent : $parent->article;
 }
 
+sub level { shift->parent->level + 1 }
+
 1;
