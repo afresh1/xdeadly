@@ -96,6 +96,8 @@ is $post->build_body, $reloaded->build_body, 'Reloaded body matches';
 is $reloaded->headers->header($_), $headers{$_}, "Reloaded header($_) matches"
     for keys %headers;
 
+eval { XDeadly::Post::_parse_ctime('Thu Jan 01 00:00:00 UTC 1970') };
+ok $@ =~ /Invalid date/, 'Date with a timezone is invalid';
 
 XDeadlyFixtures::copy_fixtures($dir);
 
