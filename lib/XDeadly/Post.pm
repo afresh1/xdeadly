@@ -70,7 +70,9 @@ sub _parse_ctime {
         Dec => 11,
     );
 
-    my ($wday, $mname, $day, $time, $year) = split /\s+/xms, $string;
+    my ($wday, $mname, $day, $time, $year, $extra) = split /\s+/xms, $string;
+    croak "Invalid date [$string]" if $extra;
+
     my ($h, $m, $s) = split /:/xms, $time;
 
     return timegm( $s, $m, $h, $day, $months{$mname}, $year );
