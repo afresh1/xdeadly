@@ -119,6 +119,8 @@ is $reloaded->headers->header($_), $headers{$_}, "Reloaded header($_) matches"
 eval { XDeadly::Post::_parse_ctime('Thu Jan 01 00:00:00 UTC 1970') };
 ok $@ =~ /Invalid date/, 'Date with a timezone is invalid';
 
+ok $post->mod->isa( 'XDeadly::PostMod' ), 'We have a mod that we can vote with';
+
 XDeadlyFixtures::copy_good_data_fixtures($dir);
 
 make_path(
