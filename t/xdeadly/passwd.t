@@ -3,13 +3,14 @@ use Mojo::Base -strict;
 use Test::More;
 use File::Temp qw/ tempdir /;
 
-plan skip_all => 'Waiting for someone to write this'
-    unless $ENV{TEST_PASSWD};
+BEGIN {
+    eval 'use XDeadly::Passwd';
+    plan skip_all => 'Waiting for someone to write this' if $@;
+}
 
 use lib 't/lib';
 use XDeadlyFixtures;
 
-use XDeadly::Passwd;
 my $dir = tempdir( CLEANUP => 1 );
 XDeadlyFixtures::copy_good_auth_fixtures($dir);
 
