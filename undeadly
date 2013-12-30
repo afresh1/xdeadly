@@ -393,15 +393,13 @@ get '/summary' => [ format => [qw( rss json )] ] => sub {
     my ($self) = @_;
 
     my @required = qw(
+        id
         subject
         link
         department
-        pubdate
         body
     );
     my @allowed = ( @required, qw(
-        sid
-        cid
         date
         name
         host
@@ -410,31 +408,34 @@ get '/summary' => [ format => [qw( rss json )] ] => sub {
 
     my $clean_it;
     $clean_it = sub {
-        my %post = @_;
+        my ($post) = @_;
         my %clean;
 
-        my $id = $post{cid} || $post{sid};
-        $clean{link} = $self->url_for("/article/$id")->to_abs;
+        $clean{link} = $self->url_for("/article/$post")->to_abs;
 
         foreach my $key (@allowed) {
-            next unless exists $post{$key} and defined $post{$key};
-            $clean{$key} = $post{$key};
+            next unless $post->can($key);
+            my $value = $post->$key;
+            next unless defined $value;
+            $clean{$key} = $value;
         }
 
-        if ( $post{mod} ) {
-            $clean{mod}{count} = $post{mod}{count};
-            $clean{mod}{sum}   = $post{mod}{sum};
-        }
+        $clean{pubdate} = delete $clean{date};
 
-        @{ $clean{comments} }
-            = map +{ $clean_it->( %{$_} ) }, @{ $post{comments} || [] };
+        $clean{mod}{score} = $post->mod->score;
+        $clean{mod}{votes} = $post->mod->votes;
+
+        if ($post->is_article) {
+            @{ $clean{comments} } = map +{ $clean_it->($_) },
+                @{ $post->comments };
+        }
 
         return %clean;
     };
 
     my @stories;
-    foreach my $sid ( $self->stories ) {
-        my %story = $clean_it->( $self->story_details($sid) );
+    foreach my $story ( $self->stories ) {
+        my %story = $clean_it->( $story );
         $story{$_} //= undef for @required;
         push @stories, \%story;
         last if @stories == $config->{num_rss_stories};
