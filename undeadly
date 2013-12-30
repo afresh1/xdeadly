@@ -14,22 +14,24 @@ use Digest::SHA1;
 # Documentation browser under "/perldoc"
 plugin 'PODRenderer';
 
-my $data_dir               = 'data';
-my $auth_dir               = 'auth';
-my $secret                 = 'lw1N0mN0t8a24UR4NY12AT55p/23FxJ9H6+NReXed8nTZJraO0g';
-my $num_front_page_stories = 5;
-my $num_older_stories      = 5;
-my $num_rss_stories        = 10;
+my $config = plugin Config => default => {
+    data_dir => 'data',
+    auth_dir => 'auth',
+    secret   => 'lw1N0mN0t8a24UR4NY12AT55p/23FxJ9H6+NReXed8nTZJraO0g',
+    num_front_page_stories => 5,
+    num_older_stories      => 5,
+    num_rss_stories        => 10,
+};
 
-helper stories => sub { @{ XDeadly::Article->articles( $data_dir ) } };
+helper stories => sub { @{ XDeadly::Article->articles( $config->{data_dir} ) } };
 helper story => sub {
     my ( $self, $id ) = @_;
 
     if ( $id =~ m{/} ) {
-        return XDeadly::Comment->new( data_dir => $data_dir, id => $id );
+        return XDeadly::Comment->new( data_dir => $config->{data_dir}, id => $id );
     }
     else {
-        return XDeadly::Article->new( data_dir => $data_dir, id => $id );
+        return XDeadly::Article->new( data_dir => $config->{data_dir}, id => $id );
     }
 };
 
@@ -64,8 +66,8 @@ helper usernavbar => sub {
 helper weeklist => sub {
     my ($self) = @_;
 
-    my $made_front_page = $num_front_page_stories;
-    my $made_weeklist   = $num_older_stories;
+    my $made_front_page = $config->{num_front_page_stories};
+    my $made_weeklist   = $config->{num_older_stories};
 
     my $last_shortdate;
     my @stories;
@@ -240,7 +242,7 @@ helper human_time => sub {
 
 helper users => sub {
     my ( $self ) = @_;
-    my $user_file = app->home->rel_file("$auth_dir/xdeadly.org.passwd");
+    my $user_file = app->home->rel_file("$config->{auth_dir}/xdeadly.org.passwd");
 
     my @keys = qw( user group password realname email comment );
 
@@ -263,7 +265,7 @@ helper user_hash => sub {
     my ($self, $password) = @_;
 
     my $sha1 = Digest::SHA1->new;
-    $sha1->add( $secret );
+    $sha1->add( $config->{secret} );
     $sha1->add( $password );
 
     return $sha1->hexdigest;
@@ -364,7 +366,7 @@ get '/' => sub {
 
     my @stories;
     foreach my $story ( $self->stories ) {
-        last if @stories == $num_front_page_stories;
+        last if @stories == $config->{num_front_page_stories};
 
         if ($story->has_more) {
             $story->more( 'Read '
@@ -435,7 +437,7 @@ get '/summary' => [ format => [qw( rss json )] ] => sub {
         my %story = $clean_it->( $self->story_details($sid) );
         $story{$_} //= undef for @required;
         push @stories, \%story;
-        last if @stories == $num_rss_stories;
+        last if @stories == $config->{num_rss_stories};
     }
 
     return $self->render( json => \@stories )
