@@ -21,6 +21,41 @@ my $num_front_page_stories = 5;
 my $num_older_stories      = 5;
 my $num_rss_stories        = 10;
 
+helper stories => sub { @{ XDeadly::Article->articles( $data_dir ) } };
+helper story => sub {
+    my ( $self, $id ) = @_;
+
+    if ( $id =~ m{/} ) {
+        return XDeadly::Comment->new( data_dir => $data_dir, id => $id );
+    }
+    else {
+        return XDeadly::Article->new( data_dir => $data_dir, id => $id );
+    }
+};
+
+helper link_to_post => sub {
+    my ( $self, $post ) = @_;
+    my $title = $post->subject;
+    return $self->link_to( $title => $self->url_with( "/article/$post" ) );
+};
+
+helper link_to_author => sub {
+    my ( $self, $post ) = @_;
+
+    my $title = $post->name;
+    my $href  = $post->href;
+    return $title unless $href;
+
+    $href = "http://$href" unless $href =~ m{://}; # because
+
+    return $self->link_to( $title => $href );
+};
+
+helper is_new => sub {
+    my ($self, $post) = @_;
+    return 'XXX FIXME [is_new] XXX';
+};
+
 helper usernavbar => sub {
     my ($self) = @_;
     return 'anon_navbar';
@@ -62,6 +97,22 @@ helper mode => sub {
 
 helper comment_template => sub {
     return shift->mode ? 'article_comment' : 'article_comment_collapsed';
+};
+
+helper level_diff => sub {
+    my ($self, $current, $base) = @_;
+    return $current->level - ( $base ? $base->level : 0 );
+};
+
+helper indent => sub {
+    my ($self, $current, $base) = @_;
+    return '' if $self->mode eq 'flat';
+    return '<ul>' x $self->level_diff( $current, $base );
+};
+helper unindent => sub {
+    my ($self, $current, $base) = @_;
+    return '' if $self->mode eq 'flat';
+    return '</ul>' x $self->level_diff( $current, $base );
 };
 
 helper navigation => sub {
