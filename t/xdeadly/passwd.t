@@ -3,6 +3,9 @@ use Mojo::Base -strict;
 use Test::More;
 use File::Temp qw/ tempdir /;
 
+plan skip_all => 'Waiting for someone to write this'
+    unless $ENV{TEST_PASSWD};
+
 use lib 't/lib';
 use XDeadlyFixtures;
 
