@@ -34,7 +34,7 @@ my %headers = (
 my $body = "If this had been an actual post you would have been asked to evacuate.\x0a";
 
 my $post = XDeadly::Post->new;
-is $post, '', 'create a new post, id is blank';
+ok defined $post, 'create a new post which is defined';
 is $post->data_dir, undef, 'new post has no data_dir';
 is $post->id, undef, 'new post has no id';
 
@@ -73,7 +73,7 @@ is $loaded->headers->header($_), $headers{$_}, "Loaded header($_) matches"
 $post = XDeadly::Post->new;
 ok !$post->parse($message_text), 'Created a test post that is false';
 is $post->id, undef, 'parsed post has no id';
-is "$post", '', 'parsed post is still false';
+ok defined $post, 'parsed post is defined';
 ok $post->body, 'but it has a body';
 
 is $post->_epoch, 1377010297, 'correctly parsed the epoch';
