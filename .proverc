@@ -1,2 +1,4 @@
 --state=hot,slow,save
+-l
+-r
 -j9
