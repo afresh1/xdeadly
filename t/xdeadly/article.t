@@ -74,6 +74,7 @@ my %attributes = (
     department => 'test department',
     topic      => 'topictest',
     topicimg   => 'topictest.jpg',
+    topicquery => 'topictest',
 );
 
 while ( my ( $method, $value ) = each %attributes ) {

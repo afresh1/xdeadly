@@ -83,6 +83,11 @@ is $post->headers->header($_), $headers{$_}, "Header($_) matches"
     for keys %headers;
 
 is $post->subject, $headers{Subject}, 'Subject shortcut works';
+is $post->name,    $headers{Name},    'Name shortcut works';
+is $post->email,   $headers{EMail},   'EMail shortcut works';
+is $post->href,    $headers{HREF},    'HREF shortcut works';
+is $post->host,    $headers{Host},    'Host shortcut works';
+is $post->date,    $headers{Date}.' (GMT)', 'Date shortcut works';
 
 ok $post->save( data_dir => $dir, id => 'test' ), 'saved post';
 is $post->path, "$dir/test/post", 'post knows where it is';
