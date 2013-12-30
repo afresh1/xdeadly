@@ -141,8 +141,8 @@ helper navigation => sub {
 
         my @dir = @{ $up->path };
         shift @dir;
-        my %parent = $self->load_post(join '/', @dir);
-        my $title = $parent{subject} || '';
+        my $parent = $self->story(join '/', @dir);
+        my $title = $parent->subject || '';
 
         push @links, {
             href  => $up,
@@ -169,10 +169,10 @@ helper navigation => sub {
     } if $mode;
 
     if ( $self->current_route('front') ) {
-        my $count         = $self->count_comments($sid);
+        my $story = $self->story( $sid );
+        my $count         = @{ $story->comments };
         my $s             = $count eq 1 ? '' : 's';
-        my $latest_change = $self->human_time(
-            $self->latest_change( { $self->story_details($sid) } ) );
+        my $latest_change = $self->human_time( $story->latest_change );
 
         unshift @links, {
             href => $href->clone,
@@ -197,18 +197,16 @@ helper navigation => sub {
         }
 
         if ($prev) {
-            my %story = $self->story_details($prev);
             unshift @links, {
                 href =>  $self->url_with("/article/$prev"),
-                title => "<< $story{subject}",
+                title => '<< ' . $prev->subject,
             };
         }
 
         if ($next) {
-            my %story = $self->story_details($next);
             push @links, {
                 href =>  $self->url_with("/article/$next"),
-                title => "$story{subject} >>",
+                title => $next->subject . ' >>',
             };
         }
     }
@@ -365,16 +363,16 @@ get '/' => sub {
     my ($self) = @_;
 
     my @stories;
-    foreach my $sid ( $self->stories ) {
+    foreach my $story ( $self->stories ) {
         last if @stories == $num_front_page_stories;
-        my %story = $self->story_details($sid);
-        if ( $story{has_more} ) {
-            $story{more}
-                = 'Read '
-                . $self->link_to( more => "/article/$story{sid}" )
-                . ' . . .';
+
+        if ($story->has_more) {
+            $story->more( 'Read '
+                . $self->link_to( more => "/article/$story" )
+                . ' . . .' ) if $story->has_more;
         }
-        push @stories, \%story;
+
+        push @stories, $story;
     }
     $self->stash( front_stories => \@stories );
 } => 'front';
@@ -383,28 +381,11 @@ get '/about';
 get '/errata';
 get '/search';
 
-get '/article/:sid' => sub {
+get '/article/*id' => sub {
     my ($self) = @_;
-    my $sid = $self->param('sid');
-
-    $self->stash(
-        $self->story_details($sid),
-        more     => $self->story_more($sid),
-        comments => [ $self->comments($sid) ],
-    );
+    my $id = $self->param('id');
+    $self->stash( story => $self->story($id) );
 } => 'article';
-
-get '/article/:sid/*cid' => sub {
-    my ($self) = @_;
-    my $sid = $self->param('sid');
-    my $cid = $self->param('cid');
-
-    $self->stash(
-        $self->comment_details($sid, $cid),
-        comments => [ $self->comments("$sid/$cid") ],
-    );
-} => 'article';
-
 
 get '/summary' => [ format => [qw( rss json )] ] => sub {
     my ($self) = @_;
