@@ -15,6 +15,10 @@ use Carp;
 use File::Spec::Functions qw/ canonpath catdir catfile /;
 use File::Path qw/ make_path /;
 
+use overload
+    '""' => sub { shift->id },
+    fallback => 1;
+
 has content => sub {
     my ($self) = @_;
 
