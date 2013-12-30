@@ -5,6 +5,10 @@ use Mojo::Util qw(url_escape slurp);
 use List::Util qw(sum);
 use Time::Local qw(timegm);
 
+use lib app->home->rel_dir('lib');
+use XDeadly::Article;
+use XDeadly::Comment;
+
 use Digest::SHA1;
 
 # Documentation browser under "/perldoc"
