@@ -2,7 +2,7 @@
 <html>
 
 	<head>
-		<title><%= $title %></title>
+		<title><%= $story->subject %></title>
 	</head>
 
 	<body bgcolor="#ffffff" text="#000000" link="#336666" vlink="#666666" alink="#996666">
@@ -16,9 +16,7 @@
 				<td valign="top" width="100%">
 					<%= include 'front_story' %>
 					<p>
-						<font color="#000000">
-							<%= $navigation %>
-						</font>
+						<font color="#000000">XXX FIXME [threshold] XXX</font>
 					</p>
 				</td>
 
@@ -59,7 +57,7 @@
 		</tbody></table>
 
 		<table width="100%" cellspacing="0" border="0"><tbody>
-			%= include $_->{template}, %{ $_ } for @{ $comments };
+			%= include comment_template( $_ ), comment => $_, indent => indent( $_, $story ), unindent => unindent( $_, $story ) for @{ $story->comments };
 		</tbody></table>
 
 		<%= include 'footer' %>

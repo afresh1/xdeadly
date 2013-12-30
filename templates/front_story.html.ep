@@ -4,7 +4,7 @@
 		<td valign="top">
 			<%= image('/images/slc.gif', align => 'top', alt => '', height => 16, width => 13) %>
 			<font size="4" color="#336666"><b>
-				<%= $subject %>
+				<%= $story->subject %>
 			</b></font>
 		</td>
 	</tr>
@@ -12,23 +12,34 @@
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<font size="2">Contributed by <%== $name %> on <%= $date %></font><br>
-            % if ($department) {
-			<font size="2">from the <%= $department %> dept.</font>
-            % }
+			<font size="2">Contributed by <%== link_to_author( $story ) %> on <%= $story->date %></font><br>
 
+% if ($story->is_article) {
+%   if ($story->department) {
+			<font size="2">from the <%= $story->department %> dept.</font>
+%   }
 			<p>
-				<%== $body %>
+				<%== $story->body %>
 			</p>
-			<%== $more %>
+%   if ($story->has_more) {
+            <p>
+                <%== $story->more %>
+            </p>
+%   }
 		</td>
 		<td align="right" valign="top">
-			<a href="<%= url_for('search')->query(query => $topicquery, sort => 'time') %>">
-				<%= image("/images/$topicimg", alt => $topicquery, border => 0, height => 70, hspace => 20, vspace => 10, width => 70) %>
+			<a href="<%= url_for('search')->query(query => $story->topicquery, sort => 'time') %>">
+				<%= image('/images/' . $story->topicimg, alt => $story->topicquery, border => 0, height => 70, hspace => 20, vspace => 10, width => 70) %>
 			</a>
+% }
+% else {
+			<p>
+				<%== $story->body %>
+			</p>
+% }
 		</td>
 	</tr>
 </table>
-%== join ' | ', map { link_to( $_->{title}, $_->{href} ) } navigation $sid;
+%== join ' | ', map { link_to( $_->{title}, $_->{href} ) } navigation $story->id;
 
 <p>

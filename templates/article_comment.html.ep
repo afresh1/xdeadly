@@ -6,22 +6,22 @@
 				<td width="1"><%== $indent %>&nbsp;<%== $unindent %></td>
 				<td bgcolor="#cccccc">
 					<font color="#336666">
-						<b><%= $subject %></b> (mod <%= $mod->{sum} %>/<%= $mod->{count} %>) <%= $new %><br />
-						by <%= $name %> <%= $host %> <%= $email %> on <%= $date %> <%= $href %>
+						<b><%= $comment->subject %></b> (mod <%= $comment->mod->score %>/<%= $comment->mod->votes %>) <%= is_new( $comment ) %><br />
+						by <%= link_to_author( $comment ) %> <%= $comment->host %> <%= $comment->email %> on <%= $comment->date %>
 					</font>
 				</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td>
-					<%== $body %>
+					<%== $comment->body %>
 				</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td align="center">
 					<font size="2">
-%== join ' ', map { '[ ' . link_to( $_->{title}, $_->{href} ) . ' ]' } navigation $sid, $cid;
+%== join ' ', map { '[ ' . link_to( $_->{title}, $_->{href} ) . ' ]' } navigation $comment->parent, $comment;
 					</font>
 				</td>
 			</tr>

@@ -3,7 +3,11 @@
 		<table width="100%" cellspacing="0" border="0">
 			<tr>
 				<td>
-					<a href="<%= $link %>"><%= $subject %></a> (<%= $mod->{sum} %>/<%= $mod->{count} %>) by <%= $name %> on <%= $date %> <%= $new %>
+					<%= link_to_post $comment %>
+                    (<%= $comment->mod->score %>/<%= $comment->mod->votes %>)
+                    by <%= $comment->name %>
+                    on <%= $comment->date %>
+                    <%= is_new($comment) %>
 				</td>
 			</tr>
 		</table>
