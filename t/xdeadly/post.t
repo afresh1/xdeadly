@@ -33,7 +33,8 @@ my %headers = (
 );
 my $body = "If this had been an actual post you would have been asked to evacuate.\x0a";
 
-ok my $post = XDeadly::Post->new;
+my $post = XDeadly::Post->new;
+is $post, '', 'create a new post, id is blank';
 is $post->data_dir, undef, 'new post has no data_dir';
 is $post->id, undef, 'new post has no id';
 
@@ -44,6 +45,7 @@ is $post->data_dir, $dir, 'Got a data_dir';
 is $post->id, 'test', 'Got an id';
 is $post->dir, "$dir/test";
 is $post->path, "$dir/test/post";
+is "$post", 'test', 'Post stringifies to the id';
 
 {
     mkdir "$dir/loaded" or die;
@@ -68,9 +70,11 @@ is $loaded->build_body, $body, 'Loaded body matches';
 is $loaded->headers->header($_), $headers{$_}, "Loaded header($_) matches"
     for keys %headers;
 
-ok $post = XDeadly::Post->new;
-ok $post->parse($message_text), 'Created a test post';
+$post = XDeadly::Post->new;
+ok !$post->parse($message_text), 'Created a test post that is false';
 is $post->id, undef, 'parsed post has no id';
+is "$post", '', 'parsed post is still false';
+ok $post->body, 'but it has a body';
 
 is $post->_epoch, 1377010297, 'correctly parsed the epoch';
 
@@ -93,20 +97,20 @@ is $reloaded->headers->header($_), $headers{$_}, "Reloaded header($_) matches"
 
 $post = XDeadly::Post->new;
 ok open( my $fh, '<', "$dir/test/post" ), 'Opened post';
-ok $post->parse( do { local $/ = undef; <$fh> } ), 'manual load parsed';
+ok !$post->parse( do { local $/ = undef; <$fh> } ), 'manual load parsed, but is false';
 close $fh;
 
 is $post->build_body, $body, 'manual load body matches';
 is $post->headers->header($_), $headers{$_}, "manual load Header($_) matches"
     for keys %headers;
 
-ok $post->data_dir($dir), 'set post data_dir';
-ok $post->id('test2'), 'set post id';
+ok !$post->data_dir($dir), 'set post data_dir, still false';
+ok $post->id('test2'), 'set post id, now stringifies true';
 ok $post->save, 'save post to ->path';
 
 $reloaded = XDeadly::Post->new();
-ok $reloaded->data_dir( $dir ), 'set data_dir after ->new';
-ok $reloaded->id( 'test2' ), 'set id after ->new';
+ok !$reloaded->data_dir( $dir ), 'set data_dir after ->new, still false';
+ok $reloaded->id( 'test2' ), 'set id after ->new, now true';
 
 is $post->build_body, $reloaded->build_body, 'Reloaded body matches';
 is $reloaded->headers->header($_), $headers{$_}, "Reloaded header($_) matches"
