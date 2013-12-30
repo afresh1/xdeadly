@@ -10,6 +10,7 @@ use Mojo::Content::Single;
 use Time::Local qw(timegm);
 use XDeadly::Article;
 use XDeadly::Comment;
+use XDeadly::PostMod;
 
 use Carp;
 use File::Spec::Functions qw/ canonpath catdir catfile /;
@@ -31,6 +32,8 @@ has content => sub {
 
     return $self->content;
 };
+
+has mod => sub { XDeadly::PostMod->new( post => shift ) };
 
 has '_epoch' => sub {
     my ($self) = @_;
