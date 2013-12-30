@@ -49,6 +49,12 @@ has 'filename' => 'post';
 has 'data_dir';
 
 sub subject { shift->content->headers->header( subject => @_ ) }
+sub name    { shift->content->headers->header( name    => @_ ) }
+sub email   { shift->content->headers->header( email   => @_ ) }
+sub href    { shift->content->headers->header( href    => @_ ) }
+sub host    { shift->content->headers->header( host    => @_ ) }
+
+sub date { shift->content->headers->header( date => @_ ) . ' (GMT)' }
 
 sub parse {
     my ( $self, $chunk ) = @_;

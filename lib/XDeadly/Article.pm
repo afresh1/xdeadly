@@ -61,8 +61,9 @@ sub save {
     return $self;
 }
 
-sub department { shift->headers->header('Dept') }
-sub topic      { shift->headers->header('Topic') }
+sub department { shift->headers->header( Dept  => @_ ) }
+sub topic      { shift->headers->header( Topic => @_ ) }
+sub topicquery { shift->topic(@_) }
 
 sub topicimg {
     my ($self) = @_;
