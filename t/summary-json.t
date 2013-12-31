@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo;
 
 use FindBin;
-require "$FindBin::Bin/../undeadly";
+require "$FindBin::Bin/../xdeadly";
 
 use lib 't/lib';
 use XDeadlyFixtures;
