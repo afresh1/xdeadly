@@ -49,7 +49,7 @@ has 'cid' => sub {
 # id's are joined with /, not the file path separator.
 # This is because it is representative of a URI path
 has id => sub {
-    my $self = shift;
+    my ($self) = @_;
     return unless $self->parent;
     return join '/', $self->parent->id, $self->cid;
 };
@@ -73,6 +73,7 @@ has 'data_dir' => sub {
 
 sub article {
     my $parent = shift->parent;
+    return unless $parent;
     return $parent->is_article ? $parent : $parent->article;
 }
 
