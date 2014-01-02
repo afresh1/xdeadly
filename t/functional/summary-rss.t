@@ -10,9 +10,11 @@ use Test::More;
 use Test::Mojo;
 
 use FindBin;
+## no critic RequireBarewordIncludes
 require "$FindBin::Bin/../../xdeadly";
 
-use lib 't/lib';
+## no critic RequireBarewordIncludes
+use lib "$FindBin::Bin/../lib";
 use XDeadlyFixtures;
 
 my $dir = tempdir( CLEANUP => 1 );

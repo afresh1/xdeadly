@@ -8,6 +8,7 @@ use Test::More;
 use Test::Mojo;
 
 use FindBin;
+## no critic RequireBarewordIncludes
 require "$FindBin::Bin/../../xdeadly";
 
 my $t = Test::Mojo->new;
