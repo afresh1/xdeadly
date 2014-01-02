@@ -17,7 +17,6 @@ use Mojo::Base -base;
 
 our $VERSION = '0.01';
 
-use Mojo::Asset::File;
 use List::Util qw( sum );
 
 has 'post';
@@ -26,14 +25,15 @@ has _points => sub {
     my ($self) = @_;
 
     my %mod = ();
-    return \%mod unless $self->path and -e $self->path;
 
-    my $file = Mojo::Asset::File->new( path => $self->path );
+    if ($self->path and -s $self->path) {
+        open my $fh, '<', $self->path or die $!;
+        while (<$fh>) {
+            chomp;
+            my ( $who, $what ) = split /\s+/;
 
-    foreach ( split /\n/, $file->slurp ) {
-        my ( $who, $what ) = split /\s+/;
-
-        $mod{$who} = $what;
+            $mod{$who} = $what;
+        }
     }
 
     return \%mod
