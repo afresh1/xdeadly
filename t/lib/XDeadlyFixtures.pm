@@ -31,6 +31,7 @@ sub _copy_fixtures {
     }, $source_dir );
 }
 
+sub copy_good_fixtures      { _copy_fixtures(['good'],       @_) }
 sub copy_good_data_fixtures { _copy_fixtures(['good','data'],@_) }
 sub copy_good_auth_fixtures { _copy_fixtures(['good','auth'],@_) }
 
