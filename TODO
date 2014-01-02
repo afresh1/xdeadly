@@ -1,7 +1,5 @@
 Basic TODO list for getting xdeadly to a point to replace the C version
 
-* Finish up XDeadly::Post, XDeadly::Article, XDeadly::Comment
-* Convert the script to use those instead of the 'helper's
 * Lots of tests for everything
 * Write XDeadly::Passwd that will talk to the password file from the C version
   * Needs to provide a small API
@@ -11,6 +9,8 @@ Basic TODO list for getting xdeadly to a point to replace the C version
   * my $success = ->add( %info ); # see above for description of %info
   * my $success = ->disable( $user );
 * Add authentication and authorization to the app
+  * Add session support
+  * With rotating keys so the sessions expire
 * Flesh out all the empty routes in the script, applying authorization as needed
   * get '/submit';
   * post '/submit';
@@ -33,3 +33,4 @@ Basic TODO list for getting xdeadly to a point to replace the C version
 * Add search capabilites
 * Make sure all objects notice changes on the filesystem and reload
 * Use file locking to keep from overwriting files
+* Add support for approving and unapproving stories
