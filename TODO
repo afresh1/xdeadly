@@ -31,3 +31,5 @@ Basic TODO list for getting xdeadly to a point to replace the C version
     * editors
     * yesterday
 * Add search capabilites
+* Make sure all objects notice changes on the filesystem and reload
+* Use file locking to keep from overwriting files
