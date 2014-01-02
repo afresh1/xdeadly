@@ -8,7 +8,6 @@ use XDeadlyFixtures;
 
 use XDeadly::Article;
 
-
 my $article = XDeadly::Article->new;
 
 ok $article->is_article, 'New article is an article';
@@ -21,7 +20,8 @@ my $dir = tempdir( CLEANUP => 1 );
 XDeadlyFixtures::copy_good_data_fixtures($dir);
 
 my $id = '19700101030000';
-ok $article = XDeadly::Article->new( data_dir => $dir, id => $id ), 'Load an article';
+ok $article = XDeadly::Article->new( data_dir => $dir, id => $id ),
+    'Load an article';
 
 is $article->id, $id, 'Article has the correct id';
 

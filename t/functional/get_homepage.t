@@ -8,7 +8,7 @@ use Test::More;
 use Test::Mojo;
 
 use FindBin;
-require "$FindBin::Bin/../xdeadly";
+require "$FindBin::Bin/../../xdeadly";
 
 my $t = Test::Mojo->new;
 

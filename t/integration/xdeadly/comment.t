@@ -10,14 +10,6 @@ use XDeadly::Comment;
 my $dir = tempdir( CLEANUP => 1 );
 XDeadlyFixtures::copy_good_data_fixtures($dir);
 
-my $comment = XDeadly::Comment->new;
-
-is $comment->filename, 'comment', 'A new comment has the right filename';
-
-is $comment->id,     undef, 'A new comment has no id';
-is $comment->parent, undef, 'A new comment has no parent';
-is $comment->cid,    undef, 'A comment without a parent has no cid';
-
 my $article = XDeadly::Comment->articles($dir)->[-1];
 
 is $article->id, '19700101010000', 'Loaded the right article';
@@ -59,7 +51,7 @@ my @tests  = (
 
 foreach my $t (@tests) {
     my $id = $t->{id};
-    ok $comment = XDeadly::Comment->new( parent => $parent ), "[$id] New";
+    ok my $comment = XDeadly::Comment->new( parent => $parent ), "[$id] New";
 
     is $comment->data_dir, $dir,     "[$id] correct data_dir";
     is $comment->article,  $article, "[$id] correct article";

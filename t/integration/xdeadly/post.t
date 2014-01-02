@@ -33,19 +33,39 @@ my %headers = (
 );
 my $body = "If this had been an actual post you would have been asked to evacuate.\x0a";
 
-my $post = XDeadly::Post->new;
-ok defined $post, 'create a new post which is defined';
-is $post->data_dir, undef, 'new post has no data_dir';
-is $post->id, undef, 'new post has no id';
+sub post_ok {
+    my ($post) = @_;
 
-is $post->level, 0, 'Posts have a level of 0';
+    is $post->_epoch, 1377010297, 'correctly parsed the epoch';
+    is $post->body, $body, 'Body matches';
+    is $post->headers->header($_), $headers{$_}, "Header($_) matches"
+        for keys %headers;
 
-ok $post = XDeadly::Post->new( data_dir => $dir, id => 'test' );
-is $post->data_dir, $dir, 'Got a data_dir';
-is $post->id, 'test', 'Got an id';
-is $post->dir, "$dir/test";
-is $post->path, "$dir/test/post";
-is "$post", 'test', 'Post stringifies to the id';
+    is $post->subject, $headers{Subject}, 'Subject shortcut works';
+    is $post->name,    $headers{Name},    'Name shortcut works';
+    is $post->email,   $headers{EMail},   'EMail shortcut works';
+    is $post->href,    $headers{HREF},    'HREF shortcut works';
+    is $post->host,    $headers{Host},    'Host shortcut works';
+    is $post->date, $headers{Date} . ' (GMT)', 'Date shortcut works';
+}
+
+
+my $parsed = XDeadly::Post->new;
+ok !$parsed->parse($message_text), 'Created a test post that is false';
+is $parsed->id, undef, 'parsed post has no id';
+ok defined $parsed, 'parsed post is defined';
+ok $parsed->body, 'but it has a body';
+
+post_ok($parsed);
+
+ok $parsed->save( data_dir => $dir, id => 'test' ), 'saved post';
+is $parsed->path, "$dir/test/post", 'post knows where it is';
+
+my $reloaded = XDeadly::Post->new( data_dir => $dir, id => 'test' );
+is $reloaded->path, "$dir/test/post", 'Reloaded has correct path';
+is $reloaded->dir, "$dir/test", 'Reloaded has correct dir';
+
+post_ok( $reloaded );
 
 {
     mkdir "$dir/loaded" or die;
@@ -66,65 +86,37 @@ is $loaded->filename, 'post', 'loaded post filename is post';
 
 ok !$loaded->{content}, 'Still have not loaded the content for the post';
 
-is $loaded->build_body, $body, 'Loaded body matches';
-is $loaded->headers->header($_), $headers{$_}, "Loaded header($_) matches"
-    for keys %headers;
+post_ok( $loaded );
 
-$post = XDeadly::Post->new;
-ok !$post->parse($message_text), 'Created a test post that is false';
-is $post->id, undef, 'parsed post has no id';
-ok defined $post, 'parsed post is defined';
-ok $post->body, 'but it has a body';
-
-is $post->_epoch, 1377010297, 'correctly parsed the epoch';
-
-is $post->build_body, $body, 'Body matches';
-is $post->headers->header($_), $headers{$_}, "Header($_) matches"
-    for keys %headers;
-
-is $post->subject, $headers{Subject}, 'Subject shortcut works';
-is $post->name,    $headers{Name},    'Name shortcut works';
-is $post->email,   $headers{EMail},   'EMail shortcut works';
-is $post->href,    $headers{HREF},    'HREF shortcut works';
-is $post->host,    $headers{Host},    'Host shortcut works';
-is $post->date,    $headers{Date}.' (GMT)', 'Date shortcut works';
-
-ok $post->save( data_dir => $dir, id => 'test' ), 'saved post';
-is $post->path, "$dir/test/post", 'post knows where it is';
-
-my $reloaded = XDeadly::Post->new( data_dir => $dir, id => 'test' );
-is $reloaded->path, "$dir/test/post", 'Reloaded has correct path';
-is $post->dir, "$dir/test", 'Reloaded has correct dir';
-
-is $post->build_body, $reloaded->build_body, 'Reloaded body matches';
-is $reloaded->headers->header($_), $headers{$_}, "Reloaded header($_) matches"
-    for keys %headers;
-
-$post = XDeadly::Post->new;
+my $manual = XDeadly::Post->new;
 ok open( my $fh, '<', "$dir/test/post" ), 'Opened post';
-ok !$post->parse( do { local $/ = undef; <$fh> } ), 'manual load parsed, but is false';
+ok !$manual->parse(
+    do { local $/ = undef; <$fh> }
+    ),
+    'manual load parsed, but is false';
 close $fh;
 
-is $post->build_body, $body, 'manual load body matches';
-is $post->headers->header($_), $headers{$_}, "manual load Header($_) matches"
-    for keys %headers;
+post_ok($manual);
 
-ok !$post->data_dir($dir), 'set post data_dir, still false';
-ok $post->id('test2'), 'set post id, now stringifies true';
-ok $post->save, 'save post to ->path';
+ok !$manual->data_dir($dir), 'set manual data_dir, still false';
+ok $manual->id('test2'), 'set manual id, now stringifies true';
+ok $manual->save, 'save manual to ->path';
 
 $reloaded = XDeadly::Post->new();
 ok !$reloaded->data_dir( $dir ), 'set data_dir after ->new, still false';
 ok $reloaded->id( 'test2' ), 'set id after ->new, now true';
 
-is $post->build_body, $reloaded->build_body, 'Reloaded body matches';
-is $reloaded->headers->header($_), $headers{$_}, "Reloaded header($_) matches"
-    for keys %headers;
+is $manual->body, $reloaded->body, 'Reloaded body matches';
+
+post_ok( $reloaded );
+
+
 
 eval { XDeadly::Post::_parse_ctime('Thu Jan 01 00:00:00 UTC 1970') };
 ok $@ =~ /Invalid date/, 'Date with a timezone is invalid';
 
-ok $post->mod->isa( 'XDeadly::PostMod' ), 'We have a mod that we can vote with';
+ok( XDeadly::Post->new->mod->isa('XDeadly::PostMod'),
+    'We have a mod that we can vote with');
 
 XDeadlyFixtures::copy_good_data_fixtures($dir);
 
