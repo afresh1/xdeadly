@@ -18,6 +18,7 @@ use Mojo::Base 'XDeadly::Post';
 our $VERSION = 0.01;
 
 use XDeadly::Article;
+use Carp;
 
 use File::Spec::Functions qw(catfile catdir);
 
@@ -27,17 +28,20 @@ has 'cid' => sub {
     my ($self) = @_;
     return unless $self->parent;
 
+    my $cid = 1;
+
     if ($self->{id}) {
         my $parent_id = $self->parent->id;
-        my $cid = $self->id;
-        $cid =~ s{^$parent_id/}{};
+        $cid = $self->id;
+        $cid =~ s{^\Q$parent_id/}{}
+            || croak "Cannot calculate cid: parent [$parent_id] and ID [$cid] incompatable";
     }
+    else {
+        my $parent_dir = $self->parent->dir;
 
-    my $parent_dir = $self->parent->dir;
-
-    my $cid = 1;
-    $cid++ while -e catdir $parent_dir, $cid;
-    mkdir catdir $parent_dir, $cid;
+        $cid++ while -e catdir $parent_dir, $cid;
+        mkdir catdir $parent_dir, $cid;
+    }
 
     return $cid;
 };
