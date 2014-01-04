@@ -37,15 +37,22 @@ my $config = plugin Config => default => {
     num_rss_stories        => 10,
 };
 
-helper stories => sub { @{ XDeadly::Article->articles( $config->{data_dir} ) } };
+helper stories =>
+    sub { @{ XDeadly::Article->articles( $config->{data_dir} ) } };
 helper story => sub {
     my ( $self, $id ) = @_;
 
     if ( $id =~ m{/} ) {
-        return XDeadly::Comment->new( data_dir => $config->{data_dir}, id => $id );
+        return XDeadly::Comment->new(
+            data_dir => $config->{data_dir},
+            id       => $id,
+        );
     }
     else {
-        return XDeadly::Article->new( data_dir => $config->{data_dir}, id => $id );
+        return XDeadly::Article->new(
+            data_dir => $config->{data_dir},
+            id       => $id,
+        );
     }
 };
 
