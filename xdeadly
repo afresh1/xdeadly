@@ -153,22 +153,19 @@ helper navigation => sub {
             },
             {   href  => $href->clone->path("/reply/$cid"),
                 title => 'Reply to this comment',
-            }
+            },
+            # Mod Up/Down
         );
     }
 
-    # XXX This is rather fragile, need to find a better way.
-    if ( @{ $self->url_with->path } > 2 ) {
-        my $up = $self->url_with->clone;
-        pop @{ $up->path };
+    my $story = $self->story( $sid );
 
-        my @dir = @{ $up->path };
-        shift @dir;
-        my $parent = $self->story(join '/', @dir);
+    unless ($story->is_article) {
+        my $parent = $story->parent;
         my $title = $parent->subject || '';
 
         push @links, {
-            href  => $up,
+            href  => $self->url_with("/article/$parent"),
             title => "Up: $title",
         };
     }
@@ -192,7 +189,6 @@ helper navigation => sub {
     } if $mode;
 
     if ( $self->current_route('front') ) {
-        my $story = $self->story( $sid );
         my $count         = @{ $story->comments };
         my $s             = $count eq 1 ? '' : 's';
         my $latest_change = $self->human_time( $story->latest_change );
@@ -207,7 +203,12 @@ helper navigation => sub {
         my $prev;
         my $next;
 
-        foreach my $current ($self->stories) {
+        my @posts
+            = $story->is_article
+            ? $self->stories
+            : reverse @{ $story->article->comments };
+
+        foreach my $current (@posts) {
             if ($current eq $sid) {
                 $seen_myself = 1;
                 next;
@@ -219,19 +220,15 @@ helper navigation => sub {
             $next = $current;
         }
 
-        if ($prev) {
-            unshift @links, {
-                href =>  $self->url_with("/article/$prev"),
-                title => '<< ' . $prev->subject,
-            };
-        }
+        unshift @links, {
+            href =>  $self->url_with("/article/$prev"),
+            title => '<< ' . $prev->subject,
+        } if $prev;
 
-        if ($next) {
-            push @links, {
-                href =>  $self->url_with("/article/$next"),
-                title => $next->subject . ' >>',
-            };
-        }
+        push @links, {
+            href =>  $self->url_with("/article/$next"),
+            title => $next->subject . ' >>',
+        } if $next;
     }
 
     return @links;
