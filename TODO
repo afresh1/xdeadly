@@ -30,7 +30,10 @@ Basic TODO list for getting xdeadly to a point to replace the C version
     * errata
     * editors
     * yesterday
+* Add moderation
 * Add search capabilites
 * Make sure all objects notice changes on the filesystem and reload
 * Use file locking to keep from overwriting files
 * Add support for approving and unapproving stories
+* Add support for going back in time; seeing "yesterday's edition"
+* Enable Mojolicious::Validator::Validation csrf support and protection of inputs
