@@ -38,9 +38,7 @@ has 'cid' => sub {
     }
     else {
         my $parent_dir = $self->parent->dir;
-
         $cid++ while -e catdir $parent_dir, $cid;
-        mkdir catdir $parent_dir, $cid;
     }
 
     return $cid;

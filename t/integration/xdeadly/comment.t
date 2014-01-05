@@ -29,18 +29,18 @@ my @tests  = (
         cid   => '4',
         level => 1,
     },
-    {   id    => '19700101010000/5',
-        cid   => '5',
-        level => 1,
+    {   id          => '19700101010000/5',
+        cid         => '5',
+        level       => 1,
         make_parent => 1,
     },
     {   id    => '19700101010000/5/1',
         cid   => '1',
         level => 2,
     },
-    {   id    => '19700101010000/5/2',
-        cid   => '2',
-        level => 2,
+    {   id          => '19700101010000/5/2',
+        cid         => '2',
+        level       => 2,
         make_parent => 1,
     },
     {   id    => '19700101010000/5/2/1',
@@ -63,6 +63,9 @@ foreach my $t (@tests) {
         is $comment->$method, $t->{$method},
             "[$id] correct $method [$t->{$method}]";
     }
+
+    # Need to save it so it actually exists
+    ok $comment->save, 'Save the comment';
 }
 
 done_testing;
