@@ -24,8 +24,8 @@ my @ids = (
     '19700101010000/3/1', '19700101010000/3/1/1',
     '19700101020000',     '19700101030000',
 );
-my @cids  = ('12345/6/7/8');
-my @modes = qw( flat collapsed expanded );
+my @cids         = ('12345/6/7/8');
+my @thread_modes = qw( flat collapsed expanded );
 
 $t->app->hook( around_action => sub {
     my ( $next, $c, $action, $last ) = @_;
@@ -47,10 +47,10 @@ my %links = (
         {   'href'  => '/article/19700101010000',
             'title' => '8 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000?mode=flat',
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000?mode=expanded',
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
@@ -62,57 +62,57 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000&cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/?id=19700101010000&cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000&cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/?id=19700101010000&cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000&cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/?id=19700101010000&cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000&mode=collapsed' => [
-        {   'href'  => '/article/19700101010000?mode=collapsed',
+    '/?id=19700101010000&thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101010000?thread_mode=collapsed',
             'title' => '8 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000?mode=flat',
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000?mode=expanded',
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
-    '/?id=19700101010000&mode=expanded' => [
-        {   'href'  => '/article/19700101010000?mode=expanded',
+    '/?id=19700101010000&thread_mode=expanded' => [
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => '8 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000?mode=flat',
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101010000',
             'title' => 'Collapsed'
         }
     ],
-    '/?id=19700101010000&mode=flat' => [
-        {   'href'  => '/article/19700101010000?mode=flat',
+    '/?id=19700101010000&thread_mode=flat' => [
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => '8 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000?mode=expanded',
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000',
@@ -126,10 +126,10 @@ my %links = (
         {   'href'  => '/article/19700101010000',
             'title' => 'Up: Test Post #1'
         },
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
@@ -141,66 +141,66 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3&cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/?id=19700101010000/3&cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3&cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/?id=19700101010000/3&cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3&cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/?id=19700101010000/3&cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3&mode=collapsed' => [
-        {   'href'  => '/article/19700101010000/3?mode=collapsed',
+    '/?id=19700101010000/3&thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101010000/3?thread_mode=collapsed',
             'title' => '3 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000?mode=collapsed',
+        {   'href'  => '/article/19700101010000?thread_mode=collapsed',
             'title' => 'Up: Test Post #1'
         },
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
-    '/?id=19700101010000/3&mode=expanded' => [
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+    '/?id=19700101010000/3&thread_mode=expanded' => [
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => '3 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000?mode=expanded',
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => 'Up: Test Post #1'
         },
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101010000/3',
             'title' => 'Collapsed'
         }
     ],
-    '/?id=19700101010000/3&mode=flat' => [
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+    '/?id=19700101010000/3&thread_mode=flat' => [
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => '3 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000?mode=flat',
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => 'Up: Test Post #1'
         },
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000/3',
@@ -214,10 +214,10 @@ my %links = (
         {   'href'  => '/article/19700101010000/3',
             'title' => 'Up: Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
@@ -229,66 +229,66 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3/1&cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/?id=19700101010000/3/1&cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3/1&cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/?id=19700101010000/3/1&cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3/1&cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/?id=19700101010000/3/1&cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3/1&mode=collapsed' => [
-        {   'href'  => '/article/19700101010000/3/1?mode=collapsed',
+    '/?id=19700101010000/3/1&thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=collapsed',
             'title' => '2 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000/3?mode=collapsed',
+        {   'href'  => '/article/19700101010000/3?thread_mode=collapsed',
             'title' => 'Up: Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
-    '/?id=19700101010000/3/1&mode=expanded' => [
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+    '/?id=19700101010000/3/1&thread_mode=expanded' => [
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => '2 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => 'Up: Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101010000/3/1',
             'title' => 'Collapsed'
         }
     ],
-    '/?id=19700101010000/3/1&mode=flat' => [
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+    '/?id=19700101010000/3/1&thread_mode=flat' => [
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => '2 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => 'Up: Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000/3/1',
@@ -302,10 +302,10 @@ my %links = (
         {   'href'  => '/article/19700101010000/3/1',
             'title' => 'Up: Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
@@ -317,66 +317,66 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3/1/1&cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/?id=19700101010000/3/1/1&cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3/1/1&cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/?id=19700101010000/3/1/1&cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3/1/1&cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/?id=19700101010000/3/1/1&cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101010000/3/1/1&mode=collapsed' => [
-        {   'href'  => '/article/19700101010000/3/1/1?mode=collapsed',
+    '/?id=19700101010000/3/1/1&thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=collapsed',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=collapsed',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=collapsed',
             'title' => 'Up: Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
-    '/?id=19700101010000/3/1/1&mode=expanded' => [
-        {   'href'  => '/article/19700101010000/3/1/1?mode=expanded',
+    '/?id=19700101010000/3/1/1&thread_mode=expanded' => [
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=expanded',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => 'Up: Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101010000/3/1/1',
             'title' => 'Collapsed'
         }
     ],
-    '/?id=19700101010000/3/1/1&mode=flat' => [
-        {   'href'  => '/article/19700101010000/3/1/1?mode=flat',
+    '/?id=19700101010000/3/1/1&thread_mode=flat' => [
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=flat',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => 'Up: Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000/3/1/1',
@@ -387,10 +387,10 @@ my %links = (
         {   'href'  => '/article/19700101020000',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101020000?mode=flat',
+        {   'href'  => '/article/19700101020000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101020000?mode=expanded',
+        {   'href'  => '/article/19700101020000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
@@ -402,57 +402,57 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101020000&cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/?id=19700101020000&cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101020000&cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/?id=19700101020000&cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101020000&cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/?id=19700101020000&cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101020000&mode=collapsed' => [
-        {   'href'  => '/article/19700101020000?mode=collapsed',
+    '/?id=19700101020000&thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101020000?thread_mode=collapsed',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101020000?mode=flat',
+        {   'href'  => '/article/19700101020000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101020000?mode=expanded',
+        {   'href'  => '/article/19700101020000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
-    '/?id=19700101020000&mode=expanded' => [
-        {   'href'  => '/article/19700101020000?mode=expanded',
+    '/?id=19700101020000&thread_mode=expanded' => [
+        {   'href'  => '/article/19700101020000?thread_mode=expanded',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101020000?mode=flat',
+        {   'href'  => '/article/19700101020000?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101020000',
             'title' => 'Collapsed'
         }
     ],
-    '/?id=19700101020000&mode=flat' => [
-        {   'href'  => '/article/19700101020000?mode=flat',
+    '/?id=19700101020000&thread_mode=flat' => [
+        {   'href'  => '/article/19700101020000?thread_mode=flat',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101020000?mode=expanded',
+        {   'href'  => '/article/19700101020000?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101020000',
@@ -463,10 +463,10 @@ my %links = (
         {   'href'  => '/article/19700101030000',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101030000?mode=flat',
+        {   'href'  => '/article/19700101030000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101030000?mode=expanded',
+        {   'href'  => '/article/19700101030000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
@@ -478,57 +478,57 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101030000&cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/?id=19700101030000&cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101030000&cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/?id=19700101030000&cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101030000&cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/?id=19700101030000&cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/?id=19700101030000&mode=collapsed' => [
-        {   'href'  => '/article/19700101030000?mode=collapsed',
+    '/?id=19700101030000&thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101030000?thread_mode=collapsed',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101030000?mode=flat',
+        {   'href'  => '/article/19700101030000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101030000?mode=expanded',
+        {   'href'  => '/article/19700101030000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
-    '/?id=19700101030000&mode=expanded' => [
-        {   'href'  => '/article/19700101030000?mode=expanded',
+    '/?id=19700101030000&thread_mode=expanded' => [
+        {   'href'  => '/article/19700101030000?thread_mode=expanded',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101030000?mode=flat',
+        {   'href'  => '/article/19700101030000?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101030000',
             'title' => 'Collapsed'
         }
     ],
-    '/?id=19700101030000&mode=flat' => [
-        {   'href'  => '/article/19700101030000?mode=flat',
+    '/?id=19700101030000&thread_mode=flat' => [
+        {   'href'  => '/article/19700101030000?thread_mode=flat',
             'title' => '0 comments Xd ago'
         },
-        {   'href'  => '/article/19700101030000?mode=expanded',
+        {   'href'  => '/article/19700101030000?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101030000',
@@ -536,10 +536,10 @@ my %links = (
         }
     ],
     '/article/19700101010000' => [
-        {   'href'  => '/article/19700101010000?mode=flat',
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000?mode=expanded',
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101020000',
@@ -553,10 +553,10 @@ my %links = (
         {   'href'  => '/article/19700101010000',
             'title' => 'Up: Test Post #1'
         },
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000/3/1',
@@ -570,10 +570,10 @@ my %links = (
         {   'href'  => '/article/19700101010000/3',
             'title' => 'Up: Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000/3/1/1',
@@ -587,10 +587,10 @@ my %links = (
         {   'href'  => '/article/19700101010000/3/1',
             'title' => 'Up: Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000/3/1/2',
@@ -605,78 +605,78 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3/1/1?cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/article/19700101010000/3/1/1?cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3/1/1?cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/article/19700101010000/3/1/1?cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3/1/1?cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/article/19700101010000/3/1/1?cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3/1/1?mode=collapsed' => [
-        {   'href'  => '/article/19700101010000/3/1?mode=collapsed',
+    '/article/19700101010000/3/1/1?thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=collapsed',
             'title' => '<< Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=collapsed',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=collapsed',
             'title' => 'Up: Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=expanded',
             'title' => 'Expanded'
         },
-        {   'href'  => '/article/19700101010000/3/1/2?mode=collapsed',
+        {   'href'  => '/article/19700101010000/3/1/2?thread_mode=collapsed',
             'title' => 'Test Post #1_3_1_2 >>'
         }
     ],
-    '/article/19700101010000/3/1/1?mode=expanded' => [
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+    '/article/19700101010000/3/1/1?thread_mode=expanded' => [
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => '<< Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => 'Up: Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101010000/3/1/1',
             'title' => 'Collapsed'
         },
-        {   'href'  => '/article/19700101010000/3/1/2?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1/2?thread_mode=expanded',
             'title' => 'Test Post #1_3_1_2 >>'
         }
     ],
-    '/article/19700101010000/3/1/1?mode=flat' => [
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+    '/article/19700101010000/3/1/1?thread_mode=flat' => [
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => '<< Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => 'Up: Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000/3/1/1',
             'title' => 'Collapsed'
         },
-        {   'href'  => '/article/19700101010000/3/1/2?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1/2?thread_mode=flat',
             'title' => 'Test Post #1_3_1_2 >>'
         }
     ],
@@ -688,78 +688,78 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3/1?cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/article/19700101010000/3/1?cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3/1?cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/article/19700101010000/3/1?cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3/1?cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/article/19700101010000/3/1?cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3/1?mode=collapsed' => [
-        {   'href'  => '/article/19700101010000/3?mode=collapsed',
+    '/article/19700101010000/3/1?thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101010000/3?thread_mode=collapsed',
             'title' => '<< Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3?mode=collapsed',
+        {   'href'  => '/article/19700101010000/3?thread_mode=collapsed',
             'title' => 'Up: Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => 'Expanded'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=collapsed',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=collapsed',
             'title' => 'Test Comment #1_3_1_1 >>'
         }
     ],
-    '/article/19700101010000/3/1?mode=expanded' => [
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+    '/article/19700101010000/3/1?thread_mode=expanded' => [
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => '<< Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => 'Up: Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101010000/3/1',
             'title' => 'Collapsed'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=expanded',
             'title' => 'Test Comment #1_3_1_1 >>'
         }
     ],
-    '/article/19700101010000/3/1?mode=flat' => [
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+    '/article/19700101010000/3/1?thread_mode=flat' => [
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => '<< Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => 'Up: Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000/3/1',
             'title' => 'Collapsed'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=flat',
             'title' => 'Test Comment #1_3_1_1 >>'
         }
     ],
@@ -771,78 +771,78 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3?cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/article/19700101010000/3?cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3?cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/article/19700101010000/3?cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3?cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/article/19700101010000/3?cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000/3?mode=collapsed' => [
-        {   'href'  => '/article/19700101010000/2?mode=collapsed',
+    '/article/19700101010000/3?thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101010000/2?thread_mode=collapsed',
             'title' => '<< Test Comment #2'
         },
-        {   'href'  => '/article/19700101010000?mode=collapsed',
+        {   'href'  => '/article/19700101010000?thread_mode=collapsed',
             'title' => 'Up: Test Post #1'
         },
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => 'Expanded'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=collapsed',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=collapsed',
             'title' => 'Test Comment #1_3_1 >>'
         }
     ],
-    '/article/19700101010000/3?mode=expanded' => [
-        {   'href'  => '/article/19700101010000/2?mode=expanded',
+    '/article/19700101010000/3?thread_mode=expanded' => [
+        {   'href'  => '/article/19700101010000/2?thread_mode=expanded',
             'title' => '<< Test Comment #2'
         },
-        {   'href'  => '/article/19700101010000?mode=expanded',
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => 'Up: Test Post #1'
         },
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101010000/3',
             'title' => 'Collapsed'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => 'Test Comment #1_3_1 >>'
         }
     ],
-    '/article/19700101010000/3?mode=flat' => [
-        {   'href'  => '/article/19700101010000/2?mode=flat',
+    '/article/19700101010000/3?thread_mode=flat' => [
+        {   'href'  => '/article/19700101010000/2?thread_mode=flat',
             'title' => '<< Test Comment #2'
         },
-        {   'href'  => '/article/19700101010000?mode=flat',
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => 'Up: Test Post #1'
         },
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000/3',
             'title' => 'Collapsed'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => 'Test Comment #1_3_1 >>'
         }
     ],
@@ -854,60 +854,60 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000?cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/article/19700101010000?cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000?cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/article/19700101010000?cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000?cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/article/19700101010000?cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101010000?mode=collapsed' => [
-        {   'href'  => '/article/19700101010000?mode=flat',
+    '/article/19700101010000?thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000?mode=expanded',
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => 'Expanded'
         },
-        {   'href'  => '/article/19700101020000?mode=collapsed',
+        {   'href'  => '/article/19700101020000?thread_mode=collapsed',
             'title' => 'Test Post #2 >>'
         }
     ],
-    '/article/19700101010000?mode=expanded' => [
-        {   'href'  => '/article/19700101010000?mode=flat',
+    '/article/19700101010000?thread_mode=expanded' => [
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101010000',
             'title' => 'Collapsed'
         },
-        {   'href'  => '/article/19700101020000?mode=expanded',
+        {   'href'  => '/article/19700101020000?thread_mode=expanded',
             'title' => 'Test Post #2 >>'
         }
     ],
-    '/article/19700101010000?mode=flat' => [
-        {   'href'  => '/article/19700101010000?mode=expanded',
+    '/article/19700101010000?thread_mode=flat' => [
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101010000',
             'title' => 'Collapsed'
         },
-        {   'href'  => '/article/19700101020000?mode=flat',
+        {   'href'  => '/article/19700101020000?thread_mode=flat',
             'title' => 'Test Post #2 >>'
         }
     ],
@@ -915,10 +915,10 @@ my %links = (
         {   'href'  => '/article/19700101010000',
             'title' => '<< Test Post #1'
         },
-        {   'href'  => '/article/19700101020000?mode=flat',
+        {   'href'  => '/article/19700101020000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101020000?mode=expanded',
+        {   'href'  => '/article/19700101020000?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101030000',
@@ -933,69 +933,69 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101020000?cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/article/19700101020000?cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101020000?cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/article/19700101020000?cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101020000?cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/article/19700101020000?cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101020000?mode=collapsed' => [
-        {   'href'  => '/article/19700101010000?mode=collapsed',
+    '/article/19700101020000?thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101010000?thread_mode=collapsed',
             'title' => '<< Test Post #1'
         },
-        {   'href'  => '/article/19700101020000?mode=flat',
+        {   'href'  => '/article/19700101020000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101020000?mode=expanded',
+        {   'href'  => '/article/19700101020000?thread_mode=expanded',
             'title' => 'Expanded'
         },
-        {   'href'  => '/article/19700101030000?mode=collapsed',
+        {   'href'  => '/article/19700101030000?thread_mode=collapsed',
             'title' => 'Test Post #3 >>'
         }
     ],
-    '/article/19700101020000?mode=expanded' => [
-        {   'href'  => '/article/19700101010000?mode=expanded',
+    '/article/19700101020000?thread_mode=expanded' => [
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => '<< Test Post #1'
         },
-        {   'href'  => '/article/19700101020000?mode=flat',
+        {   'href'  => '/article/19700101020000?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101020000',
             'title' => 'Collapsed'
         },
-        {   'href'  => '/article/19700101030000?mode=expanded',
+        {   'href'  => '/article/19700101030000?thread_mode=expanded',
             'title' => 'Test Post #3 >>'
         }
     ],
-    '/article/19700101020000?mode=flat' => [
-        {   'href'  => '/article/19700101010000?mode=flat',
+    '/article/19700101020000?thread_mode=flat' => [
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => '<< Test Post #1'
         },
-        {   'href'  => '/article/19700101020000?mode=expanded',
+        {   'href'  => '/article/19700101020000?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101020000',
             'title' => 'Collapsed'
         },
-        {   'href'  => '/article/19700101030000?mode=flat',
+        {   'href'  => '/article/19700101030000?thread_mode=flat',
             'title' => 'Test Post #3 >>'
         }
     ],
@@ -1003,10 +1003,10 @@ my %links = (
         {   'href'  => '/article/19700101020000',
             'title' => '<< Test Post #2'
         },
-        {   'href'  => '/article/19700101030000?mode=flat',
+        {   'href'  => '/article/19700101030000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101030000?mode=expanded',
+        {   'href'  => '/article/19700101030000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
@@ -1018,57 +1018,57 @@ my %links = (
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101030000?cid=12345/6/7/8&mode=collapsed' => [
-        {   'href'  => '/article/12345/6/7/8?mode=collapsed',
+    '/article/19700101030000?cid=12345/6/7/8&thread_mode=collapsed' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=collapsed',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=collapsed',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101030000?cid=12345/6/7/8&mode=expanded' => [
-        {   'href'  => '/article/12345/6/7/8?mode=expanded',
+    '/article/19700101030000?cid=12345/6/7/8&thread_mode=expanded' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=expanded',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=expanded',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=expanded',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101030000?cid=12345/6/7/8&mode=flat' => [
-        {   'href'  => '/article/12345/6/7/8?mode=flat',
+    '/article/19700101030000?cid=12345/6/7/8&thread_mode=flat' => [
+        {   'href'  => '/article/12345/6/7/8?thread_mode=flat',
             'title' => 'Show Thread'
         },
-        {   'href'  => '/reply/12345/6/7/8?mode=flat',
+        {   'href'  => '/reply/12345/6/7/8?thread_mode=flat',
             'title' => 'Reply to this comment'
         }
     ],
-    '/article/19700101030000?mode=collapsed' => [
-        {   'href'  => '/article/19700101020000?mode=collapsed',
+    '/article/19700101030000?thread_mode=collapsed' => [
+        {   'href'  => '/article/19700101020000?thread_mode=collapsed',
             'title' => '<< Test Post #2'
         },
-        {   'href'  => '/article/19700101030000?mode=flat',
+        {   'href'  => '/article/19700101030000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101030000?mode=expanded',
+        {   'href'  => '/article/19700101030000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
-    '/article/19700101030000?mode=expanded' => [
-        {   'href'  => '/article/19700101020000?mode=expanded',
+    '/article/19700101030000?thread_mode=expanded' => [
+        {   'href'  => '/article/19700101020000?thread_mode=expanded',
             'title' => '<< Test Post #2'
         },
-        {   'href'  => '/article/19700101030000?mode=flat',
+        {   'href'  => '/article/19700101030000?thread_mode=flat',
             'title' => 'Flattened'
         },
         {   'href'  => '/article/19700101030000',
             'title' => 'Collapsed'
         }
     ],
-    '/article/19700101030000?mode=flat' => [
-        {   'href'  => '/article/19700101020000?mode=flat',
+    '/article/19700101030000?thread_mode=flat' => [
+        {   'href'  => '/article/19700101020000?thread_mode=flat',
             'title' => '<< Test Post #2'
         },
-        {   'href'  => '/article/19700101030000?mode=expanded',
+        {   'href'  => '/article/19700101030000?thread_mode=expanded',
             'title' => 'Expanded'
         },
         {   'href'  => '/article/19700101030000',
@@ -1076,10 +1076,10 @@ my %links = (
         }
     ],
     '19700101010000' => [
-        {   'href'  => '/article/19700101010000?mode=flat',
+        {   'href'  => '/article/19700101010000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000?mode=expanded',
+        {   'href'  => '/article/19700101010000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
@@ -1087,10 +1087,10 @@ my %links = (
         {   'href'  => '/article/19700101010000',
             'title' => 'Up: Test Post #1'
         },
-        {   'href'  => '/article/19700101010000/3?mode=flat',
+        {   'href'  => '/article/19700101010000/3?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3?mode=expanded',
+        {   'href'  => '/article/19700101010000/3?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
@@ -1098,10 +1098,10 @@ my %links = (
         {   'href'  => '/article/19700101010000/3',
             'title' => 'Up: Test Comment #1_3'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
@@ -1109,26 +1109,26 @@ my %links = (
         {   'href'  => '/article/19700101010000/3/1',
             'title' => 'Up: Test Comment #1_3_1'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=flat',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101010000/3/1/1?mode=expanded',
+        {   'href'  => '/article/19700101010000/3/1/1?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
     '19700101020000' => [
-        {   'href'  => '/article/19700101020000?mode=flat',
+        {   'href'  => '/article/19700101020000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101020000?mode=expanded',
+        {   'href'  => '/article/19700101020000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ],
     '19700101030000' => [
-        {   'href'  => '/article/19700101030000?mode=flat',
+        {   'href'  => '/article/19700101030000?thread_mode=flat',
             'title' => 'Flattened'
         },
-        {   'href'  => '/article/19700101030000?mode=expanded',
+        {   'href'  => '/article/19700101030000?thread_mode=expanded',
             'title' => 'Expanded'
         }
     ]
@@ -1138,12 +1138,12 @@ foreach my $id (@ids) {
     check_links( $t->app, $id );
 
     foreach my $cid ( '', @cids ) {
-        foreach my $mode ( '', @modes ) {
+        foreach my $thread_mode ( '', @thread_modes ) {
 
             my $params = '';
-            $params .= "cid=$cid"   if $cid;
-            $params .= '&'          if $params and $mode;
-            $params .= "mode=$mode" if $mode;
+            $params .= "cid=$cid"                 if $cid;
+            $params .= '&'                        if $params and $thread_mode;
+            $params .= "thread_mode=$thread_mode" if $thread_mode;
 
             $t->get_ok( "/?id=$id" .     ( $params ? "&$params" : '' ) );
             $t->get_ok( "/article/$id" . ( $params ? "?$params" : '' ) );

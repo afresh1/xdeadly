@@ -30,10 +30,10 @@ $t->content_like( qr/Test Post #1/, 'Got the right page' );
 $t->content_like( qr/Contributed by.*Test McTesterson/, 'By the right author' );
 
 # Flatten the comments
-follow_link_ok( $t, '/article/19700101010000?mode=flat' );
+follow_link_ok( $t, '/article/19700101010000?thread_mode=flat' );
 
 # Expand the comments
-follow_link_ok( $t, '/article/19700101010000?mode=expanded' );
+follow_link_ok( $t, '/article/19700101010000?thread_mode=expanded' );
 
 # View a comment
 follow_link_ok( $t, '/article/19700101010000/1/2' );

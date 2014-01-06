@@ -2,7 +2,7 @@
 	<form method="post" action="<%= url_for('submitpost') %>">
 		<input type="hidden" name="sid" value="<%= $sid %>">
 		<input type="hidden" name="pid" value="<%= $pid %>">
-		<input type="hidden" name="mode" value="<%= mode %>">
+		<input type="hidden" name="thread_mode" value="<%= thread_mode %>">
 		<input type="hidden" name="thres" value="<%= $thres %>">
 		<input type="hidden" name="cksum" value="<%= $cksum %>">
 

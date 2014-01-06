@@ -111,39 +111,43 @@ helper weeklist => sub {
     return @stories;
 };
 
-helper mode => sub {
+helper thread_mode => sub {
     my ($self) = @_;
-    my %modes = map { $_ => $_ } qw( expanded flat );
+    my %thread_modes = map { $_ => $_ } qw( expanded flat );
 
-    return $modes{ $self->param('mode') || 'collapsed' } || '';
+    return $thread_modes{ $self->param('thread_mode') || 'collapsed' } || '';
 };
 
 helper comment_template => sub {
-    return shift->mode ? 'article_comment' : 'article_comment_collapsed';
+    return
+        shift->thread_mode ? 'article_comment' : 'article_comment_collapsed';
 };
 
 helper level_diff => sub {
     my ($self, $current, $base) = @_;
-    return $current->level - ( $base ? $base->level : 0 );
+
+    return $current->level unless $base;
+
+    my $diff = $current->level - $base->level;
+    $diff = 0 if $diff < 0;
+
+    return $diff;
 };
 
-helper indent => sub {
-    my ($self, $current, $base) = @_;
-    return '' if $self->mode eq 'flat';
-    return '<ul>' x $self->level_diff( $current, $base );
+helper _do_indent => sub {
+    my ($self, $tag, $current, $base) = @_;
+    return '' if $self->thread_mode eq 'flat';
+    return $tag x $self->level_diff( $current, $base );
 };
-helper unindent => sub {
-    my ($self, $current, $base) = @_;
-    return '' if $self->mode eq 'flat';
-    return '</ul>' x $self->level_diff( $current, $base );
-};
+helper indent => sub { shift->_do_indent('<ul>', @_) };
+helper unindent => sub {shift->_do_indent('</ul>', @_) };
 
 helper navigation => sub {
     my ( $self, $sid, $cid) = @_;
 
     my @links;
 
-    my $mode = $self->mode;
+    my $thread_mode = $self->thread_mode;
     my $href = $self->url_with("/article/$sid");
 
     if ( defined $cid ) {
@@ -171,22 +175,22 @@ helper navigation => sub {
     }
 
     push @links, {
-        href  => $href->clone->query( mode => 'flat' ),
+        href  => $href->clone->query( thread_mode => 'flat' ),
         title => 'Flattened',
-    } unless $mode eq 'flat';
+    } unless $thread_mode eq 'flat';
 
     push @links, {
-        href  => $href->clone->query( mode => 'expanded' ),
+        href  => $href->clone->query( thread_mode => 'expanded' ),
         title => 'Expanded',
-    } unless $mode eq 'expanded';
+    } unless $thread_mode eq 'expanded';
 
-    # $href->clone->query->remove('mode') returns a Mojo::Parameters object
+# $href->clone->query->remove('thread_mode') returns a Mojo::Parameters object
     my $collapsed_href = $href->clone;
-    $collapsed_href->query->remove('mode');
+    $collapsed_href->query->remove('thread_mode');
     push @links, {
         href  => $collapsed_href,
         title => 'Collapsed',
-    } if $mode;
+    } if $thread_mode;
 
     if ( $self->current_route('front') ) {
         my $count         = @{ $story->comments };

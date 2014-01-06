@@ -23,7 +23,7 @@
           <form method="get" action="<%= $baseurl %>">
             <b>Search</b>&nbsp;&nbsp;
             <input type="hidden" name="action" value="search">
-            <input type="hidden" name="mode" value="<%= mode %>">
+            <input type="hidden" name="thread_mode" value="<%= thread_mode %>">
             <input type="hidden" name="thres" value="<%= $thres %>">
             Match:
             <select name="method">
