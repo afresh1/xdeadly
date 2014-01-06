@@ -37,3 +37,4 @@ Basic TODO list for getting xdeadly to a point to replace the C version
 * Add support for approving and unapproving stories
 * Add support for going back in time; seeing "yesterday's edition"
 * Enable Mojolicious::Validator::Validation csrf support and protection of inputs
+* Add a /cgi helper that redirects old links to the new location
