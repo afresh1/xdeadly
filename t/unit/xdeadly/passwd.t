@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 use Mojo::Base -strict;
 use Test::More;
-use File::Temp qw/ tempdir /;
 
 BEGIN {
     eval 'use XDeadly::Passwd';
