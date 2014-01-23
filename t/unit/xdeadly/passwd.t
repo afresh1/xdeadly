@@ -3,7 +3,7 @@ use Mojo::Base -strict;
 use Test::More;
 
 BEGIN {
-    eval 'use XDeadly::Passwd';
+    eval { use XDeadly::Passwd };
     plan skip_all => 'Waiting for someone to write this' if $@;
 }
 
