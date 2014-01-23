@@ -11,7 +11,7 @@ my $passwd = XDeadly::Passwd->new(
     default_salt => 12345,
 );
 
-$passwd->default_salt, '12345', 'Loaded the default salt';
+is $passwd->default_salt, '12345', 'Loaded the default salt';
 
 ok $passwd->_check_sha1(
     test1 => '4d4b06ffce9d901d80fb4730160546ce1f2f400d'
