@@ -57,6 +57,9 @@ ok $post->body, 'but it has a body';
 
 is $post->_epoch, 1377010297, 'correctly parsed the epoch';
 
+is $post->short_date, 'Tuesday, August 20', 'correctly parsed the short_date';
+is $post->time,       '14:51:37',           'correctly parsed the time';
+
 is $post->build_body, $body, 'Body matches';
 is $post->headers->header($_), $headers{$_}, "Header($_) matches"
     for keys %headers;
