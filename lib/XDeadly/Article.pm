@@ -28,13 +28,18 @@ has is_article => 1;
 
 has 'id' => sub {
     my ($self) = @_;
+    return _epoch_to_id(time);
+};
 
-    my @now = (gmtime)[0..5];
+sub _epoch_to_id {
+    my ($epoch) = @_;
+
+    my @now = (gmtime($epoch))[0..5];
     $now[4]++;
     $now[5] += 1900;
 
     return sprintf '%04d%02d%02d%02d%02d%02d', reverse @now;
-};
+}
 
 sub has_more {
     my $self = shift;
