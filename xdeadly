@@ -31,7 +31,7 @@ plugin 'PODRenderer';
 my $config = plugin Config => default => {
     data_dir => 'data',
     auth_dir => 'auth',
-    secret   => 'lw1N0mN0t8a24UR4NY12AT55p/23FxJ9H6+NReXed8nTZJraO0g',
+    #secret   => 'pleasepickasecret',
     num_front_page_stories => 5,
     num_older_stories      => 5,
     num_rss_stories        => 10,
