@@ -69,6 +69,39 @@ sub href    { shift->content->headers->header( href    => @_ ) }
 sub host    { shift->content->headers->header( host    => @_ ) }
 
 sub date { shift->content->headers->header( date => @_ ) . ' (GMT)' }
+sub time { sprintf "%02d:%02d:%02d", ( gmtime( shift->_epoch ) )[ 2, 1, 0 ] }
+
+sub short_date {
+    my ($self) = @_;
+
+    my @days = ( qw(
+        Sunday
+        Monday
+        Tuesday
+        Wednesday
+        Thursday
+        Friday
+        Saturday
+    ) );
+
+    my @months = ( qw(
+        January
+        February
+        March
+        April
+        May
+        June
+        July
+        August
+        September
+        October
+        November
+        December
+    ) );
+
+    my @d = gmtime( $self->_epoch );
+    return sprintf "%s, %s %d", $days[ $d[6] ], $months[ $d[4] ], $d[3];
+}
 
 sub parse {
     my ( $self, $chunk ) = @_;
