@@ -13,23 +13,22 @@
 				<tr>
 					<td>
 						<table width="203">
-                            <tr>
 % my $last_date = '';
 % foreach my $story (weeklist) {
-%   if ($story->{shortdate} ne $last_date) {
-%       $last_date = $story->{shortdate};
+%   if ($story->short_date ne $last_date) {
+%       $last_date = $story->short_date;
 							<tr><td colspan="2"><font size="3" color="black">
-                                <b><%= $story->{shortdate} %></b></font><br>
+                                <b><%= $story->short_date %></b></font><br>
                             </td></tr>
 %   }
                             <tr>
                                 <td valign="top">
-                                    <font size="1"><%= $story->{time} %></font>
+                                    <font size="1"><%= $story->time %></font>
                                 </td>
                                 <td valign="top">
                                     <font size="1">
-                                    <%= link_to $story->{subject} => 'article/' . $story->{sid} %>
-                                    (<%= $story->{total_comments} %>)
+                                    <%= link_to_post $story %>
+                                    (<%= scalar @{ $story->comments } %>)
                                     </font>
                                 </td>
                             </tr>
@@ -40,7 +39,7 @@
 									<p><p>
 									<font size="2">
 										<a href="<%= url_for('search')->query(query => '*', sort => 'time') %>"><b>Older Stuff...</b></a><br>
-										<a href="<%= url_for('front')->query(date => $yesterday) %>"><b>Yesterday's Edition...</b></a>
+										<a href="<%= url_for('front')->query(date => stash->{yesterday}) %>"><b>Yesterday's Edition...</b></a>
 									</font>
 								</td>
 							</tr>
