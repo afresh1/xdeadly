@@ -29,6 +29,9 @@ $t->app->routes->get( '/weeklist' => sub {
     } );
 } );
 
+$t->app->routes->get(
+    '/olderstuff' => sub { shift->render('front_box_olderstuff') } );
+
 my @epochs;
 foreach my $mon ( 0 .. 5 ) {
     foreach my $mday ( 1 .. 3 ) {
@@ -42,8 +45,12 @@ my @articles;
 foreach my $epoch ( sort { $b <=> $a } @epochs ) {
     my $id = XDeadly::Article::_epoch_to_id($epoch);
     my $article = XDeadly::Article->new( data_dir => $dir, id => $id );
+    $article->subject( "Article [$id]" );
     $article->date( scalar gmtime($epoch) );
     $article->save;
+
+    my $parent = $article;
+    $parent = XDeadly::Comment->new( parent => $parent )->save for @articles;
 
     push @articles, $article;
 }
@@ -63,6 +70,45 @@ sub expected_weeklist {
 
     $t->get_ok("/weeklist$query");
     is_deeply $t->tx->res->json, $expect, "Expected weeklist for $date";
+
+    $t->get_ok("/olderstuff$query");
+    my $dom = $t->tx->res->dom;
+
+    ok my $yesterdays_link
+        = $dom->at("a[href^=/?date=$expect->{yesterday}]");
+    is $yesterdays_link->all_text, "Yesterday's Edition...",
+        'Correct link to yesterday';
+
+    my $table = $dom->at('table table');
+    is $table->tr->[0]->td->all_text, 'Older Stuff',
+        'Got table with Older Stuff';
+
+    my $trs = $table->tr->[1]->at('table')->tr;
+
+    my $j = 0;
+    my $last_shortdate = '';
+    for (my $i = 0 ; $i <= $#articles ; $i++) {
+        my $article = $articles[$i];
+        my $tr = $trs->[$j++];
+
+        if ($last_shortdate ne $article->short_date) {
+            $last_shortdate = $article->short_date;
+            is $tr->all_text, $article->short_date,
+                "Found short_date header for $last_shortdate";
+            $tr = $trs->[$j++];
+        }
+
+        is $tr->td->[0]->all_text, $article->time,
+            "[$date][$article] have time";
+
+        ok my $link = $tr->td->[1]->at("a[href^=/article/$article]");
+        is $link->text, "Article [$article]",
+            "[$date][$article] link to the article";
+
+        my $comments = @{ $article->comments };
+        like $tr->td->[1]->all_text, qr/ \($comments\)$/,
+            "[$date][$article] Correct number of comments";
+    }
 }
 
 sub epoch_to_date {
