@@ -90,22 +90,40 @@ helper weeklist => sub {
     my $made_front_page = $config->{num_front_page_stories};
     my $made_weeklist   = $config->{num_older_stories};
 
-    my $last_shortdate;
+    # We actually just ignore invalid dates and plan for them
+    # to be "today"
+    my $validation = $self->validation;
+    $validation->optional('date')->like(qr/^\d{8}$/)->is_valid;
+    my $date = $validation->param('date') || '';
+
+    my $epoch = time;
+    if ($date) {
+        my ($year, $mon, $mday) = $date =~ /^(\d{4})(\d{2})(\d{2})$/;
+        $epoch = timegm( 59, 59, 23, $mday, $mon - 1, $year );
+    }
+
+    my $to_date = sub {
+        my ($epoch) = @_;
+        my ( $year, $mon, $mday ) = ( gmtime($epoch) )[ 5, 4, 3 ];
+        $year += 1900;
+        $mon++;
+        return sprintf '%04d%02d%02d', $year, $mon, $mday;
+    };
+    $self->stash->{today}     = $to_date->($epoch);
+    $self->stash->{yesterday} = $to_date->( $epoch - 86400 );
+
+    my $last_shortdate = '';
     my @stories;
-    foreach my $sid ( $self->stories ) {
+    foreach my $story ( $self->stories ) {
+        next if $story->_epoch > $epoch;
         next if $made_front_page-- > 0;
-        my %story = $self->story_details($sid);
 
-        my @date = split /\s+/, $story{date};
-        $story{shortdate} = sprintf "%s, %s %d", @date[ 0 .. 2 ];
-        $story{time} = $date[3];
-
-        if ( $story{shortdate} ne $last_shortdate ) {
-            $last_shortdate = $story{shortdate};
+        if ( $story->short_date ne $last_shortdate ) {
+            $last_shortdate = $story->short_date;
             last unless $made_weeklist--;
         }
 
-        push @stories, \%story;
+        push @stories, $story;
     }
 
     return @stories;
