@@ -320,24 +320,18 @@ under sub {
         category
         checked_comments
         checked_poll
-        checked_type_html
-        checked_type_plain
         checked_verbose
         cksum
         date
         dept
         editors
-        email
         errata
         excerpt
         form
-        href
         items
         link
-        name
         navigation
         new
-        pid
         poll
         pubdate
         query
@@ -388,7 +382,6 @@ under sub {
         selected_topic_topicsecurity
         selected_topic_topicsparc
         selected_topic_topicsysadmin
-        subject
         submission
         thres
         time
@@ -487,8 +480,19 @@ get '/summary' => [ format => [qw( rss json )] ] => sub {
     $self->stash( stories => \@stories );
 };
 
-get '/submit';
-post '/submit';
+group {
+    under sub {
+        shift->stash(
+            title   => 'Add new story',
+        );
+    };
+
+    get '/submit';
+
+    post '/submit' => sub {
+        my ($self) = @_;
+    };
+};
 
 get '/deauth';
 get '/login';

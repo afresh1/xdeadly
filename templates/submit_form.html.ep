@@ -1,32 +1,28 @@
 <font color="#336666" size="3">
-	<form method="post" action="<%= url_for('submitpost') %>">
-		<input type="hidden" name="sid" value="<%= $sid %>">
-		<input type="hidden" name="pid" value="<%= $pid %>">
-		<input type="hidden" name="thread_mode" value="<%= thread_mode %>">
-		<input type="hidden" name="thres" value="<%= $thres %>">
-		<input type="hidden" name="cksum" value="<%= $cksum %>">
+	<form method="post" action="<%= url_for('submit') %>">
+		<%= hidden_field 'sid' %>
 
 		Name<br>
 		<small>If you risk freedom or life by speaking up, leave empty
 		(gets posted as <i>Anonymous Coward</i>), otherwise take
 		credit and responsiblity for your words (you <i>do</i>
 		think it's worth submitting, after all)</small><br>
-		<input type="text" name="name" value="<%= $name %>" size="60"><p>
+		<%= text_field name => size => 60 %><br />
 
 		Email address (optional)<br>
 		<small>This shows up verbatim in comments, but not submitted
 		stories. For stories, it may be used by editors to contact
 		you in case there are questions regarding
 		your submission or to give feedback</small><br>
-		<input type="text" name="email" value="<%= $email %>" size="60"><p>
+        <%= text_field email => size => 60 %><br />
 
 		Web page (optional)<br>
 		<small>If specified, this becomes the URL pointed to by your
 		name, like your personal web page</small><br>
-		<input type="text" name="href" value="<%= $href %>" size="60"><p>
+        <%= text_field href => size => 60 %><br />
 
 		Subject<br>
-		<input type="text" name="subject" value="<%= $subject %>" size="60"><p>
+        <%= text_field subject => size => 60 %><br />
 
 		Comment<br>
 		<small><i>Please</i> truncate quotes as short as possible.
@@ -34,10 +30,14 @@
 		writing. Readers of your comment will see the original reference just above
 		your post, so you can truncate your quote to a minimum.
 		To make Puffy really happy, put replies <i>below</i> quotes.</small><br>
-		<textarea name="data" cols="72" rows="25"><%= $data %></textarea><p>
+        <%= text_area body => cols => 72, rows => 25 %><br />
 
-		<input type="radio" name="type" value="plain" <%= $checked_type_plain %>> Plain text (automatically converted to HTML)<br>
-		<input type="radio" name="type" value="html" <%= $checked_type_html %>> HTML (<i>Warning:</i> if you switch to HTML mode, you have to manually HTML-ize your post, including quotes)<br>
+        <%= radio_button content_type => 'plain', id => 'content_type_plain' %>
+        <%= label_for content_type_plain => 'Plain text' %>
+        (automatically converted to HTML)<br />
+        <%= radio_button content_type => 'html', id => 'content_type_html' %>
+        <%= label_for content_type_html => 'HTML' %>
+         (<i>Warning:</i> if you switch to HTML mode, you have to manually HTML-ize your post, including quotes)<br />
 		<p>
 
 		<i>In HTML mode:</i><p>
@@ -61,7 +61,7 @@
 
 <%= $captcha %>
 
-		<input type="submit" name="preview" value="Preview">
-		<input type="submit" name="submit" value="Submit">
+        <%= submit_button 'Preview', name => 'preview' %>
+        <%= submit_button 'Submit',  name => 'submit' %>
 	</form>
 </font>

@@ -13,7 +13,7 @@
 			<tr>
 				<td valign="top" width="100%">
 					<font color="#000000">
-						<%= $form %>
+						<%= include 'submit_form' %>
 						<p><br>
 					</font>
 				</td>
