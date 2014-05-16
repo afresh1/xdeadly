@@ -15,9 +15,13 @@ is $article->filename, 'article', 'New article filename is correct';
 
 ok $article->id =~ /^\d{14}$/, 'New article generated id is 14 digits';
 
+is_deeply $article->comments, [], 'an article without a dir has no comments';
 
 my $dir = tempdir( CLEANUP => 1 );
 XDeadlyFixtures::copy_good_data_fixtures($dir);
+
+$article->data_dir( $dir );
+is_deeply $article->comments, [], 'an unsaved article has no comments';
 
 my $id = '19700101030000';
 ok $article = XDeadly::Article->new( data_dir => $dir, id => $id ),

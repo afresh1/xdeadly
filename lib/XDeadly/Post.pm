@@ -165,7 +165,7 @@ A check whether we can calculate the path
 
 sub has_path {
     my ($self) = @_;
-    return $self->id and $self->data_dir
+    return ($self->id and $self->data_dir);
 }
 
 =head3 path
@@ -229,6 +229,9 @@ sub _load_articles {
 
 sub _posts {
     my ( $self, $dir ) = @_;
+
+    # if the directory doesn't exist, there are no posts.
+    return unless -d $dir;
 
     opendir my $dh, $dir or croak "Couldn't opendir $dir: $!";
     my @posts = grep { -d catdir( $dir, $_ ) }    # only dirs that exist
