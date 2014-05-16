@@ -246,6 +246,10 @@ sub _load_article {
 
 sub comments {
     my ($self) = @_;
+
+    # Allow "no comments" on an unsaved post.
+    return [] unless $self->has_path;
+
     return [ map { ( $_, @{ $_->comments } ) }
             $self->_load_comments( $self->dir ) ];
 }

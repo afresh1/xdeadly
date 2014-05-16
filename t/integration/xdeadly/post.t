@@ -56,6 +56,8 @@ is $parsed->id, undef, 'parsed post has no id';
 ok defined $parsed, 'parsed post is defined';
 ok $parsed->body, 'but it has a body';
 
+is_deeply $parsed->comments, [], 'No comments on an unsaved post';
+
 post_ok($parsed);
 
 ok $parsed->save( data_dir => $dir, id => 'test' ), 'saved post';
