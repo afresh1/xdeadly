@@ -165,7 +165,7 @@ A check whether we can calculate the path
 
 sub has_path {
     my ($self) = @_;
-    return $self->id and $self->data_dir
+    return $self->id && $self->data_dir
 }
 
 =head3 path
