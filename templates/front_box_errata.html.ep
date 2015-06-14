@@ -13,7 +13,17 @@
 				<tr>
 					<td>
 						<table width="203">
-							<%= $errata %>
+							<ul>
+							% for my $obsdver (@{$errata}) {
+							<li><%= (keys %{$obsdver})[0] %>
+								<ul>
+								% for my $eitem (@{ $obsdver->{(keys %{$obsdver})[0]} }) {
+									<li><a href="<%= $eitem->{'patch'} %>"><%= $eitem->{'title'} %></a></li>
+                                                                % }
+								</ul>
+							</li>
+							% }
+							</ul>
 							<tr><td colspan="2" align="right">
 								<a href="<%= url_for('errata') %>"><%= image('/images/xml.gif', alt => '[xml]', border => 0, height => 14, width => 36) %></a>
 							</td></tr>

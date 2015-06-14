@@ -2,6 +2,7 @@
 use Mojolicious::Lite;
 
 # Copyright (c) 2013 Andrew Fresh <andrew@afresh1.com>
+# Copyright (c) 2015 Tim Howe <timh@dirtymonday.net>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -18,6 +19,7 @@ use Mojolicious::Lite;
 use Mojo::Util qw(url_escape slurp);
 use List::Util qw(sum);
 use Time::Local qw(timegm);
+use Mojo::JSON qw(decode_json);
 
 use lib app->home->rel_dir('lib');
 use XDeadly::Article;
@@ -311,6 +313,13 @@ helper user_hash => sub {
     return $sha1->hexdigest;
 };
 
+helper errata => sub {
+    my ($self) = @_;
+
+    my $errata_file = Mojo::Asset::File->new(path => 'public/errata.json');
+    return decode_json $errata_file->slurp;
+};
+
 under sub {
     my $self = shift;
 
@@ -328,7 +337,6 @@ under sub {
         dept
         editors
         email
-        errata
         excerpt
         form
         href
@@ -417,6 +425,7 @@ get '/' => sub {
         push @stories, $story;
     }
     $self->stash( front_stories => \@stories );
+    $self->stash( errata => $self->errata );
 } => 'front';
 
 get '/about';
