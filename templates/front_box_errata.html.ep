@@ -19,7 +19,7 @@
 								<ul>
 								% for my $eitem (@{ $obsdver->{(keys %{$obsdver})[0]} }) {
 									<li><a href="<%= $eitem->{'patch'} %>"><%= $eitem->{'title'} %></a></li>
-                                                                % }
+								% }
 								</ul>
 							</li>
 							% }
