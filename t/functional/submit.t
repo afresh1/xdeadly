@@ -18,13 +18,16 @@ $t->get_ok('/submit')->status_is(200);
 
 my $csrf_token = $t->tx->res->dom->at("*[name='csrf_token']")->attr('value');
 
-my %formdata = (
+my %article = (
     name    => 'Testy McTesterson',
-    email   => 'test@example.com',
     href    => 'http://example.com',
     subject => 'This is only a test',
     body => "If this had been an actual post you would have been asked to evacuate.",
+);
 
+my %formdata = (
+    %article,
+    email        => 'test@example.com',
     content_type => 'plain',
     csrf_token   => $csrf_token,
 );
@@ -46,6 +49,13 @@ $t->post_ok( '/submit', form => { %formdata, preview => 'Preview' } )
 
 %expect = (%expect, %formdata);
 value_ok($_, $expect{$_}) for sort keys %expect;
+
+$t->post_ok( '/submit', form => { %formdata, submit => 'Submit' } )
+    ->status_is(302)
+    ->header_like(Location => qr{^/article/\d{14}$});
+
+my $res = $t->get_ok( $t->tx->res->headers->location );
+$res->content_like(qr/\Q$_\E/) for values %article;
 
 sub value_ok {
     my ($name, $expect) = @_;

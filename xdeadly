@@ -511,19 +511,17 @@ group {
         unless ( $validation->has_error ) {
             if ( $validation->param('submit') ) {
                 $self->flash( message => 'Thanks' );
-                $self->redirect_to('/');    # TODO: redirect somewhere better
+
+                my $article = XDeadly::Article->new(
+                    data_dir => $config->{data_dir} );
+                $article->$_( $validation->param($_) )
+                    for qw( name email href subject body );
+                $article->headers->add(
+                    'Content-Type' => $validation->param('content_type') );
+                $article->headers->add( date => scalar gmtime );
+                $article->save;
+                $self->redirect_to($self->url_for("/article/$article"));
             }
-            $self->stash(
-                story => XDeadly::Article->new(
-                    name         => $validation->param('name'),
-                    email        => $validation->param('email'),
-                    href         => $validation->param('href'),
-                    subject      => $validation->param('subject'),
-                    body         => $validation->param('body'),
-                    content_type => $validation->param('content_type'),
-                    data_dir     => $config->{data_dir},
-                ),
-            );
         }
     };
 };
