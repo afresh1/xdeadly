@@ -3,6 +3,11 @@
 
 	<head>
 		<title><%= $title %></title>
+		<style>
+		    label.field-with-error    {            color: #dd7e5e }
+		    input.field-with-error    { background-color: #fd9e7e }
+		    textarea.field-with-error { background-color: #fd9e7e }
+		</style>
 	</head>
 
 	<body bgcolor="#ffffff" text="#000000" link="#336666" vlink="#666666" alink="#996666">

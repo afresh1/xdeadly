@@ -484,6 +484,7 @@ group {
     under sub {
         shift->stash(
             title   => 'Add new story',
+            story   => undef,
         );
     };
 
@@ -491,6 +492,39 @@ group {
 
     post '/submit' => sub {
         my ($self) = @_;
+
+        my $validation = $self->validation;
+        return $self->render unless $validation->has_data;
+
+        return $self->render(text => 'Bad CSRF token!', status => 403)
+            if $validation->csrf_protect->has_error('csrf_token');
+
+        $validation->optional('submit');
+
+        $validation->optional('name');
+        $validation->optional('email');
+        $validation->optional('href')->like(qr{://});
+        $validation->required('subject');
+        $validation->required('body');
+        $validation->required('content_type');
+
+        unless ( $validation->has_error ) {
+            if ( $validation->param('submit') ) {
+                $self->flash( message => 'Thanks' );
+                $self->redirect_to('/');    # TODO: redirect somewhere better
+            }
+            $self->stash(
+                story => XDeadly::Article->new(
+                    name         => $validation->param('name'),
+                    email        => $validation->param('email'),
+                    href         => $validation->param('href'),
+                    subject      => $validation->param('subject'),
+                    body         => $validation->param('body'),
+                    content_type => $validation->param('content_type'),
+                    data_dir     => $config->{data_dir},
+                ),
+            );
+        }
     };
 };
 

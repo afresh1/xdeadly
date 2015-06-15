@@ -21,11 +21,12 @@ my $csrf_token = $t->tx->res->dom->at("*[name='csrf_token']")->attr('value');
 my %formdata = (
     name    => 'Testy McTesterson',
     email   => 'test@example.com',
-    href    => 'example.com',
+    href    => 'http://example.com',
     subject => 'This is only a test',
-    body    => "If this had been an actual post you would have been asked to evacuate.",
+    body => "If this had been an actual post you would have been asked to evacuate.",
 
-    csrf_token => $csrf_token,
+    content_type => 'plain',
+    csrf_token   => $csrf_token,
 );
 
 my %expect = (
@@ -40,7 +41,8 @@ my %expect = (
 value_ok($_, $expect{$_}) for sort keys %expect;
 
 $t->post_ok( '/submit', form => { %formdata, preview => 'Preview' } )
-    ->status_is(200);
+    ->status_is(200)
+    ->content_unlike(qr/class="field-with-error"/);
 
 %expect = (%expect, %formdata);
 value_ok($_, $expect{$_}) for sort keys %expect;
