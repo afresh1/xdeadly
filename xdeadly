@@ -37,6 +37,7 @@ my $config = plugin Config => default => {
     num_front_page_stories => 5,
     num_older_stories      => 5,
     num_rss_stories        => 10,
+    num_errata_entries     => 8 
 };
 
 helper stories =>
@@ -425,7 +426,6 @@ get '/' => sub {
         push @stories, $story;
     }
     $self->stash( front_stories => \@stories );
-    $self->stash( errata => $self->errata );
 } => 'front';
 
 get '/about';

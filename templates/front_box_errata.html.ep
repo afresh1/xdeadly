@@ -12,22 +12,22 @@
 				</tr>
 				<tr>
 					<td>
-						<table width="203">
-							<ul>
-							% for my $obsdver (@{$errata}) {
-							<li><%= (keys %{$obsdver})[0] %>
-								<ul>
-								% for my $eitem (@{ $obsdver->{(keys %{$obsdver})[0]} }) {
-									<li><a href="<%= $eitem->{'patch'} %>"><%= $eitem->{'title'} %></a></li>
-								% }
-								</ul>
+						<ul style="font-size:8pt; list-style: none; margin-left: 0px; padding-left: 2px">
+						% my @rev_errata = reverse @{$c->helpers->errata};
+						% my $count = 0;
+						% VER: foreach my $obsdver (@rev_errata) {
+						%     ITEM: foreach my $eitem (@{ $obsdver->{(keys %{$obsdver})[0]} }) {
+							<li><a href="<%= $eitem->{'patch'} %>"><%= $eitem->{'title'} %></a>
+								<p style="margin-top: 1px"><%== $eitem->{'descr'} %></p>
 							</li>
-							% }
-							</ul>
-							<tr><td colspan="2" align="right">
-								<a href="<%= url_for('errata') %>"><%= image('/images/xml.gif', alt => '[xml]', border => 0, height => 14, width => 36) %></a>
-							</td></tr>
-						</table>
+						%         $count++;
+						%         last VER if( $count >= $c->config->{'num_errata_entries'} );
+						%     }
+						% }
+						</ul>
+						<tr><td colspan="2" align="right">
+							<a href="<%= url_for('errata') %>"><%= image('/images/xml.gif', alt => '[xml]', border => 0, height => 14, width => 36) %></a>
+						</td></tr>
 					</td>
 				</tr>
 			</table>
