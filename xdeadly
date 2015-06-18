@@ -330,23 +330,22 @@ under sub {
         category
         checked_comments
         checked_poll
-        checked_type_html
-        checked_type_plain
         checked_verbose
         cksum
         date
         dept
         editors
+<<<<<<< HEAD
         email
+=======
+        errata
+>>>>>>> upstream/master
         excerpt
         form
-        href
         items
         link
-        name
         navigation
         new
-        pid
         poll
         pubdate
         query
@@ -397,7 +396,6 @@ under sub {
         selected_topic_topicsecurity
         selected_topic_topicsparc
         selected_topic_topicsysadmin
-        subject
         submission
         thres
         time
@@ -496,8 +494,51 @@ get '/summary' => [ format => [qw( rss json )] ] => sub {
     $self->stash( stories => \@stories );
 };
 
-get '/submit';
-post '/submit';
+group {
+    under sub {
+        shift->stash(
+            title   => 'Add new story',
+            story   => undef,
+        );
+    };
+
+    get '/submit';
+
+    post '/submit' => sub {
+        my ($self) = @_;
+
+        my $validation = $self->validation;
+        return $self->render unless $validation->has_data;
+
+        return $self->render(text => 'Bad CSRF token!', status => 403)
+            if $validation->csrf_protect->has_error('csrf_token');
+
+        $validation->optional('submit');
+
+        $validation->optional('name');
+        $validation->optional('email');
+        $validation->optional('href')->like(qr{://});
+        $validation->required('subject');
+        $validation->required('body');
+        $validation->required('content_type');
+
+        unless ( $validation->has_error ) {
+            if ( $validation->param('submit') ) {
+                $self->flash( message => 'Thanks' );
+
+                my $article = XDeadly::Article->new(
+                    data_dir => $config->{data_dir} );
+                $article->$_( $validation->param($_) )
+                    for qw( name email href subject body );
+                $article->headers->add(
+                    'Content-Type' => $validation->param('content_type') );
+                $article->headers->add( date => scalar gmtime );
+                $article->save;
+                $self->redirect_to($self->url_for("/article/$article"));
+            }
+        }
+    };
+};
 
 get '/deauth';
 get '/login';

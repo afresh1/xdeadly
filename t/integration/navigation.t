@@ -1181,6 +1181,9 @@ sub check_links {
         }
     }
 
+    # Mojolicious decided to encode our query string.
+    $url =~ s{%2F}{/}g;
+
     my $got = eval { navlinks_for( $app, "$id", $cid ) };
     my $expect = $links{"$url"};
 

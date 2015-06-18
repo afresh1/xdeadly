@@ -27,15 +27,15 @@ $t->get_ok('/summary.rss')->status_is(200);
 
 $t->text_like(
     'rss > channel > item:nth-of-type(1) > link',
-    qr{http://localhost:\d+/article/19700101030000}
+    qr{http://127.0.0.1:\d+/article/19700101030000}
 );
 $t->text_like(
     'rss > channel > item:nth-of-type(2) > link',
-    qr{http://localhost:\d+/article/19700101020000}
+    qr{http://127.0.0.1:\d+/article/19700101020000}
 );
 $t->text_like(
     'rss > channel > item:nth-of-type(3) > link',
-    qr{http://localhost:\d+/article/19700101010000}
+    qr{http://127.0.0.1:\d+/article/19700101010000}
 );
 $t->element_exists_not( 'rss > channel > item:nth-of-type(4)' );
 

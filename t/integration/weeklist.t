@@ -80,10 +80,10 @@ sub expected_weeklist {
         'Correct link to yesterday';
 
     my $table = $dom->at('table table');
-    is $table->tr->[0]->td->all_text, 'Older Stuff',
+    is $table->at('tr')->at('td')->all_text, 'Older Stuff',
         'Got table with Older Stuff';
 
-    my $trs = $table->tr->[1]->at('table')->tr;
+    my $trs = $table->at('tr:nth-of-type(2)')->at('table')->find('tr');
 
     my $j = 0;
     my $last_shortdate = '';
@@ -98,15 +98,16 @@ sub expected_weeklist {
             $tr = $trs->[$j++];
         }
 
-        is $tr->td->[0]->all_text, $article->time,
+        is $tr->at('td')->all_text, $article->time,
             "[$date][$article] have time";
 
-        ok my $link = $tr->td->[1]->at("a[href^=/article/$article]");
+        ok my $link
+            = $tr->at('td:nth-of-type(2)')->at("a[href^=/article/$article]");
         is $link->text, "Article [$article]",
             "[$date][$article] link to the article";
 
         my $comments = @{ $article->comments };
-        like $tr->td->[1]->all_text, qr/ \($comments\)$/,
+        like $tr->at('td:nth-of-type(2)')->all_text, qr/ \($comments\)$/,
             "[$date][$article] Correct number of comments";
     }
 }

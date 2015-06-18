@@ -165,7 +165,11 @@ A check whether we can calculate the path
 
 sub has_path {
     my ($self) = @_;
+<<<<<<< HEAD
     return $self->id && $self->data_dir
+=======
+    return ($self->id and $self->data_dir);
+>>>>>>> upstream/master
 }
 
 =head3 path
@@ -230,6 +234,9 @@ sub _load_articles {
 sub _posts {
     my ( $self, $dir ) = @_;
 
+    # if the directory doesn't exist, there are no posts.
+    return unless -d $dir;
+
     opendir my $dh, $dir or croak "Couldn't opendir $dir: $!";
     my @posts = grep { -d catdir( $dir, $_ ) }    # only dirs that exist
         grep {/^[^\.]/}                           # No dotfiles
@@ -246,6 +253,10 @@ sub _load_article {
 
 sub comments {
     my ($self) = @_;
+
+    # Allow "no comments" on an unsaved post.
+    return [] unless $self->has_path;
+
     return [ map { ( $_, @{ $_->comments } ) }
             $self->_load_comments( $self->dir ) ];
 }

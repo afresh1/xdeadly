@@ -15,9 +15,17 @@ is $article->filename, 'article', 'New article filename is correct';
 
 ok $article->id =~ /^\d{14}$/, 'New article generated id is 14 digits';
 
+is_deeply $article->comments, [], 'an article without a dir has no comments';
+ok !$article->has_more, 'a new article has no more';
+is $article->more, undef, 'an unsaved article more is undef';
 
 my $dir = tempdir( CLEANUP => 1 );
 XDeadlyFixtures::copy_good_data_fixtures($dir);
+
+$article->data_dir( $dir );
+is_deeply $article->comments, [], 'an unsaved article has no comments';
+ok !$article->has_more, 'an unsaved article has no more';
+is $article->more, undef, 'an unsaved article more is undef';
 
 my $id = '19700101030000';
 ok $article = XDeadly::Article->new( data_dir => $dir, id => $id ),

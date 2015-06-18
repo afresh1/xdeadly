@@ -17,7 +17,7 @@ my $message_text = q{name: Testy McTesterson
 email: test@example.com
 href: example.com
 date: Tue Aug 20 14:51:37 2013
-host: localhost
+host: 127.0.0.1
 subject: This is only a test
 
 If this had been an actual post you would have been asked to evacuate.
@@ -28,7 +28,7 @@ my %headers = (
     EMail   => 'test@example.com',
     HREF    => 'example.com',
     Date    => 'Tue Aug 20 14:51:37 2013',
-    Host    => 'localhost',
+    Host    => '127.0.0.1',
     Subject => 'This is only a test',
 );
 my $body = "If this had been an actual post you would have been asked to evacuate.\x0a";
@@ -55,6 +55,8 @@ ok !$parsed->parse($message_text), 'Created a test post that is false';
 is $parsed->id, undef, 'parsed post has no id';
 ok defined $parsed, 'parsed post is defined';
 ok $parsed->body, 'but it has a body';
+
+is_deeply $parsed->comments, [], 'No comments on an unsaved post';
 
 post_ok($parsed);
 

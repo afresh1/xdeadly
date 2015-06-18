@@ -44,6 +44,7 @@ sub _epoch_to_id {
 sub has_more {
     my $self = shift;
     return !!$self->{more} if exists $self->{more};
+    return unless $self->has_path;
     return -s $self->more_path;
 }
 
