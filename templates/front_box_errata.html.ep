@@ -17,7 +17,7 @@
 						% my $count = 0;
 						% VER: foreach my $obsdver (@rev_errata) {
 						%     ITEM: foreach my $eitem (@{ $obsdver->{(keys %{$obsdver})[0]} }) {
-							<li><a href="<%= $eitem->{'patch'} %>"><%= $eitem->{'title'} %></a>
+							<li><a href="<%= $eitem->{'link'} %>"><%= $eitem->{'title'} %></a>
 								<p style="margin-top: 1px"><%== $eitem->{'descr'} %></p>
 							</li>
 						%         $count++;

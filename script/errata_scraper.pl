@@ -22,6 +22,7 @@ use feature 'postderef';
 no warnings 'experimental::postderef';
 
 use Mojo::UserAgent;
+use Mojo::URL;
 use Mojo::JSON qw(encode_json);
 
 my $base_uri = 'http://www.openbsd.org/';
@@ -40,6 +41,8 @@ foreach my $l ( @{$ls}[ -2, -1 ] ) {
                          )->res->dom('body > ul > li')->@*
                   )
     {
+        my $link  = Mojo::URL->new( $base_uri . $l->attr->{'href'}
+                                  )->fragment($e->attr('id'));
         my $patch = $e->at('a[href$=".patch.sig"]')->attr('href') if
                         defined $e->at('a[href$=".patch.sig"]');
         my $title = $e->at('font > strong')->text;
@@ -61,6 +64,7 @@ foreach my $l ( @{$ls}[ -2, -1 ] ) {
         $descr =~ s/\.+$/./gs;
 
         push $entries->@*, {
+            'link'  => $link->to_string,
             'title' => $title,
             'arch'  => $arch,
             'patch' => defined $patch ? $patch : '',
