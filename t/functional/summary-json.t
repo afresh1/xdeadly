@@ -49,7 +49,7 @@ foreach my $entry ( 0, 1, 2 ) {
 }
 
 $t->json_is( '/2/comments/1/mod', { score => 0, votes => 0 } );
-$t->json_is( '/2/comments/-1/id', '19700101010000/3/1/2' );
+$t->json_is( '/2/comments/7/id', '19700101010000/3/1/2' );
 $t->json_hasnt('/2/comments/0/comments');
 
 done_testing();
