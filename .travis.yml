@@ -1,6 +1,5 @@
 language: perl
 script: "prove -v -s t"
 perl:
-  - "5.22"
   - "5.20"
   - "5.10"
