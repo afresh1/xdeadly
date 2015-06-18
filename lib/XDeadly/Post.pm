@@ -165,11 +165,7 @@ A check whether we can calculate the path
 
 sub has_path {
     my ($self) = @_;
-<<<<<<< HEAD
-    return $self->id && $self->data_dir
-=======
     return ($self->id and $self->data_dir);
->>>>>>> upstream/master
 }
 
 =head3 path
