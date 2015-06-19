@@ -3,8 +3,8 @@
       <link><%= $link %></link>
       <category><%= $category %></category>
       <pubDate><%= $date %></pubDate>
-      <description><![CDATA[
-<%= $body %>
-]]></description>
+      <description>
+<%= $descr %>
+</description>
     </item>
 

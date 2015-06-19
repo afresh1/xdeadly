@@ -18,7 +18,8 @@
 						% VER: foreach my $obsdver (@rev_errata) {
 						%     ITEM: foreach my $eitem (@{ $obsdver->{(keys %{$obsdver})[0]} }) {
 							<li><a href="<%= $eitem->{'link'} %>"><%= $eitem->{'title'} %></a>
-								<p style="margin-top: 1px"><%== $eitem->{'descr'} %></p>
+								<p style="margin-top: 1px">ARCH: <%= $eitem->{'arch'} %><br>
+									<%== $eitem->{'descr'} %></p>
 							</li>
 						%         $count++;
 						%         last VER if( $count >= $c->config->{'num_errata_entries'} );
@@ -26,7 +27,7 @@
 						% }
 						</ul>
 						<tr><td colspan="2" align="right">
-							<a href="<%= url_for('errata') %>"><%= image('/images/xml.gif', alt => '[xml]', border => 0, height => 14, width => 36) %></a>
+							<a href="<%= url_for('errata.rss') %>"><%= image('/images/xml.gif', alt => '[xml]', border => 0, height => 14, width => 36) %></a>
 						</td></tr>
 					</td>
 				</tr>

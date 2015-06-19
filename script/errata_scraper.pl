@@ -21,6 +21,7 @@ use warnings;
 use feature 'postderef';
 no warnings 'experimental::postderef';
 
+use Time::Piece;
 use Mojo::UserAgent;
 use Mojo::URL;
 use Mojo::JSON qw(encode_json);
@@ -33,7 +34,7 @@ my $ls = $ua->get( $base_uri . 'errata.html' )->res->dom('a[href^="errata"]');
 
 my $errata = [];
 
-foreach my $l ( @{$ls}[ -2, -1 ] ) {
+foreach my $l ( $ls->@[ -2, -1 ] ) {
     my $vertitle = 'Errata for OpenBSD ' . $l->text;
     my $entries = [];
     foreach my $e (
@@ -46,6 +47,8 @@ foreach my $l ( @{$ls}[ -2, -1 ] ) {
         my $patch = $e->at('a[href$=".patch.sig"]')->attr('href') if
                         defined $e->at('a[href$=".patch.sig"]');
         my $title = $e->at('font > strong')->text;
+        my ($pnum, $category, $rawdate) = $title =~ /\A(\d+):\s+(\w+).*:\s(.+)\z/;
+        my $date = Time::Piece->strptime($rawdate, "%B %d, %Y");
         my $arch  = $e->at('i')->text;
 
         ## FIXME! This needs to be something that might work better. ##
@@ -64,11 +67,13 @@ foreach my $l ( @{$ls}[ -2, -1 ] ) {
         $descr =~ s/\.+$/./gs;
 
         push $entries->@*, {
-            'link'  => $link->to_string,
-            'title' => $title,
-            'arch'  => $arch,
-            'patch' => defined $patch ? $patch : '',
-            'descr' => $descr, };
+            'link'     => $link->to_string,
+            'title'    => $title,
+            'date'     => $date->strftime("%d %B %Y"),
+            'arch'     => $arch,
+            'category' => $category,
+            'patch'    => defined $patch ? $patch : '',
+            'descr'    => $descr, };
     }
 
     push $errata->@*, { $vertitle => $entries };

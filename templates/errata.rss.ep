@@ -17,8 +17,17 @@
       <height>100</height>
       <description>The OpenBSD Community.</description>
     </image>
-
-<%= $items %>
+% my @rev_errata = reverse @{$c->helpers->errata};
+% VER: foreach my $obsdver (@rev_errata) {
+%     ITEM: foreach my $eitem (@{ $obsdver->{(keys %{$obsdver})[0]} }) {
+%         my %item_parts = ( 'descr'    => $eitem->{'descr'},
+%                            'title'    => $eitem->{'title'},
+%                            'date'     => $eitem->{'date'},
+%                            'link'     => $eitem->{'link'},
+%                            'category' => $eitem->{'category'}, );
+%=        include('errata_item', %item_parts);
+%     }
+% }
 
   </channel>
 </rss>
