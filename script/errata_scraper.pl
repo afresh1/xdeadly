@@ -17,6 +17,7 @@
 ########################################################################
 use strict;
 use warnings;
+use autodie;
 
 use feature 'postderef';
 no warnings 'experimental::postderef';
@@ -79,5 +80,9 @@ foreach my $l ( $ls->@[ -2, -1 ] ) {
     push $errata->@*, { $vertitle => $entries };
 }
 
-print encode_json($errata);
+open my $json_file, '>', 'public/errata.json';
+
+print $json_file encode_json($errata);
+
+close $json_file;
 
