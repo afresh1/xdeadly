@@ -35,4 +35,8 @@ my $t = Test::Mojo->new;
 $t->get_ok('/')->status_is(200);
 $t->content_like(qr/$first_title/);
 
+# What's good for the goose...
+$t->get_ok('/errata.rss')->status_is(200);
+$t->content_like(qr/$first_title/);
+
 done_testing();
