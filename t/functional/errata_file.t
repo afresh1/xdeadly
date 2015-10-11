@@ -20,7 +20,8 @@ use Mojo::Asset::File;
 use Mojo::JSON qw(decode_json);
 my $errata_file = Mojo::Asset::File->new(path => $errata_file_path);
 my $errata_json;
-ok( $errata_json = decode_json($errata_file->slurp) , 'Decoding JSON file succeeds.');
+ok( $errata_json = decode_json($errata_file->slurp) ,
+    'Decoding JSON file succeeds.');
 
 # Get the title that should be on top.
 my @rev_errata = reverse @{$errata_json};

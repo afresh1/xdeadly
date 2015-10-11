@@ -48,7 +48,8 @@ foreach my $l ( $ls->@[ -2, -1 ] ) {
         my $patch = $e->at('a[href$=".patch.sig"]')->attr('href') if
                         defined $e->at('a[href$=".patch.sig"]');
         my $title = $e->at('font > strong')->text;
-        my ($pnum, $category, $rawdate) = $title =~ /\A(\d+):\s+(\w+).*:\s(.+)\z/;
+        my ($pnum, $category, $rawdate) = $title =~
+                                          /\A(\d+):\s+(\w+).*:\s(.+)\z/;
         my $date = Time::Piece->strptime($rawdate, "%B %d, %Y");
         my $arch  = $e->at('i')->text;
 
@@ -74,7 +75,8 @@ foreach my $l ( $ls->@[ -2, -1 ] ) {
             'arch'     => $arch,
             'category' => $category,
             'patch'    => defined $patch ? $patch : '',
-            'descr'    => $descr, };
+            'descr'    => $descr,
+        };
     }
 
     push $errata->@*, { $vertitle => $entries };
