@@ -13,17 +13,19 @@
 				<tr>
 					<td>
 						<ul style="font-size:8pt; list-style: none; margin-left: 0px; padding-left: 2px">
-						% my @rev_errata = reverse @{$c->helpers->errata};
-						% my $count = 0;
-						% VER: foreach my $obsdver (@rev_errata) {
-						%     ITEM: foreach my $eitem (@{ $obsdver->{(keys %{$obsdver})[0]} }) {
+						% if( my $errata = $c->helpers->errata ) {
+						%   my @rev_errata = reverse @{$errata};
+						%   my $count = 0;
+						%   VER: foreach my $obsdver (@rev_errata) {
+						%       ITEM: foreach my $eitem (@{ $obsdver->{(keys %{$obsdver})[0]} }) {
 							<li><a href="<%= $eitem->{'link'} %>"><%= $eitem->{'title'} %></a>
 								<p style="margin-top: 1px">ARCH: <%= $eitem->{'arch'} %><br>
 									<%== $eitem->{'descr'} %></p>
 							</li>
-						%         $count++;
-						%         last VER if( $count >= $c->config->{'num_errata_entries'} );
-						%     }
+						%           $count++;
+						%           last VER if( $count >= $c->config->{'num_errata_entries'} );
+						%       }
+						%   }
 						% }
 						</ul>
 						<tr><td colspan="2" align="right">

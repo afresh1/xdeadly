@@ -37,7 +37,7 @@ my $config = plugin Config => default => {
     num_front_page_stories => 5,
     num_older_stories      => 5,
     num_rss_stories        => 10,
-    num_errata_entries     => 8 
+    num_errata_entries     => 8,
 };
 
 helper stories =>
@@ -318,7 +318,12 @@ helper errata => sub {
     my ($self) = @_;
 
     my $errata_file = Mojo::Asset::File->new(path => 'public/errata.json');
-    return decode_json $errata_file->slurp;
+    my $decoded = eval { decode_json $errata_file->slurp };
+    if( my $exception = $@ ) {
+      $self->app->log->warn('Unable to use errata file: ' . $@);
+      return 0;
+    }
+    return $decoded;
 };
 
 under sub {
