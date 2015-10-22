@@ -27,7 +27,6 @@ Basic TODO list for getting xdeadly to a point to replace the C version
   * Many of them probably just need conversion to the right Mojo method
   * some are more work
     * poll
-    * errata
     * editors
     * yesterday
 * Add moderation
