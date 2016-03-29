@@ -1,6 +1,10 @@
 language: perl
-script: "prove -v -s t"
 perl:
   - "5.22"
   - "5.20"
   - "5.10"
+
+before_install:
+  cpanm -n Devel::Cover::Report::Coveralls
+script:
+  cover -test -ignore ^t/ -report coveralls
