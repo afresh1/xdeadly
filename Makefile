@@ -4,4 +4,4 @@ nothing:
 	@echo "it'll start doing that.  Try 'make test'."
 
 test:
-	prove -lfs t
+	prove --norc --lib --recurse --verbose --shuffle t

@@ -1,4 +1,5 @@
 --state=hot,slow,save
--l
--r
--j9
+--shuffle
+--lib
+--recurse
+--jobs 9
