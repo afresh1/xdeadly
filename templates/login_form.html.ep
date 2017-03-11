@@ -1,0 +1,11 @@
+%= form_for login => ( class => validation->has_error ? "form-with-error" : "" ) => begin
+%=     csrf_field;
+%=     label_for username => 'Username'
+%=     text_field 'username'
+%=     label_for password => 'Password'
+%=     password_field 'password'
+%=     submit_button 'Submit',  name => 'submit'
+% if ( my $errors = validation->error('submit') ) {
+    <p>Unknown User</p>
+% }
+%= end; # form_for login

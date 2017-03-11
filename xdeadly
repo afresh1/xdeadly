@@ -84,6 +84,9 @@ helper is_new => sub {
 
 helper usernavbar => sub {
     my ($self) = @_;
+    if ( my $role = $self->session('role') ) {
+        return $role eq 'editor' ? 'editor_navbar' : 'user_navbar';
+    }
     return 'anon_navbar';
 };
 
@@ -281,6 +284,19 @@ helper human_time => sub {
         if $time{days} < 5;
 
     return $time;
+};
+
+app->validator->add_check( is_valid_user => sub {
+    my ($validation) = @_;
+    my $username = $validation->param('username') || '';
+    my $password = $validation->param('password') || '';
+    return !( $username =~ /^(?:user|editor)$/ and $password eq 'password' );
+});
+
+helper login_user => sub {
+    my ($self, $username) = @_;
+    my ($role) = $username =~ /^(\D+)/;
+    $self->session( { user => $username, role => $role } );
 };
 
 helper users => sub {
@@ -541,7 +557,27 @@ group {
 
 get '/deauth';
 get '/login';
-post '/login';
+post '/login' => sub {
+    my ($self) = @_;
+
+    my $validation = $self->validation;
+    return $self->render unless $validation->has_data;
+
+    return $self->render(text => 'Bad CSRF token!', status => 403)
+        if $validation->csrf_protect->has_error('csrf_token');
+
+    $validation->required('username');
+    $validation->required('password');
+    $validation->optional('submit');
+
+    $validation->is_valid_user;
+
+    unless ( $validation->has_error ) {
+        $self->flash( message => 'Thanks' );
+        $self->login_user( $validation->param('username') );
+        $self->redirect_to($self->url_for("/"));
+    }
+};
 
 get '/register';
 post '/register';
