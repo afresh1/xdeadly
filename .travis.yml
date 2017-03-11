@@ -5,6 +5,6 @@ perl:
   - "5.10"
 
 before_install:
-  cpanm -n Devel::Cover::Report::Coveralls
+  - cpanm -n Devel::Cover::Report::Coveralls
 script:
   cover -test -ignore ^t/ -report coveralls
