@@ -35,6 +35,12 @@ my $ls = $ua->get( $base_uri . 'errata.html' )->res->dom('a[href^="errata"]');
 
 my $errata = [];
 
+my %month_abbreviations = (
+    'Jan' => 'January', 'Feb' => 'February', 'Mar' => 'March',
+    'Apr' => 'April', 'May' => 'May', 'Jun' => 'June',
+    'Jul' => 'July', 'Aug' => 'August', 'Sep' => 'September',
+    'Oct' => 'October', 'Nov' => 'November', 'Dec' => 'December' );
+
 foreach my $l ( $ls->@[ -2, -1 ] ) {
     my $vertitle = 'Errata for OpenBSD ' . $l->text;
     my $entries = [];
@@ -50,6 +56,14 @@ foreach my $l ( $ls->@[ -2, -1 ] ) {
         my $title = $e->at('font > strong')->text;
         my ($pnum, $category, $rawdate) = $title =~
                                           /\A(\d+):\s+(\w+).*:\s(.+)\z/;
+
+        # Sometimes they decide to use abbreviations.  Boo!
+        foreach my $abb (keys(%month_abbreviations)) {
+          my $fullmonth = $month_abbreviations{$abb};
+          if($rawdate =~ /$abb /) {
+            $rawdate =~ s/$abb /$fullmonth /;
+          }
+        }
         my $date = Time::Piece->strptime($rawdate, "%B %d, %Y");
         my $arch  = $e->at('i')->text;
 
