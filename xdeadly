@@ -602,7 +602,15 @@ get '/deauth' => sub {
 get '/prefs';
 post '/prefs';
 
-get '/submissions';
 post '/edit';
+
+under sub {
+    my ($self) = @_;
+    return 1 if $self->user_is_editor;
+
+    $self->render( text => 'Not Found', status => 404 );
+    return;
+};
+get '/submissions';
 
 app->start;
