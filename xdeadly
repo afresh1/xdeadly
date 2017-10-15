@@ -84,8 +84,9 @@ helper is_new => sub {
 
 helper usernavbar => sub {
     my ($self) = @_;
-    if ( my $role = $self->session('role') ) {
-        return $role eq 'editor' ? 'editor_navbar' : 'user_navbar';
+    if ( $self->user_is_logged_in ) {
+        return 'editor_navbar' if $self->user_is_editor;
+        return 'user_navbar';
     }
     return 'anon_navbar';
 };
@@ -304,6 +305,9 @@ helper logout_user => sub {
     delete $self->session->{user};
     delete $self->session->{role};
 };
+
+helper user_is_logged_in => sub { !!$_[0]->session('user') };
+helper user_is_editor => sub { ( $_[0]->session('role') || '' ) eq 'editor' };
 
 helper users => sub {
     my ( $self ) = @_;
