@@ -299,6 +299,12 @@ helper login_user => sub {
     $self->session( { user => $username, role => $role } );
 };
 
+helper logout_user => sub {
+    my ($self, $username) = @_;
+    delete $self->session->{user};
+    delete $self->session->{role};
+};
+
 helper users => sub {
     my ( $self ) = @_;
     my $user_file = app->home->rel_file("$config->{auth_dir}/xdeadly.org.passwd");
@@ -555,7 +561,6 @@ group {
     };
 };
 
-get '/deauth';
 get '/login';
 post '/login' => sub {
     my ($self) = @_;
@@ -581,6 +586,14 @@ post '/login' => sub {
 
 get '/register';
 post '/register';
+
+get '/deauth' => sub {
+    my ($self) = @_;
+
+    $self->logout_user;
+    $self->flash( message => 'You have been logged out' );
+    $self->redirect_to($self->url_for("/"));
+};
 
 get '/prefs';
 post '/prefs';

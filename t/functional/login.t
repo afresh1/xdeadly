@@ -44,6 +44,14 @@ $t->get_ok( $t->tx->res->headers->location )
     ->element_exists('a[href="/prefs"]')
     ->element_exists('a[href="/deauth"]');
 
+$t->get_ok('/deauth')
+    ->status_is(302);
+
+$t->get_ok( $t->tx->res->headers->location )
+    #->content_like(qr/\bYou have been logged out\b/)
+    ->element_exists_not('a[href="/deauth]')
+    ->element_exists('a[href="/login"]');
+
 $t->get_ok('/login');
 $t->post_ok( '/login' => form =>
         { username => "editor", password => "password", %submit } )
@@ -54,5 +62,13 @@ $t->get_ok( $t->tx->res->headers->location )
     ->element_exists('a[href="/submissions"]')
     ->element_exists('a[href="/prefs"]')
     ->element_exists('a[href="/deauth"]');
+
+$t->get_ok('/deauth')
+    ->status_is(302);
+
+$t->get_ok( $t->tx->res->headers->location )
+    #->content_like(qr/\bYou have been logged out\b/)
+    ->element_exists_not('a[href="/deauth]')
+    ->element_exists('a[href="/login"]');
 
 done_testing;
