@@ -352,7 +352,8 @@ helper errata => sub {
     return $decoded;
 };
 
-under sub {
+under sub { shift->define_unimplemented };
+helper define_unimplemented => sub {
     my $self = shift;
 
     $self->stash( $_ => "XXX FIXME [$_] XXX" ) for qw(
@@ -606,6 +607,7 @@ post '/edit';
 
 under sub {
     my ($self) = @_;
+    $self->define_unimplemented;
     return 1 if $self->user_is_editor;
 
     $self->render( text => 'Not Found', status => 404 );
