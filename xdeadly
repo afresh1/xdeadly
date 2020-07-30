@@ -27,9 +27,6 @@ use XDeadly::Comment;
 
 use Digest::SHA1;
 
-# Documentation browser under "/perldoc"
-plugin 'PODRenderer';
-
 my $config = plugin Config => default => {
     data_dir => 'data',
     auth_dir => 'auth',
