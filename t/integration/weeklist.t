@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 use Mojo::Base -strict;
+use Mojo::Util qw/ trim /;
 use Test::Mojo;
 use Test::More;
 use File::Temp qw/ tempdir /;
@@ -80,7 +81,7 @@ sub expected_weeklist {
         'Correct link to yesterday';
 
     my $table = $dom->at('table table');
-    is $table->at('tr')->at('td')->all_text, 'Older Stuff',
+    is trim( $table->at('tr')->at('td')->all_text ), 'Older Stuff',
         'Got table with Older Stuff';
 
     my $trs = $table->at('tr:nth-of-type(2)')->at('table')->find('tr');
@@ -93,21 +94,22 @@ sub expected_weeklist {
 
         if ($last_shortdate ne $article->short_date) {
             $last_shortdate = $article->short_date;
-            is $tr->all_text, $article->short_date,
+            is trim( $tr->all_text ), $article->short_date,
                 "Found short_date header for $last_shortdate";
             $tr = $trs->[$j++];
         }
 
-        is $tr->at('td')->all_text, $article->time,
+        is trim( $tr->at('td')->all_text ), $article->time,
             "[$date][$article] have time";
 
         ok my $link
             = $tr->at('td:nth-of-type(2)')->at("a[href^=/article/$article]");
-        is $link->text, "Article [$article]",
+        is trim( $link->text ), "Article [$article]",
             "[$date][$article] link to the article";
 
         my $comments = @{ $article->comments };
-        like $tr->at('td:nth-of-type(2)')->all_text, qr/ \($comments\)$/,
+        like trim( $tr->at('td:nth-of-type(2)')->all_text ),
+	     qr/ \($comments\)$/,
             "[$date][$article] Correct number of comments";
     }
 }
