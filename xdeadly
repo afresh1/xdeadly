@@ -16,7 +16,7 @@ use Mojolicious::Lite;
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-use Mojo::Util qw(url_escape slurp);
+use Mojo::Util qw(url_escape);
 use List::Util qw(sum);
 use Time::Local qw(timegm);
 use Mojo::JSON qw(decode_json);
