@@ -21,7 +21,7 @@ use List::Util qw(sum);
 use Time::Local qw(timegm);
 use Mojo::JSON qw(decode_json);
 
-use lib app->home->rel_dir('lib');
+use lib '' . app->home->rel_file('lib');
 use XDeadly::Article;
 use XDeadly::Comment;
 
